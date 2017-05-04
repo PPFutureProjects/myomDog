@@ -1,0 +1,11 @@
+.idea
+.tmp
+.npm
+npm-debug.log
+lib
+yarn.lock
+coverage
+node_modules
+typings
+.vscode/
+firebase-functions-*.tgz
