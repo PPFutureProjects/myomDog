@@ -12,6 +12,8 @@ import { TabsPage } from '../pages/tabs/tabs';
 
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
+import { AuthServiceProvider } from '../providers/auth-service/auth-service';
+import { ManageProvider } from '../providers/manage/manage';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
@@ -48,7 +50,9 @@ firebase.initializeApp(firebaseConfig);
   providers: [
     StatusBar,
     SplashScreen,
-    {provide: ErrorHandler, useClass: IonicErrorHandler}
+    {provide: ErrorHandler, useClass: IonicErrorHandler},
+    AuthServiceProvider,
+    ManageProvider
   ]
 })
 
