@@ -1,0 +1,36 @@
+<ion-header>
+  <ion-toolbar>
+      <ion-title>사용자 초대하기</ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text color="primary" showWhen="ios">Cancel</span>
+          <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+
+  <ion-list>
+    <ion-item>
+      <ion-label floating>사용자email</ion-label>
+      <ion-input type = "email" value="" [(ngModel)]="inviteduser"></ion-input>
+    </ion-item>
+
+    <ion-item>  //ngFor문
+      <ion-label>어떤강아지를초대</ion-label>
+        <ion-select [(ngModel)]="inviteddog" multiple = "true" cancelText = "취이소" okText = "확이인">
+          <ion-option value="dog1">흰둥이</ion-option>
+          <ion-option value="dog2">깜지</ion-option>
+          <ion-option value="dog3">단비</ion-option>
+          <ion-option value="dog4">승호</ion-option>
+        </ion-select>
+    </ion-item>
+  </ion-list>
+
+  <div padding>
+    <button ion-button color = "primary" block (click) = "invitebutton()">초 오 대</button>
+  </div>
+
+</ion-content>

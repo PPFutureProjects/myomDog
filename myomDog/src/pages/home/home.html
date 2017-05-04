@@ -5,13 +5,26 @@
 </ion-header>
 
 <ion-content padding>
-  <h2>Welcome to Ionic!</h2>
-  <p>
-    This starter project comes with simple tabs-based layout for apps
-    that are going to primarily use a Tabbed UI.
-  </p>
-  <p>
-    Take a look at the <code>src/pages/</code> directory to add or change tabs,
-    update any existing page or create new pages.
-  </p>
+  <h3>Hello {{ (user | async)?.name }}</h3>
+  메세지 :
+  <ul>
+    <li *ngFor="let msg of msgs | async">
+      {{ msg.$value }}
+    </li>
+  </ul>
+  <!-- <ul>
+    <h4>List</h4>
+    <li *ngFor="let dog of dogs | async">
+      ID : {{ dog.$key }} <br>
+      이름 : {{ dog.d_name }} <br>
+      몇끼 먹니? {{ dog.meal_time }} <br>
+      같이 기르는 사람들 : <br>
+      {{dog.users | json}}
+        <ul>
+          <li *ngFor="let user of dog.users | keys">
+            {{ user.key }}
+          </li>
+        </ul>
+    </li>
+  </ul> -->
 </ion-content>
