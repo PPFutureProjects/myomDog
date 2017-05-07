@@ -24,4 +24,8 @@ export class HomePage {
         // this.userDogRef = db.list('/mockUserData/' + this.temp_uid + '/groups');
         // this.dogs = db.list('/mockDogData');
     }
+
+    ionViewDidLoad() {
+      console.log('ionViewDidLoad Home');
+    }
 }
