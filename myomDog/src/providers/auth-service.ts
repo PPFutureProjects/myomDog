@@ -33,7 +33,6 @@ export class AuthService {
     //   this.currentUser = user;
     // })
     this.fireAuth = firebase.auth();
-
     this.fireAuth.onAuthStateChanged( function (user) {
       if(user) {
         console.log("User "+ user.email +" Logged in.");
@@ -47,12 +46,15 @@ export class AuthService {
         // this.rootPage = LoginPage;
       }
     });
+    this.userData = firebase.database().ref('userData');
   }
 
   register(email: string, password: string): any {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
-        this.userData.child(newUser.uid)
+        let id = newUser.email.split('.');
+        let key = id[0]+'-'+id[1];
+        this.userData.child(key)
         .set({email: email
         });
     });
@@ -72,19 +74,4 @@ export class AuthService {
     return this.fireAuth.signOut();
   }
 
-  invite(receiverEmail){
-    /*
-    var strArr = receiverEmail.split('.');
-    this.inviteData = firebase.database().ref('/inviteData').child(strArr[0]+'-'+strArr[1]);
-    this.inviteData.push({
-      invite: true,
-      sender: this.email
-    })
-    */
-    this.inviteData = firebase.database().ref('/inviteData');
-    this.inviteData.push({
-      receiver: receiverEmail,
-      sender: this.email
-    });
-  }
 }

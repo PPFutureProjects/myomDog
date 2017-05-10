@@ -1,26 +1,16 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, ModalController, ViewController } from 'ionic-angular';
+import { NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
-/**
- * Generated class for the Setting page.
- *
- * See http://ionicframework.com/docs/components/#navigation for more info
- * on Ionic pages and navigation.
- */
-@IonicPage()
+import firebase from 'firebase';
+import {ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
+
 @Component({
-  selector: 'page-setting',
-  templateUrl: 'setting.html',
+  templateUrl: './setting.html'
 })
 export class SettingPage {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public modalCtrl: ModalController, public authService: AuthService) {
+  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService) {
   }
-
-  ionViewDidLoad() {
-    console.log('ionViewDidLoad Setting');
-  }
-
   addingDogModal(){
     let dogModal = this.modalCtrl.create(AddingDogPage);
     dogModal.present();
@@ -37,6 +27,7 @@ export class SettingPage {
   logout() {
     this.authService.doLogout();
   }
+
 }
 
 @Component({
