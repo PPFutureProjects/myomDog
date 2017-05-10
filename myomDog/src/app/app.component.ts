@@ -23,32 +23,35 @@ export class MyApp {
     private splashScreen: SplashScreen,
     public authService: AuthService,
     public alertCtrl: AlertController) {
-      this.currentUser = this.authService.fireAuth.currentUser;
-      if(this.currentUser) {
-        console.log("Successfully Logged in.");
-        this.authService.email = this.currentUser.email;
-        // this.nav.setRoot(TabsPage);
-        this.rootPage = TabsPage;
-      }
-      else {
-        console.log("Not Logged in.");
-        // this.nav.setRoot(LoginPage);
-        this.rootPage = LoginPage;
-      }
-      // this.authService.fireAuth.onAuthStateChanged( function (user) {
-      //   if(user) {
-      //     console.log("Successfully Logged in.");
-      //     this.authService.email = user.email;
-      //     this.nav.setRoot(TabsPage);
-      //     // this.rootPage = TabsPage;
-      //   }
-      //   else {
-      //     console.log("Not Logged in.");
-      //     this.nav.setRoot(LoginPage);
-      //     // this.rootPage = LoginPage;
-      //   }
-      // });
-      //
+
+
+      // this.currentUser = this.authService.currentUser;
+      // if(this.currentUser) {
+      //   console.log("Successfully Logged in.");
+      //   this.authService.email = this.currentUser.email;
+      //   // this.nav.setRoot(TabsPage);
+      //   this.rootPage = TabsPage;
+      // }
+      // else {
+      //   console.log("Not Logged in.");
+      //   // this.nav.setRoot(LoginPage);
+      //   this.rootPage = LoginPage;
+      // }
+
+      this.authService.fireAuth.onAuthStateChanged( function (user) {
+        if(user) {
+          console.log("User "+ user.email +" Logged in.");
+          // this.authService.email = user.email;
+          // this.nav.setRoot(TabsPage);
+          this.rootPage = TabsPage;
+        }
+        else {
+          console.log("User Logged out.");
+          // this.nav.setRoot(LoginPage);
+          this.rootPage = LoginPage;
+        }
+      });
+
       // this.authService.fireAuth.subscribe(
       //   (auth) => {
       //     if(auth == null) {

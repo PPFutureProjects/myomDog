@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { AngularFireAuth } from 'angularfire2/auth';
 import 'rxjs/add/operator/map';
-// import { Observable } from 'rxjs/Observable';
+import { Observable } from 'rxjs/Observable';
 
 import  firebase  from 'firebase';
 
@@ -15,10 +15,13 @@ import  firebase  from 'firebase';
 @Injectable()
 export class AuthService {
 
-  // private authState: Observable<firebase.User>;
-  // private currentUser: firebase.User;
+  // AngularFire2 docs 참조해서 작성중 -----------
+  private authState: Observable<firebase.User>;
+  private currentUser: firebase.User;
+  // ----------- AngularFire2 docs 참조해서 작성중
 
   public fireAuth: any;
+  // public currentUser: any;
   public userData: any;
   public email: string;
   public inviteData: any;
@@ -26,11 +29,24 @@ export class AuthService {
   constructor(public http: Http, public afAuth: AngularFireAuth) {
     console.log('Hello AuthService Provider');
     // this.authState= afAuth.authState;
-    // afAuth.subscribe((user: firebase.User) => {
+    // this.authState.subscribe((user: firebase.User) => {
     //   this.currentUser = user;
     // })
     this.fireAuth = firebase.auth();
 
+    this.fireAuth.onAuthStateChanged( function (user) {
+      if(user) {
+        console.log("User "+ user.email +" Logged in.");
+        // this.authService.email = user.email;
+        // this.nav.setRoot(TabsPage);
+        // this.rootPage = TabsPage;
+      }
+      else {
+        console.log("User Logged out.");
+        // this.nav.setRoot(LoginPage);
+        // this.rootPage = LoginPage;
+      }
+    });
   }
 
   register(email: string, password: string): any {
@@ -47,10 +63,12 @@ export class AuthService {
   }
 
   doLogin(email: string, password: string): any {
+    this.currentUser = this.fireAuth.currentUser;
     return this.fireAuth.signInWithEmailAndPassword(email, password);
   }
 
   doLogout(): any {
+    this.currentUser = null;
     return this.fireAuth.signOut();
   }
 
