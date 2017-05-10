@@ -2,6 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
+import { Push, CloudSettings, CloudModule } from '@ionic/cloud-angular'
 import { MyApp } from './app.component';
 import firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2';
@@ -41,6 +42,24 @@ export const firebaseConfig = {
   messagingSenderId: "835408454244"
 };
 
+const cloudSettings: CloudSettings = {
+  'core': {
+    'app_id': 'de7190d8'
+  },
+  'push': {
+    'sender_id': '835408454244',
+    'pluginConfig': {
+      'ios': {
+        'badge': true,
+        'sound': true
+      },
+      'android': {
+        'iconColor': '#343434'
+      }
+    }
+  }
+}
+
 firebase.initializeApp(firebaseConfig);
 
 @NgModule({
@@ -66,7 +85,8 @@ firebase.initializeApp(firebaseConfig);
     HttpModule,
     BrowserModule,
     IonicModule.forRoot(MyApp, {tabsPlacement: 'bottom'}),
-    AngularFireModule.initializeApp(firebaseConfig)
+    AngularFireModule.initializeApp(firebaseConfig),
+    CloudModule.forRoot(cloudSettings)
   ],
   bootstrap: [IonicApp],
   entryComponents: [

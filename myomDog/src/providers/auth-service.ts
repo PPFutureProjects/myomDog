@@ -28,11 +28,14 @@ export class AuthService {
 
   constructor(public http: Http, public afAuth: AngularFireAuth) {
     console.log('Hello AuthService Provider');
-    // this.authState= afAuth.authState;
-    // this.authState.subscribe((user: firebase.User) => {
-    //   this.currentUser = user;
-    // })
+
+    this.authState= afAuth.authState;
+    this.authState.subscribe((user: firebase.User) => {
+      this.currentUser = user;
+    })
+
     this.fireAuth = firebase.auth();
+    /*
     this.fireAuth.onAuthStateChanged( function (user) {
       if(user) {
         console.log("User "+ user.email +" Logged in.");
@@ -46,7 +49,12 @@ export class AuthService {
         // this.rootPage = LoginPage;
       }
     });
+    */
     this.userData = firebase.database().ref('userData');
+  }
+
+  get authenticated(): boolean {
+    return this.currentUser !== null;
   }
 
   register(email: string, password: string): any {
