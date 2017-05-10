@@ -30,7 +30,7 @@ export class AuthService {
     //   this.currentUser = user;
     // })
     this.fireAuth = firebase.auth();
-
+    this.userData = firebase.database().ref('userData');
   }
 
   register(email: string, password: string): any {
