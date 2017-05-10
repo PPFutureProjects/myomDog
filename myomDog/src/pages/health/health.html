@@ -41,8 +41,26 @@
     </ion-list>
   </div>
 <!-- ///////////////// -->
-  <ion-list>
-    <h3>history</h3>
+
+<ion-toolbar no-border-top>
+  <ion-segment [(ngModel)]="history">
+    <ion-segment-button value="everything">
+      전체
+    </ion-segment-button>
+    <ion-segment-button value="meal">
+      식사
+    </ion-segment-button>
+    <ion-segment-button value="walk">
+      산책
+    </ion-segment-button>
+    <ion-segment-button value="etc">
+      그 외
+    </ion-segment-button>
+  </ion-segment>
+</ion-toolbar>
+
+<div [ngSwitch]="history">
+  <ion-list *ngSwitchCase="'everything'">
     <ion-item>
       <ion-thumbnail item-left>
         <img src="">
@@ -51,7 +69,28 @@
       <p>날짜</p>
       <button ion-button clear item-right>edit</button>
     </ion-item>
+  </ion-list>
 
+  <ion-list *ngSwitchCase="'meal'">
+    <ion-item>
+      <ion-thumbnail item-left>
+        <img src="">
+      </ion-thumbnail>
+      <h2>밥</h2>
+      <p>날짜</p>
+      <button ion-button clear item-right>edit</button>
+    </ion-item>
+      <ion-item>
+        <ion-thumbnail item-left>
+          <img src="">
+        </ion-thumbnail>
+        <h2>간식</h2>
+        <p>날짜</p>
+        <button ion-button clear item-right>edit</button>
+    </ion-item>
+  </ion-list>
+
+  <ion-list *ngSwitchCase="'walk'">
     <ion-item>
       <ion-thumbnail item-left>
         <img src="">
@@ -60,16 +99,9 @@
       <p>날짜</p>
       <button ion-button clear item-right>edit</button>
     </ion-item>
+  </ion-list>
 
-    <ion-item>
-      <ion-thumbnail item-left>
-        <img src="">
-      </ion-thumbnail>
-      <h2>간식</h2>
-      <p>날짜</p>
-      <button ion-button clear item-right>edit</button>
-    </ion-item>
-
+  <ion-list *ngSwitchCase="'etc'">
     <ion-item>
       <ion-thumbnail item-left>
         <img src="">
@@ -78,7 +110,8 @@
       <p>날짜</p>
       <button ion-button clear item-right>edit</button>
     </ion-item>
-
   </ion-list>
+</div>
 
+<!-- // -->
 </ion-content>
