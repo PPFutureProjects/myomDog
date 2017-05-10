@@ -3,7 +3,7 @@ let admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-exports.reactToInvite = functions.database.ref('/userData/{user_id}/inviteData').onWrite(event => {
+exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation').onWrite(event => {
     let eventData = event.data.val();
     let dog_id = eventData.dog_id;
     let receiver = event.params.user_id;

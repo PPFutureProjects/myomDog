@@ -13,14 +13,13 @@ import firebase  from 'firebase';
 export class ManageService {
 
   currentUser: any = null;
-  groups: any;
   user_name;
   user_email;
   user_id;
 
   constructor(public http: Http) {
-    // console.log('Hello ManageService Provider');
-    // this.currentUser = firebase.auth().currentUser;
+    this.currentUser = firebase.auth().currentUser;
+    console.log(this.currentUser);
     // if(this.currentUser!=null){
     //   this.user_name = this.currentUser.displayName;
     //   this.user_email = this.currentUser.email;
@@ -42,6 +41,13 @@ export class ManageService {
       {name: "STRONG",
        super: this.user_id
      });
+  }
+
+  invite(sender, receiver, dog){
+    firebase.database().ref('userData/'+receiver+'/invitation').push({
+      sender: sender,
+      dog_id: dog
+    });
   }
 
 }
