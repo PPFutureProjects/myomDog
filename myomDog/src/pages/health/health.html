@@ -1,18 +1,84 @@
-<!--
-  Generated template for the Health page.
-
-  See http://ionicframework.com/docs/components/#navigation for more info on
-  Ionic pages and navigation.
--->
 <ion-header>
-
-  <ion-navbar>
-    <ion-title>health</ion-title>
+  <ion-navbar no-border-bottom>
+    <ion-title>
+      Graph n History
+    </ion-title>
   </ion-navbar>
 
+  <ion-toolbar no-border-top>
+    <ion-segment [(ngModel)]="graph">
+      <ion-segment-button value="week">
+        주간
+      </ion-segment-button>
+      <ion-segment-button value="month">
+        월간
+      </ion-segment-button>
+      <ion-segment-button value="3months">
+        3개월간
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 </ion-header>
 
+<ion-content>
+  <div [ngSwitch]="graph">
+    <ion-list *ngSwitchCase="'week'">
+      <ion-item>
+        <h2>1주일 그래프</h2>
+      </ion-item>
+    </ion-list>
 
-<ion-content padding>
-  <p>Graph and History of your Dogs</p>
+    <ion-list *ngSwitchCase="'month'">
+      <ion-item>
+        <h2>1개월간 그래프</h2>
+      </ion-item>
+    </ion-list>
+
+    <ion-list *ngSwitchCase="'3months'">
+      <ion-item>
+        <h2>3개월간 그래프</h2>
+      </ion-item>
+    </ion-list>
+  </div>
+<!-- ///////////////// -->
+  <ion-list>
+    <h3>history</h3>
+    <ion-item>
+      <ion-thumbnail item-left>
+        <img src="">
+      </ion-thumbnail>
+      <h2>밥</h2>
+      <p>날짜</p>
+      <button ion-button clear item-right>edit</button>
+    </ion-item>
+
+    <ion-item>
+      <ion-thumbnail item-left>
+        <img src="">
+      </ion-thumbnail>
+      <h2>산책</h2>
+      <p>날짜</p>
+      <button ion-button clear item-right>edit</button>
+    </ion-item>
+
+    <ion-item>
+      <ion-thumbnail item-left>
+        <img src="">
+      </ion-thumbnail>
+      <h2>간식</h2>
+      <p>날짜</p>
+      <button ion-button clear item-right>edit</button>
+    </ion-item>
+
+    <ion-item>
+      <ion-thumbnail item-left>
+        <img src="">
+      </ion-thumbnail>
+      <h2>생일</h2>
+      <p>날짜</p>
+      <button ion-button clear item-right>edit</button>
+    </ion-item>
+
+  </ion-list>
+
 </ion-content>

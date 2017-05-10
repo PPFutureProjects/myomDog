@@ -19,22 +19,22 @@ export class ManageService {
   user_id;
 
   constructor(public http: Http) {
-    console.log('Hello ManageService Provider');
-    this.currentUser = firebase.auth().currentUser;
-    if(this.currentUser!=null){
-      this.user_name = this.currentUser.displayName;
-      this.user_email = this.currentUser.email;
-      this.user_id = this.currentUser.uid;
-      console.log("name : " + this.user_name+" email : " + this.user_email + "uid : " + this.user_id);
+    // console.log('Hello ManageService Provider');
+    // this.currentUser = firebase.auth().currentUser;
+    // if(this.currentUser!=null){
+    //   this.user_name = this.currentUser.displayName;
+    //   this.user_email = this.currentUser.email;
+    //   this.user_id = this.currentUser.uid;
+    //   console.log("name : " + this.user_name+" email : " + this.user_email + " uid : " + this.user_id);
 
-      var strArr = this.user_email.split('.');
-      if(firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]) == null){
-        firebase.database().ref('mockUserData/').push(this.user_email);
-      }else{
-        console.log('==> ' + firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]));
-      }
+      // var strArr = this.user_email.split('.');
+      // if(firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]) == null){
+      //   firebase.database().ref('mockUserData/').push(this.user_email);
+      // }else{
+      //   console.log('==> ' + firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]));
+      // }
       //this.groups = firebase.database().ref('mockUserData/'+this.user_email);
-    }
+    // }
   }
 
   addDog(){

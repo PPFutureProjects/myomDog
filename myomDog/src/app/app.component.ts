@@ -14,6 +14,7 @@ import { AuthService } from '../providers/auth-service';
 })
 export class MyApp {
   @ViewChild(Nav) nav: Nav;
+  currentUser: any;
   rootPage:any;
 
   constructor(platform: Platform,
@@ -22,26 +23,51 @@ export class MyApp {
     private splashScreen: SplashScreen,
     public authService: AuthService,
     public alertCtrl: AlertController) {
-
-    this.authService.fireAuth.subscribe(
-      (auth) => {
-        if(auth == null) {
-          console.log("Not Logged in.");
-          this.rootPage = TabsPage;
-        }
-        else {
-          console.log("Successfully Logged in.");
-          this.authService.email = auth.auth.email;
-          this.rootPage = LoginPage;
-        }
+      this.currentUser = this.authService.fireAuth.currentUser;
+      if(this.currentUser) {
+        console.log("Successfully Logged in.");
+        this.authService.email = this.currentUser.email;
+        // this.nav.setRoot(TabsPage);
+        this.rootPage = TabsPage;
       }
-    );
+      else {
+        console.log("Not Logged in.");
+        // this.nav.setRoot(LoginPage);
+        this.rootPage = LoginPage;
+      }
+      // this.authService.fireAuth.onAuthStateChanged( function (user) {
+      //   if(user) {
+      //     console.log("Successfully Logged in.");
+      //     this.authService.email = user.email;
+      //     this.nav.setRoot(TabsPage);
+      //     // this.rootPage = TabsPage;
+      //   }
+      //   else {
+      //     console.log("Not Logged in.");
+      //     this.nav.setRoot(LoginPage);
+      //     // this.rootPage = LoginPage;
+      //   }
+      // });
+      //
+      // this.authService.fireAuth.subscribe(
+      //   (auth) => {
+      //     if(auth == null) {
+      //       console.log("Not Logged in.");
+      //       this.rootPage = TabsPage;
+      //     }
+      //     else {
+      //       console.log("Successfully Logged in.");
+      //       this.authService.email = auth.auth.email;
+      //       this.rootPage = LoginPage;
+      //     }
+      //   }
+      // );
 
-    platform.ready().then(() => {
-      // Okay, so the platform is ready and our plugins are available.
-      // Here you can do any higher level native things you might need.
-      statusBar.styleDefault();
-      splashScreen.hide();
-    });
+      platform.ready().then(() => {
+        // Okay, so the platform is ready and our plugins are available.
+        // Here you can do any higher level native things you might need.
+        statusBar.styleDefault();
+        splashScreen.hide();
+      });
   }
 }

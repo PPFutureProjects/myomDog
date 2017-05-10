@@ -6,6 +6,7 @@ import { MyApp } from './app.component';
 import firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFireAuth } from 'angularfire2/auth';
+import { AngularFireDatabase } from 'angularfire2/database';
 
 import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
@@ -89,7 +90,8 @@ firebase.initializeApp(firebaseConfig);
     {provide: ErrorHandler, useClass: IonicErrorHandler},
     AuthService,
     ManageService,
-    AngularFireAuth
+    AngularFireAuth,
+    AngularFireDatabase
   ]
 })
 
