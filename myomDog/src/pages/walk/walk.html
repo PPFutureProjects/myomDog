@@ -15,7 +15,13 @@
 
 <ion-content padding>
   <ion-item>
-  <ion-label>Date</ion-label>
-  <ion-datetime displayFormat="DD-MM HH:mm" [(ngModel)]="picnic"></ion-datetime>
+  <ion-label>산책시작시간</ion-label>
+  <ion-datetime displayFormat="DD-MM HH:mm" [(ngModel)]="picnic_start"></ion-datetime>
   </ion-item>
+  <ion-item>
+  <ion-label>산책종료시간</ion-label>
+  <ion-datetime displayFormat="DD-MM HH:mm" [(ngModel)]="picnic_finish"></ion-datetime>
+  </ion-item>
+  <button ion-button click = 'addpicnicinfo()'>산책정보등록</button>
+<!-- 미완성 -->
 </ion-content>

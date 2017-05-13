@@ -15,6 +15,7 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 export class HealthPage {
 
   graph: string = "week"; //탭에 처음 들어왔을 때 default 세그먼트 탭
+  history: string = "everything"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
 
 
