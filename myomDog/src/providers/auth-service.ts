@@ -78,7 +78,6 @@ export class AuthService {
   }
 
   doLogout(): any {
-    this.currentUser = null;
     return this.fireAuth.signOut();
   }
 
