@@ -2,7 +2,7 @@ import { NgModule, ErrorHandler } from '@angular/core';
 import { HttpModule } from '@angular/http';
 import { BrowserModule } from '@angular/platform-browser';
 import { IonicApp, IonicModule, IonicErrorHandler } from 'ionic-angular';
-import { Push, CloudSettings, CloudModule } from '@ionic/cloud-angular'
+
 import { MyApp } from './app.component';
 import firebase from 'firebase';
 import { AngularFireModule } from 'angularfire2';
@@ -30,8 +30,7 @@ import { KeysPipe } from '../pipes/keys';
 // NATIVES
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-
-// import {Push, PushObject, PushOptions} from "@ionic-native/push";
+import { Push } from '@ionic-native/push';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
@@ -41,24 +40,6 @@ export const firebaseConfig = {
   storageBucket: "myomdog.appspot.com",
   messagingSenderId: "835408454244"
 };
-
-const cloudSettings: CloudSettings = {
-  'core': {
-    'app_id': 'de7190d8'
-  },
-  'push': {
-    'sender_id': '835408454244',
-    'pluginConfig': {
-      'ios': {
-        'badge': true,
-        'sound': true
-      },
-      'android': {
-        'iconColor': '#343434'
-      }
-    }
-  }
-}
 
 firebase.initializeApp(firebaseConfig);
 
@@ -85,8 +66,7 @@ firebase.initializeApp(firebaseConfig);
     HttpModule,
     BrowserModule,
     IonicModule.forRoot(MyApp, {tabsPlacement: 'bottom'}),
-    AngularFireModule.initializeApp(firebaseConfig),
-    CloudModule.forRoot(cloudSettings)
+    AngularFireModule.initializeApp(firebaseConfig)
   ],
   bootstrap: [IonicApp],
   entryComponents: [
@@ -111,7 +91,8 @@ firebase.initializeApp(firebaseConfig);
     AuthService,
     ManageService,
     AngularFireAuth,
-    AngularFireDatabase
+    AngularFireDatabase,
+    Push
   ]
 })
 

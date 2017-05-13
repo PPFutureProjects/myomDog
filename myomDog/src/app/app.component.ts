@@ -2,10 +2,7 @@ import { Component, ViewChild } from '@angular/core';
 import { Platform, Nav, AlertController } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import {
-  Push,
-  PushToken
-} from '@ionic/cloud-angular';
+import {Push, PushObject, PushOptions} from "@ionic-native/push";
 
 import { TabsPage } from '../pages/tabs/tabs';
 import { LoginPage } from '../pages/login/login';
@@ -68,17 +65,65 @@ export class MyApp {
       // }).then((t: PushToken) => {
       //   console.log('Token saved:', t.token);
       // });
+      this.push.hasPermission()
+       .then((res: any) => {
+
+         if (res.isEnabled) {
+           console.log('We have permission to send push notifications');
+         } else {
+           console.log('We do not have permission to send push notifications');
+         }
+
+       });
 
       platform.ready().then(() => {
         // Okay, so the platform is ready and our plugins are available.
         // Here you can do any higher level native things you might need.
         statusBar.styleDefault();
         splashScreen.hide();
+        this.pushSetup();
       });
+  }
 
-      // this.push.rx.notification()
-      // .subscribe((msg) => {
-      //   alert(msg.title + ': ' + msg.text);
-      // });
+  pushSetup() {
+    const options: PushOptions = {
+      android: {
+          senderID: '835408454244'
+      },
+      ios: {
+          alert: 'true',
+          badge: true,
+          sound: 'false'
+      },
+      windows: {}
+    };
+
+    const pushObject: PushObject = this.push.init(options);
+
+    pushObject.on('notification').subscribe((notification: any) => {
+      console.log('Received a notification', notification);
+      if (notification.additionalData.foreground){
+        console.log('Push notification (foreground) : ' + notification.message);
+        let pushAlert = this.alertCtrl.create({
+          title: '알림',
+          message: notification.message,
+          buttons: [
+            {
+              text: "Ok",
+              role: 'cancel'
+            }
+          ]
+        });
+        pushAlert.present();
+      }
+      else {
+        console.log('Push notification (background) : ' + notification.message);
+      }
+    });
+
+    pushObject.on('registration').subscribe((registration: any) => alert('Device registered '+ registration));
+
+    pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
+
   }
 }
