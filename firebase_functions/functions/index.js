@@ -13,6 +13,7 @@ exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation')
     let message = sender+' invited you';
 
     return getToken(receiver).then(token => {
+        if(token!==null) console.log(token);
         let payload = {
             notification: {
                 title: 'invite push notification',
