@@ -9,6 +9,7 @@ import { LoginPage } from '../pages/login/login';
 
 import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../providers/auth-service';
+import { ManageService } from '../providers/manage-service';
 
 @Component({
   templateUrl: 'app.html'
@@ -23,6 +24,7 @@ export class MyApp {
     private statusBar: StatusBar,
     private splashScreen: SplashScreen,
     public authService: AuthService,
+    public manageService: ManageService,
     public alertCtrl: AlertController,
     public push: Push) {
 
@@ -86,6 +88,8 @@ export class MyApp {
   }
 
   pushSetup() {
+    //for test
+    console.log("pushSetup");
     const options: PushOptions = {
       android: {
           senderID: '835408454244'
@@ -121,7 +125,10 @@ export class MyApp {
       }
     });
 
-    pushObject.on('registration').subscribe((registration: any) => alert('Device registered '+ registration));
+    pushObject.on('registration').subscribe((registration: any) => {
+      alert('Device registered '+ registration);
+      this.manageService.registToken(registration);
+    });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 

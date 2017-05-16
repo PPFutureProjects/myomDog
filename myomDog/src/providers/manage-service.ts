@@ -30,6 +30,15 @@ export class ManageService {
       //this.groups = firebase.database().ref('mockUserData/'+this.user_email);
     // }
   }
+  registToken(token){
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let uid = strArr[0]+'-'+strArr[1];
+
+    firebase.database().ref('userData'+uid).set({
+      pushToken: token
+    });
+  }
 
   addDog(dogName: String){
     this.currentUser = firebase.auth().currentUser;
