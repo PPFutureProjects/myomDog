@@ -15,22 +15,9 @@ export class ManageService {
   currentUser: any = null;
 
   constructor(public http: Http) {
-    // if(this.currentUser!=null){
-    //   this.user_name = this.currentUser.displayName;
-    //   this.user_email = this.currentUser.email;
-    //   this.user_id = this.currentUser.uid;
-    //   console.log("name : " + this.user_name+" email : " + this.user_email + " uid : " + this.user_id);
-
-      // var strArr = this.user_email.split('.');
-      // if(firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]) == null){
-      //   firebase.database().ref('mockUserData/').push(this.user_email);
-      // }else{
-      //   console.log('==> ' + firebase.database().ref('mockUserData/'+strArr[0]+'-'+strArr[1]));
-      // }
-      //this.groups = firebase.database().ref('mockUserData/'+this.user_email);
-    // }
   }
   registToken(token){
+    console.log("pushtoken: "+token);
     this.currentUser = firebase.auth().currentUser;
     let strArr = this.currentUser.email.split('.');
     let uid = strArr[0]+'-'+strArr[1];

@@ -17,7 +17,7 @@ export class AuthService {
 
   // AngularFire2 docs 참조해서 작성중 -----------
   private authState: Observable<firebase.User>;
-  private currentUser: firebase.User;
+  public currentUser: firebase.User;
   // ----------- AngularFire2 docs 참조해서 작성중
 
   public fireAuth: any;
@@ -32,7 +32,8 @@ export class AuthService {
     this.authState= afAuth.authState;
     this.authState.subscribe((user: firebase.User) => {
       this.currentUser = user;
-    })
+    });
+    console.log(this.currentUser);
 
     this.fireAuth = firebase.auth();
     /*
@@ -53,9 +54,7 @@ export class AuthService {
     this.userData = firebase.database().ref('userData');
   }
 
-  get authenticated(): boolean {
-    return this.currentUser !== null;
-  }
+
 
   register(email: string, password: string): any {
     return this.fireAuth.createUserWithEmailAndPassword(email, password)

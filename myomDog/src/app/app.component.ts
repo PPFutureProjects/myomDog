@@ -11,6 +11,8 @@ import { AngularFireAuth } from 'angularfire2/auth';
 import { AuthService } from '../providers/auth-service';
 import { ManageService } from '../providers/manage-service';
 
+import firebase from 'firebase';
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -27,55 +29,28 @@ export class MyApp {
     public manageService: ManageService,
     public alertCtrl: AlertController,
     public push: Push) {
-
-      this.authService.fireAuth.onAuthStateChanged( function (user) {
-        if(user) {
-          console.log("User "+ user.email +" Logged in.");
-          // this.authService.email = user.email;
-          // this.rootPage = TabsPage;
+      af.authState.subscribe((user: firebase.User) => {
+        this.currentUser = user;
+        console.log(this.currentUser.email);
+        if(this.currentUser!==null) {
+          console.log(this.currentUser);
+          console.log(firebase.auth().currentUser);
+          // this.authService.email = this.currentUser.email;
+          this.rootPage = TabsPage;
         }
         else {
-          console.log("User Logged out.");
-          // this.rootPage = LoginPage;
+          this.rootPage = LoginPage;
         }
       });
-      if(this.authService.authenticated) {
-        console.log("Successfully Logged in.");
-        // this.authService.email = this.currentUser.email;
-        this.rootPage = TabsPage;
-      }
-      else {
-        this.rootPage = LoginPage;
-      }
+      
 
-      // this.authService.fireAuth.subscribe(
-      //   (auth) => {
-      //     if(auth == null) {
-      //       console.log("Not Logged in.");
-      //       this.rootPage = TabsPage;
-      //     }
-      //     else {
-      //       console.log("Successfully Logged in.");
-      //       this.authService.email = auth.auth.email;
-      //       this.rootPage = LoginPage;
-      //     }
-      //   }
-      // );
-
-      // this.push.register().then((t: PushToken) => {
-      //   return this.push.saveToken(t);
-      // }).then((t: PushToken) => {
-      //   console.log('Token saved:', t.token);
-      // });
       this.push.hasPermission()
        .then((res: any) => {
-
-         if (res.isEnabled) {
-           console.log('We have permission to send push notifications');
-         } else {
-           console.log('We do not have permission to send push notifications');
-         }
-
+          if (res.isEnabled) {
+            console.log('We have permission to send push notifications');
+          } else {
+            console.log('We do not have permission to send push notifications');
+          }
        });
 
       platform.ready().then(() => {
@@ -126,8 +101,9 @@ export class MyApp {
     });
 
     pushObject.on('registration').subscribe((registration: any) => {
+      console.log("push registration check!");
       alert('Device registered '+ registration.registrationId);
-      this.manageService.registToken(registration);
+      this.manageService.registToken(registration.registrationId);
     });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
