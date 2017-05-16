@@ -60,7 +60,7 @@ export class InvitingPage {
   inviteddog:string;
   constructor(public _viewCtrl: ViewController, public manageService: ManageService){
     this.myDogsGroups = this.manageService.getMyGroups(); //All my dog Groups 
-    console.log(this.myDogsGroups);
+    console.log("my groups: "+this.myDogsGroups);
   }
   invitebutton(){
     console.log("dogname :" + this.inviteduser );

@@ -75,4 +75,12 @@ export class ManageService {
     return firebase.database().ref('/userData/'+user_id+'groups').once('value');  //return groups snapshot
   }
 
+  getDogs(group): any {
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let user_id = strArr[0]+'-'+strArr[1];
+
+    return firebase.database().ref('/userData/'+user_id+'groups/'+group).once('value'); //return dogs of group snapshot
+  }
+
 }
