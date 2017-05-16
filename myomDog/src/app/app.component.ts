@@ -121,7 +121,9 @@ export class MyApp {
       }
     });
 
-    pushObject.on('registration').subscribe((registration: any) => alert('Device registered '+ registration));
+    pushObject.on('registration').subscribe((registration: any) => {
+      alert('Device registered '+ registration);
+    });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
 
