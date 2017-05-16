@@ -12,17 +12,26 @@ exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation')
 
     let message = sender+' invited you';
 
-    return getToken(receiver).then(token => {
+    getToken(receiver).then(token => {
+        if(token!==null) console.log(token);
         let payload = {
             notification: {
                 title: 'invite push notification',
                 body: message,
                 sound: 'default',
                 badge: '1'
+            },
+            data: {
+                sender: sender,
+                message: dog_id
             }
         };
         
-        return admin.messaging().sendToDevice(token, payload);
+        return admin.messaging().sendToDevice(token, payload).then((response) =>{
+            console.log("pushed notification");
+        }).catch((err)=> {
+            console.log(err);
+        })
     });
 });
 

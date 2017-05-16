@@ -13,13 +13,8 @@ import firebase  from 'firebase';
 export class ManageService {
 
   currentUser: any = null;
-  user_name;
-  user_email;
-  user_id;
 
   constructor(public http: Http) {
-    this.currentUser = firebase.auth().currentUser;
-    console.log(this.currentUser);
     // if(this.currentUser!=null){
     //   this.user_name = this.currentUser.displayName;
     //   this.user_email = this.currentUser.email;
@@ -35,19 +30,65 @@ export class ManageService {
       //this.groups = firebase.database().ref('mockUserData/'+this.user_email);
     // }
   }
+  registToken(token){
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let uid = strArr[0]+'-'+strArr[1];
 
-  addDog(){
-    firebase.database().ref('mockDogData/').push(
-      {name: "STRONG",
-       super: this.user_id
-     });
+    firebase.database().ref('userData/').child(uid).set({
+      pushToken: token
+    });
   }
 
-  invite(sender, receiver, dog){
-    firebase.database().ref('userData/'+receiver+'/invitation').push({
-      sender: sender,
+  addDog(dogName: String){
+    this.currentUser = firebase.auth().currentUser;
+    console.log(this.currentUser);
+
+     let strArr = this.currentUser.email.split('.');
+     firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups').push({
+      groupName: "exampleName"
+     }).then((groupKey)=>{
+      firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups/'+groupKey.key+'/dogs').push({
+        name: dogName
+      }).then((newDogKey)=> {
+           firebase.database().ref('dogData/').child(newDogKey.key).set(
+            {name: "STRONG",
+            super: this.currentUser.email
+            });
+        });
+     });
+     /*
+     firebase.database().ref('userData/'+strArr[0]+strArr[1]+'/dogs').set({
+       newDogkey: {
+        name: dogName
+       }
+     });*/
+  }
+
+  invite(receiver, dog){
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let user_id = strArr[0]+'-'+strArr[1];
+    let strArr2 = receiver.split('.');
+    firebase.database().ref('userData/'+strArr2[0]+'-'+strArr2[1]+'/invitation').push({
+      sender: user_id,
       dog_id: dog
     });
+  }
+
+  getMyGroups():any {
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let user_id = strArr[0]+'-'+strArr[1];
+    
+    return firebase.database().ref('/userData/'+user_id+'groups').once('value');  //return groups snapshot
+  }
+
+  getDogs(group): any {
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let user_id = strArr[0]+'-'+strArr[1];
+    return firebase.database().ref('/userData/'+user_id+'groups/'+group).once('value'); //return dogs of group snapshot
   }
 
 }
