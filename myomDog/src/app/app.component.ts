@@ -126,7 +126,7 @@ export class MyApp {
     });
 
     pushObject.on('registration').subscribe((registration: any) => {
-      alert('Device registered '+ registration);
+      alert('Device registered '+ registration.registrationId);
       this.manageService.registToken(registration);
     });
 
