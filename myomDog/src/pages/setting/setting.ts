@@ -3,6 +3,7 @@ import { NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 import firebase from 'firebase';
+import { AngularFireDatabase } from 'angularfire2/database';
 import {ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
 
 @Component({
@@ -10,7 +11,11 @@ import {ModalController, Platform, NavParams, ViewController } from 'ionic-angul
 })
 export class SettingPage {
 
-  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public manageService: ManageService) {
+  constructor(public modalCtrl: ModalController, 
+              public navCtrl: NavController, 
+              public authService: AuthService, 
+              public manageService: ManageService,
+              db: AngularFireDatabase) {
   }
   addingDogModal(){
     let dogModal = this.modalCtrl.create(AddingDogPage);
@@ -58,7 +63,7 @@ export class InvitingPage {
   myDogsGroups: any;
   inviteduser:string;
   inviteddog:string;
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService){
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
     this.myDogsGroups = this.manageService.getMyGroups(); //All my dog Groups
     console.log("my groups: "+this.myDogsGroups);
   }
@@ -78,7 +83,7 @@ export class InvitingPage {
 })
 export class ChangeInfoPage {
   changeddog:string;
-  constructor(public _viewCtrl: ViewController){
+  constructor(public _viewCtrl: ViewController, db: AngularFireDatabase){
 
   }
   changeinfobutton(){
