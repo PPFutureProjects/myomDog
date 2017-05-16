@@ -73,7 +73,6 @@ export class AuthService {
   }
 
   doLogin(email: string, password: string): any {
-    this.currentUser = this.fireAuth.currentUser;
     return this.fireAuth.signInWithEmailAndPassword(email, password);
   }
 

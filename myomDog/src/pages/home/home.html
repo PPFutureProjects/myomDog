@@ -5,7 +5,8 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Hello {{ (user | async)?.name }}</h3>
+  <h3>Hello </h3>
+  <p>{{ user | json }}</p>
   메세지 :
   <ul>
     <li *ngFor="let msg of msgs | async">

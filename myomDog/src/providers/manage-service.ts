@@ -32,12 +32,18 @@ export class ManageService {
   }
   registToken(token){
     this.currentUser = firebase.auth().currentUser;
-    let strArr = this.currentUser.email.split('.');
-    let uid = strArr[0]+'-'+strArr[1];
+    if (this.currentUser) {
+      let strArr = this.currentUser.email.split('.');
+      let uid = strArr[0]+'-'+strArr[1];
 
-    firebase.database().ref('userData/').child(uid).set({
-      pushToken: token
-    });
+      firebase.database().ref('userData/' + uid).set({
+        pushToken: token
+      });
+    }
+    else {
+      console.log("this.currentUser is null...stupid");
+    }
+
   }
 
   addDog(dogName: String){
@@ -80,7 +86,7 @@ export class ManageService {
     this.currentUser = firebase.auth().currentUser;
     let strArr = this.currentUser.email.split('.');
     let user_id = strArr[0]+'-'+strArr[1];
-    
+
     return firebase.database().ref('/userData/'+user_id+'groups').once('value');  //return groups snapshot
   }
 

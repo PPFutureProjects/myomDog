@@ -127,7 +127,7 @@ export class MyApp {
 
     pushObject.on('registration').subscribe((registration: any) => {
       alert('Device registered '+ registration.registrationId);
-      this.manageService.registToken(registration);
+      this.manageService.registToken(registration.registrationId);
     });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
