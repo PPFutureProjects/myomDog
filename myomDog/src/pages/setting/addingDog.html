@@ -14,10 +14,14 @@
 
   <ion-list>
     <ion-item>
+      <ion-label floating>그룹명</ion-label>
+      <ion-input type="text" value="" [(ngModel)]="groupname"></ion-input>
+    </ion-item>
+    
+    <ion-item>
       <ion-label floating>DogName</ion-label>
       <ion-input type = "text" value="" [(ngModel)]="dogname"></ion-input>
     </ion-item>
-
 
     <ion-item>
       <ion-label floating>DogAge</ion-label>

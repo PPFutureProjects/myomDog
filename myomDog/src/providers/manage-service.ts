@@ -27,13 +27,13 @@ export class ManageService {
     });
   }
 
-  addDog(dogName: String){
+  addDog(dogName: String, groupName: String){
     this.currentUser = firebase.auth().currentUser;
     console.log(this.currentUser);
 
      let strArr = this.currentUser.email.split('.');
      firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups').push({
-      groupName: "exampleName"
+      groupName: groupName
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups/'+groupKey.key+'/dogs').push({
         name: dogName
@@ -59,7 +59,7 @@ export class ManageService {
     let strArr2 = receiver.split('.');
     firebase.database().ref('userData/'+strArr2[0]+'-'+strArr2[1]+'/invitation').push({
       sender: user_id,
-      dog_id: dog
+      dog_id: "dog"
     });
   }
 

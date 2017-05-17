@@ -41,6 +41,7 @@ export class SettingPage {
 })
 export class AddingDogPage {
   dogname:string;
+  groupname: string;
   dogage:number;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService){
@@ -48,7 +49,7 @@ export class AddingDogPage {
   addingbutton(){
     console.log("dogname :" + this.dogname);
     console.log("dogage :" + this.dogage);
-    this.manageService.addDog(this.dogname);
+    this.manageService.addDog(this.dogname, this.groupname);
   }
   dismiss(){
     this._viewCtrl.dismiss();
