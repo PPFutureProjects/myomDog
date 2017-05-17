@@ -12,6 +12,21 @@
       {{ msg.$value }}
     </li>
   </ul>
+
+
+  <!-- Real floating action button, fixed. It will not scroll with the content -->
+
+    <ion-fab right bottom>
+      <button ion-fab color="light"><ion-icon name="add-circle"></ion-icon></button>
+          <ion-fab-list side="top">
+            <button ion-fab color="danger"><ion-icon name="nutrition"></ion-icon></button>
+          </ion-fab-list>
+          <ion-fab-list side="left">
+            <button ion-fab color="primary"><ion-icon name="paw"></ion-icon></button>
+          </ion-fab-list>
+        </ion-fab>
+
+
   <!-- <ul>
     <h4>List</h4>
     <li *ngFor="let dog of dogs | async">
