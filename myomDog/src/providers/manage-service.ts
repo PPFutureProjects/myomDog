@@ -22,9 +22,17 @@ export class ManageService {
     let strArr = this.currentUser.email.split('.');
     let uid = strArr[0]+'-'+strArr[1];
 
-    firebase.database().ref('userData/').child(uid).set({
+    return firebase.database().ref('userData/' + uid).set({
       pushToken: token
     });
+    //
+    // if (this.currentUser) {
+    //
+    // }
+    // else {
+    //   console.log("this.currentUser is null...stupid");
+    // }
+
   }
 
   addDog(dogName: String, groupName: String){
@@ -67,7 +75,7 @@ export class ManageService {
     this.currentUser = firebase.auth().currentUser;
     let strArr = this.currentUser.email.split('.');
     let user_id = strArr[0]+'-'+strArr[1];
-    
+
     return firebase.database().ref('/userData/'+user_id+'groups').once('value');  //return groups snapshot
   }
 

@@ -70,7 +70,6 @@ export class AuthService {
   }
 
   doLogin(email: string, password: string): any {
-    this.currentUser = firebase.auth().currentUser;
     return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 

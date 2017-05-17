@@ -44,7 +44,7 @@ export class MyApp {
           this.rootPage = LoginPage;
         }
       });
-      
+
 
       this.push.hasPermission()
        .then((res: any) => {
@@ -105,7 +105,12 @@ export class MyApp {
     pushObject.on('registration').subscribe((registration: any) => {
       console.log("push registration check!");
       alert('Device registered '+ registration.registrationId);
-      this.manageService.registToken(registration.registrationId);
+      if (this.currentUser){
+        this.manageService.registToken(registration.registrationId);
+      }
+      else {
+        alert('user is null shibal');
+      }
     });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
