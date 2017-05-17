@@ -56,8 +56,6 @@ export class MyApp {
        });
 
       platform.ready().then(() => {
-        // Okay, so the platform is ready and our plugins are available.
-        // Here you can do any higher level native things you might need.
         statusBar.styleDefault();
         splashScreen.hide();
         this.pushSetup();
@@ -103,14 +101,7 @@ export class MyApp {
     });
 
     pushObject.on('registration').subscribe((registration: any) => {
-      console.log("push registration check!");
-      alert('Device registered '+ registration.registrationId);
-      if (this.currentUser){
-        this.manageService.registToken(registration.registrationId);
-      }
-      else {
-        alert('user is null shibal');
-      }
+      console.log('Device registered '+ registration.registrationId);
     });
 
     pushObject.on('error').subscribe(error => console.error('Error with Push plugin', error));
