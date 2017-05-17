@@ -84,7 +84,8 @@
     <plugin name="cordova-plugin-statusbar" spec="2.2.1" />
     <plugin name="cordova-plugin-device" spec="1.1.4" />
     <plugin name="cordova-plugin-splashscreen" spec="~4.0.1" />
-    <plugin name="phonegap-plugin-push" spec="~2.0.0-rc3">
+    <plugin name="phonegap-plugin-puh" spec="~2.0.0-rc3">
         <variable name="SENDER_ID" value="835408454244" />
     </plugin>
+    <engine name="ios" spec="~4.4.0" />
 </widget>
