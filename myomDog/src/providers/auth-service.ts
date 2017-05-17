@@ -20,7 +20,6 @@ export class AuthService {
   public currentUser: firebase.User;
   // ----------- AngularFire2 docs 참조해서 작성중
 
-  public fireAuth: any;
   // public currentUser: any;
   public userData: any;
   public email: string;
@@ -33,9 +32,8 @@ export class AuthService {
     this.authState.subscribe((user: firebase.User) => {
       this.currentUser = user;
     });
-    console.log(this.currentUser);
+    console.log("In AuthService: "+this.currentUser);
 
-    this.fireAuth = firebase.auth();
     /*
     this.fireAuth.onAuthStateChanged( function (user) {
       if(user) {
@@ -57,7 +55,7 @@ export class AuthService {
 
 
   register(email: string, password: string): any {
-    return this.fireAuth.createUserWithEmailAndPassword(email, password)
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
         let id = newUser.email.split('.');
         let key = id[0]+'-'+id[1];
@@ -68,16 +66,16 @@ export class AuthService {
   }
 
   resetPassword(email: string): any {
-    return this.fireAuth.sendPasswordResetEmail(email);
+    return firebase.auth().sendPasswordResetEmail(email);
   }
 
   doLogin(email: string, password: string): any {
-    this.currentUser = this.fireAuth.currentUser;
-    return this.fireAuth.signInWithEmailAndPassword(email, password);
+    this.currentUser = firebase.auth().currentUser;
+    return firebase.auth().signInWithEmailAndPassword(email, password);
   }
 
   doLogout(): any {
-    return this.fireAuth.signOut();
+    return firebase.auth().signOut();
   }
 
 }

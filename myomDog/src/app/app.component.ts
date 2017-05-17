@@ -13,6 +13,8 @@ import { ManageService } from '../providers/manage-service';
 
 import firebase from 'firebase';
 
+declare var FCMPlugin;
+
 @Component({
   templateUrl: 'app.html'
 })
@@ -31,9 +33,9 @@ export class MyApp {
     public push: Push) {
       af.authState.subscribe((user: firebase.User) => {
         this.currentUser = user;
-        console.log(this.currentUser.email);
+        console.log(this.currentUser);
         if(this.currentUser!==null) {
-          console.log(this.currentUser);
+          console.log(this.currentUser.email);
           console.log(firebase.auth().currentUser);
           // this.authService.email = this.currentUser.email;
           this.rootPage = TabsPage;
@@ -64,7 +66,7 @@ export class MyApp {
 
   pushSetup() {
     //for test
-    console.log("pushSetup");
+    //console.log("pushSetup"+" myID" + this.currentUser.email);
     const options: PushOptions = {
       android: {
           senderID: '835408454244'
