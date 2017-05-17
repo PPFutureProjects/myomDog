@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
-
+import firebase from 'firebase';
 
 declare var FCMPlugin;
 
@@ -23,7 +23,7 @@ export class HomePage {
     // ---------------- END OF TESTING AngularFire2
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, private db: AngularFireDatabase) {
         this.msgs = db.list('/checkMsg');
-        this.user = authService.fireAuth.currentUser;
+        this.user = firebase.auth().currentUser;
         console.log("currnet user in home : " + this.user);
         this.tokenSetup().then((token) => {
           this.registerToken(token);
