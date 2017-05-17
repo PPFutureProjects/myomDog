@@ -19,17 +19,19 @@ export class ManageService {
   registToken(token){
     console.log("pushtoken: "+token);
     this.currentUser = firebase.auth().currentUser;
-    if (this.currentUser) {
-      let strArr = this.currentUser.email.split('.');
-      let uid = strArr[0]+'-'+strArr[1];
+    let strArr = this.currentUser.email.split('.');
+    let uid = strArr[0]+'-'+strArr[1];
 
-      firebase.database().ref('userData/' + uid).set({
-        pushToken: token
-      });
-    }
-    else {
-      console.log("this.currentUser is null...stupid");
-    }
+    return firebase.database().ref('userData/' + uid).set({
+      pushToken: token
+    });
+    //
+    // if (this.currentUser) {
+    //
+    // }
+    // else {
+    //   console.log("this.currentUser is null...stupid");
+    // }
 
   }
 
