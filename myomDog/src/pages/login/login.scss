@@ -1,3 +1,46 @@
 page-login {
+    .background {
+        background-image: url('../../assets/bg_login.png');
+    }
+    .scroll-content {
+        align-content: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        text-align: center;
+    }
+    ion-card.card{
+        box-shadow: none;
+        background: rgba(204,102,000,0.1);
+    }
 
+    .item {
+        margin-bottom: 10px;
+        background: rgba(204,102,000,0.3);
+        border: medium none;
+
+        text.input {
+            color: #fff;
+        }
+
+        input::-moz-placeholder {
+            color: #fff!important;
+        }
+        input:-moz-placeholder {
+            color: #fff!important;
+        }
+        *::-webkit-input-placeholder {
+            color: #fff!important;
+        }
+        *:-ms-input-placeholder {
+            color: #fff!important
+        }
+        *:-moz-placeholder {
+            color: #fff!important
+        }
+    }
+
+    .item button {
+        color: #f11
+    }
 }

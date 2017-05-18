@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
+import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import firebase  from 'firebase';
 /*
   Generated class for the ManageService provider.
@@ -13,9 +14,17 @@ import firebase  from 'firebase';
 export class ManageService {
 
   currentUser: any = null;
+  groups: FirebaseObjectObservable<any>;
 
-  constructor(public http: Http) {
+  constructor(public http: Http, db: AngularFireDatabase) {
+    console.log("manage Service --> "+firebase.auth().currentUser);
+    this.groups = db.object('/userData', {preserveSnapshot: true});
+    this.groups.subscribe(snapshot => {
+      console.log(snapshot.key)
+      console.log(snapshot.val())
+    });
   }
+
   registToken(token){
     console.log("pushtoken: "+token);
     this.currentUser = firebase.auth().currentUser;
@@ -25,13 +34,20 @@ export class ManageService {
     return firebase.database().ref('userData/' + uid).set({
       pushToken: token
     });
-    //
-    // if (this.currentUser) {
-    //
-    // }
-    // else {
-    //   console.log("this.currentUser is null...stupid");
-    // }
+  }
+
+  getMyGroups():any {
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+    let user_id = strArr[0]+'-'+strArr[1];
+
+    /*console.log("start finding groups");
+    return firebase.database().ref('/userData/'+user_id+'groups').once('value').then(function(snapshot){
+      console.log("snapshot:  "+snapshot)
+      snapshot.forEach(function(childsnap){
+        console.log(childsnap);
+      })
+    });*/
 
   }
 
@@ -52,12 +68,6 @@ export class ManageService {
             });
         });
      });
-     /*
-     firebase.database().ref('userData/'+strArr[0]+strArr[1]+'/dogs').set({
-       newDogkey: {
-        name: dogName
-       }
-     });*/
   }
 
   invite(receiver, dog){
@@ -71,13 +81,7 @@ export class ManageService {
     });
   }
 
-  getMyGroups():any {
-    this.currentUser = firebase.auth().currentUser;
-    let strArr = this.currentUser.email.split('.');
-    let user_id = strArr[0]+'-'+strArr[1];
 
-    return firebase.database().ref('/userData/'+user_id+'groups').once('value');  //return groups snapshot
-  }
 
   getDogs(group): any {
     this.currentUser = firebase.auth().currentUser;
@@ -85,5 +89,9 @@ export class ManageService {
     let user_id = strArr[0]+'-'+strArr[1];
     return firebase.database().ref('/userData/'+user_id+'groups/'+group).once('value'); //return dogs of group snapshot
   }
+
+}
+
+export class Group {
 
 }
