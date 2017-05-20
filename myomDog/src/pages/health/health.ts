@@ -10,7 +10,7 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 @IonicPage()
 @Component({
   selector: 'page-health',
-  templateUrl: 'health.html',
+  templateUrl: 'health.html'
 })
 export class HealthPage {
 
@@ -27,4 +27,20 @@ export class HealthPage {
     console.log('ionViewDidLoad Health');
   }
 
+}
+
+@Component({
+  selector: 'edit-remove-slide-options',
+  template: `<button ion-button color="primary" icon-left>
+      <ion-icon name="create"></ion-icon>
+      편집
+    </button>
+    <button ion-button color="danger" icon-left>
+      <ion-icon name="trash"></ion-icon>
+      삭제
+    </button>`
+})
+export class SlideOptions {
+  constructor(){
+  }
 }
