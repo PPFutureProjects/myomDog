@@ -37,6 +37,8 @@ export class MyApp {
         if(this.currentUser!==null) {
           console.log(this.currentUser.email);
           console.log(firebase.auth().currentUser);
+          this.authService.setUser(user);
+          this.manageService.setUser(user);
           // this.authService.email = this.currentUser.email;
           this.rootPage = TabsPage;
         }
@@ -108,3 +110,4 @@ export class MyApp {
 
   }
 }
+

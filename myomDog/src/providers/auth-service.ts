@@ -52,7 +52,9 @@ export class AuthService {
     this.userData = firebase.database().ref('userData');
   }
 
-
+  setUser(user){
+    this.currentUser = user;
+  }
 
   register(email: string, password: string): any {
     return firebase.auth().createUserWithEmailAndPassword(email, password)
