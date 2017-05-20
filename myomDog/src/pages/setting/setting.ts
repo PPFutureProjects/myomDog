@@ -41,6 +41,7 @@ export class SettingPage {
 })
 export class AddingDogPage {
   dogname:string;
+  groupname: string;
   dogage:number;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService){
@@ -48,7 +49,7 @@ export class AddingDogPage {
   addingbutton(){
     console.log("dogname :" + this.dogname);
     console.log("dogage :" + this.dogage);
-    this.manageService.addDog(this.dogname);
+    this.manageService.addDog(this.dogname, this.groupname);
   }
   dismiss(){
     this._viewCtrl.dismiss();
@@ -61,11 +62,14 @@ export class AddingDogPage {
 })
 export class InvitingPage {
   myDogsGroups: any;
+  dogs: any;  //for test------------------------------------------------------------------------------------
   inviteduser:string;
   inviteddog:string;
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
-    this.myDogsGroups = this.manageService.getMyGroups(); //All my dog Groups
-    console.log("my groups: "+this.myDogsGroups);
+    manageService.syncData();
+    this.myDogsGroups = manageService.getMyGroupKeys();
+    this.dogs = manageService.getDogsAreOnGroup(this.myDogsGroups[0]);
+    console.log(this.dogs+"----------success");
   }
   invitebutton(){
     console.log("dogname :" + this.inviteduser );
@@ -94,3 +98,4 @@ export class ChangeInfoPage {
     this._viewCtrl.dismiss();
   }
 }
+
