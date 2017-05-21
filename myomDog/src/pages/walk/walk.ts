@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams } from 'ionic-angular';
 
+import { TimerComponet } from '../../component/timer/timer'
+
 /**
  * Generated class for the Walk page.
  *
