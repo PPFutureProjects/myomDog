@@ -61,7 +61,7 @@
 
 <div [ngSwitch]="history">
   <ion-list *ngSwitchCase="'everything'">
-
+    <!--*ngFor="let histroy of dogHistory | async"-->
     <ion-item-sliding>
       <ion-item>
         <ion-icon name="medkit" item-left></ion-icon>
@@ -97,7 +97,7 @@
 
     <ion-item-sliding>
       <ion-item>
-        <ion-icon name="restaurant" item-left></ion-icon>
+        <ion-icon name="nutrition" item-left></ion-icon>
           간식
         <ion-note item-right>05/20 20:00</ion-note>
       </ion-item>
