@@ -39,17 +39,19 @@ export class ManageService {
         let g = new Group();
         let g_key = group.key;
         
-        firebase.database().ref('/userData/'+user_id+'/groups/'+g_key+'/dogs').once('value').then((dog)=>{
-          let d = new Dog();
-          let dogKey = dog.key;
-          firebase.database().ref('/dogData/'+dogKey+'/managers').once('value').then((manager)=>{
-            d.addManager(manager.key);
+        firebase.database().ref('/userData/'+user_id+'/groups/'+g_key+'/dogs').once('value').then((dogs)=>{
+          dogs.forEach((dog)=>{
+            let d = new Dog();
+            let dogKey = dog.key;
+            firebase.database().ref('/dogData/'+dogKey+'/managers').once('value').then((manager)=>{
+              d.addManager(manager.key);
+            });
+            d.setSuperManager(dog.super);
+            d.setDogKey(dog.key);
+            d.setDogName(dog.val().name);
+            g.addDog(d);
+            this.myDogs.push(d);
           });
-          d.setSuperManager(dog.super);
-          d.setDogKey(dog.key);
-          d.setDogName(dog.val().name);
-          g.addDog(d);
-          this.myDogs.push(d);
         });
         g.setGroupKey(group.key);
         g.setGroupName(group.val().groupName);
@@ -66,12 +68,33 @@ export class ManageService {
     return groups;
   }
 
+  getAllMyDogsToDict(){
+    let groupNameAndDogs = {};
+    this.myGroups.forEach((group)=>{
+      let dogs: Array<Dog> = group.getDogs();
+      groupNameAndDogs[group.getGroupName()] = dogs;
+    });
+    return groupNameAndDogs;
+  }
+
+  getAllMyDogs(){
+    let mydogs: Array<Dog> = new Array();
+    this.myGroups.forEach((group)=>{
+      let d = group.getDogs()
+      d.forEach((eachdog)=>{
+        mydogs.push(eachdog);
+      });
+    });
+    return mydogs;
+  }
+
   getDogsAreOnGroup(groupKey){
     let dogs: Array<Dog>;
     this.myGroups.forEach((group)=>{
       if(group.getGroupKey()==groupKey)
         dogs = (group.getDogs());
     });
+    console.log(dogs[0]);
     return dogs;
   }
 
@@ -192,6 +215,9 @@ export class Dog {
 
   getDogKey(){
     return this.dogKey;
+  }
+  getDogname(){
+    return this.dogName;
   }
   getManagers(){
     return this.managers;

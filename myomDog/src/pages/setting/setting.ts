@@ -61,20 +61,25 @@ export class AddingDogPage {
   templateUrl: './inviting.html'
 })
 export class InvitingPage {
-  myDogsGroups: any;
-  dogs: any;  //for test------------------------------------------------------------------------------------
+  GroupAndDogs: any; 
+  nameOfGroups: any;
+  AllDogs: any;
   inviteduser:string;
   inviteddog:string;
+
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
     manageService.syncData();
-    this.myDogsGroups = manageService.getMyGroupKeys();
-    this.dogs = manageService.getDogsAreOnGroup(this.myDogsGroups[0]);
-    console.log(this.dogs+"----------success");
+    this.GroupAndDogs = manageService.getAllMyDogsToDict(); //{ groupName : dogs[] pair }
+    this.nameOfGroups = Object.keys(this.GroupAndDogs);
+    let NumberOfGroups = Object.keys(this.GroupAndDogs).length;
+    
+    this.AllDogs = manageService.getAllMyDogs();
   }
   invitebutton(){
     console.log("dogname :" + this.inviteduser );
     console.log("dogage :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog);
+    console.log(this.inviteduser);
+    this.manageService.invite(this.inviteduser, this.inviteddog.toString());
   }
 
   dismiss(){

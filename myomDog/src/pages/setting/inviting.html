@@ -21,10 +21,10 @@
     <ion-item>  //ngFor문
       <ion-label>어떤강아지를초대</ion-label>
         <ion-select [(ngModel)]="inviteddog" multiple = "true" cancelText = "취이소" okText = "확이인">
-          <ion-option value="dog1">흰둥이</ion-option>
-          <ion-option value="dog2">깜지</ion-option>
-          <ion-option value="dog3">단비</ion-option>
-          <ion-option value="dog4">승호</ion-option>
+          <!--<ion-option *ngFor="let d of dogs">{{d.dogName}}</ion-option>-->
+          <ion-option *ngFor="let dog of AllDogs" [value]="dog.dogKey">
+            {{dog.dogName}}
+          </ion-option>
         </ion-select>
     </ion-item>
   </ion-list>
