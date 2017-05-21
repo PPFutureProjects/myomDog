@@ -31,6 +31,7 @@ import { KeysPipe } from '../pipes/keys';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
 import { Push } from '@ionic-native/push';
+import { TimerComponent } from '../components/timer/timer';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
@@ -61,7 +62,9 @@ firebase.initializeApp(firebaseConfig);
     TabsPage,
 
     OrderbyPipe,
-    KeysPipe
+    KeysPipe,
+    TimerComponent,
+    TimerComponent
   ],
   imports: [
     HttpModule,

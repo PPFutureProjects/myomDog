@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { ManageService } from '../../providers/manage-service';
 
 /**
  * Generated class for the Health page.
@@ -19,7 +20,7 @@ export class HealthPage {
   isAndroid: boolean = false;
 
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public manageService: ManageService) {
     this.isAndroid = platform.is('android');
   }
 
