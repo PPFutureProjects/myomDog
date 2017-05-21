@@ -68,6 +68,13 @@ export class ManageService {
     return groups;
   }
 
+  getGroupName(key){
+    for (let i in this.myGroups){
+      if(this.myGroups[i].getGroupKey()==key)
+        return this.myGroups[i].getGroupName();
+    }
+  }
+
   getAllMyDogsToDict(){
     let groupNameAndDogs = {};
     this.myGroups.forEach((group)=>{
@@ -87,6 +94,8 @@ export class ManageService {
     });
     return mydogs;
   }
+
+
 
   getDogsAreOnGroup(groupKey){
     let dogs: Array<Dog>;
