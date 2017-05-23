@@ -3,6 +3,7 @@ import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 
 import { History } from './History'
+import { HealthListComponent } from '../../component/health-list/health-list'
 
 /**
  * Generated class for the Health page.
@@ -21,7 +22,6 @@ export class HealthPage {
   history: string = "everything"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
 
-  dogHistory:[History]
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public manageService: ManageService) {
     this.isAndroid = platform.is('android');

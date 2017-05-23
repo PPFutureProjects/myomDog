@@ -44,10 +44,10 @@
 
 <ion-toolbar no-border-top>
   <ion-segment [(ngModel)]="history">
-    <ion-segment-button value="everything">
+    <ion-segment-button value="total">
       전체
     </ion-segment-button>
-    <ion-segment-button value="meal">
+    <ion-segment-button value="food">
       식사
     </ion-segment-button>
     <ion-segment-button value="walk">
@@ -60,8 +60,8 @@
 </ion-toolbar>
 
 <div [ngSwitch]="history">
-  <ion-list *ngSwitchCase="'everything'">
-    <!--*ngFor="let histroy of dogHistory | async"-->
+  <ion-list *ngSwitchCase="'total'">
+    <!-- *ngFor="let histroy of dogHistory | async" -->
     <ion-item-sliding>
       <ion-item>
         <ion-icon name="medkit" item-left></ion-icon>
@@ -108,7 +108,7 @@
 
   </ion-list>
 
-  <ion-list *ngSwitchCase="'meal'">
+  <ion-list *ngSwitchCase="food">
     <ion-item-sliding>
       <ion-item>
         <ion-icon name="restaurant" item-left></ion-icon>
