@@ -15,7 +15,7 @@ export class TimerComponent {
 
   private timeInSeconds: number;
   public timer: PTimer;
-  constructor() {} 
+  constructor() {}
 
   ngOnInit() {
     this.initTimer();
