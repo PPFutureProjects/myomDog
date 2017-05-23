@@ -27,8 +27,12 @@ $colors: (
   primary:    #488aff,
   secondary:  #32db64,
   danger:     #f53d3d,
+  // myom colors
   light:      #f4f4f4,
-  dark:       #222
+  dark:       #3e454c,
+  main:       #24c5a9,
+  emphasis:   #1b9998,
+  point:      #fd806a
 );
 
 
@@ -76,3 +80,5 @@ $colors: (
 
 @import "roboto";
 @import "noto-sans";
+
+$font-stack:  NanumBarunGothic,noto-sans;
