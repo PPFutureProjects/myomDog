@@ -19,7 +19,7 @@ export class WalkPage {
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
  addpincininfo(){
-   //미완성
+   console.log();
  }
 
   ionViewDidLoad() {

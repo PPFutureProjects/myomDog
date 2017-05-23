@@ -5,41 +5,34 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Hello {{ user.email }}</h3>
-  메세지 :
-  <ul>
-    <li *ngFor="let msg of msgs | async">
-      {{ msg.$value }}
-    </li>
-  </ul>
 
+  <ion-list>
+    <ion-list-header>
+      그룹1
+    </ion-list-header>
 
-  <!-- Real floating action button, fixed. It will not scroll with the content -->
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="img/test.png">
+      </ion-avatar>
+      <h2>개1</h2>
+      <h3>개년월일</h3>
+      <p>개인포</p>
+    </ion-item>
 
-    <ion-fab right bottom>
-      <button ion-fab color="light"><ion-icon name="add-circle"></ion-icon></button>
-          <ion-fab-list side="top">
-            <button ion-fab color="danger"><ion-icon name="nutrition"></ion-icon></button>
-          </ion-fab-list>
-          <ion-fab-list side="left">
-            <button ion-fab color="primary"><ion-icon name="paw"></ion-icon></button>
-          </ion-fab-list>
-        </ion-fab>
+    <ion-list-header>
+      그룹2
+    </ion-list-header>
 
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="img/notread.png">
+      </ion-avatar>
+      <h2>개1</h2>
+      <h3>개년월일</h3>
+      <p>개인포</p>
+    </ion-item>
 
-  <!-- <ul>
-    <h4>List</h4>
-    <li *ngFor="let dog of dogs | async">
-      ID : {{ dog.$key }} <br>
-      이름 : {{ dog.d_name }} <br>
-      몇끼 먹니? {{ dog.meal_time }} <br>
-      같이 기르는 사람들 : <br>
-      {{dog.users | json}}
-        <ul>
-          <li *ngFor="let user of dog.users | keys">
-            {{ user.key }}
-          </li>
-        </ul>
-    </li>
-  </ul> -->
+  </ion-list>
+
 </ion-content>
