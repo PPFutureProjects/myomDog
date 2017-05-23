@@ -1,0 +1,29 @@
+<!-- Generated template for the HealthListComponent component -->
+<div>
+  {{text}}
+</div>
+
+<ion-item-sliding *ngFor="let histroy of dogHistory | async">
+  <ion-item>
+    <ion-icon name="{{history.icon}}" item-left></ion-icon>
+      {{history.name}}
+    <ion-note item-right>{{history.time | date:'MM/dd jm'}}</ion-note>
+  </ion-item>
+  <!-->
+  <ion-item>
+    <ion-icon name="medkit" item-left></ion-icon>
+      예방 주사
+    <ion-note item-right>03/03 10:30</ion-note>
+  </ion-item>
+  </!-->
+  <ion-item-options>
+    <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+        <ion-icon name="create"></ion-icon>
+        편집
+      </button>
+      <button ion-button color="point" icon-left (click)="deleteItem(history)">
+        <ion-icon name="trash"></ion-icon>
+        삭제
+      </button>
+  </ion-item-options>
+</ion-item-sliding>
