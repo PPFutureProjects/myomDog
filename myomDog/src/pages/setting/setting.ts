@@ -3,7 +3,7 @@ import { NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 import firebase from 'firebase';
-import { AngularFireDatabase } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import {ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
 
 @Component({
@@ -16,6 +16,7 @@ export class SettingPage {
               public authService: AuthService,
               public manageService: ManageService,
               db: AngularFireDatabase) {
+
   }
   addingDogModal(){
     let dogModal = this.modalCtrl.create(AddingDogPage);
@@ -61,6 +62,10 @@ export class AddingDogPage {
   templateUrl: './inviting.html'
 })
 export class InvitingPage {
+
+  userKey: string;
+  grouplist: FirebaseListObservable<any[]>;
+  groupobject: FirebaseObjectObservable<any>;
   GroupAndDogs: any;
   nameOfGroups: any;
   AllDogs: any;
@@ -68,17 +73,23 @@ export class InvitingPage {
   inviteddog:string;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
+    this.userKey = manageService.userKey;
+    console.log(this.userKey);
+    this.grouplist = db.list('/userData/'+this.userKey+'/groups');
+    this.groupobject = db.object('/userData/'+this.userKey+'/groups');
+    console.log(this.grouplist);
+    /*
     manageService.syncData();
     this.GroupAndDogs = manageService.getAllMyDogsToDict(); //{ groupName : dogs[] pair }
     this.nameOfGroups = Object.keys(this.GroupAndDogs);
     let NumberOfGroups = Object.keys(this.GroupAndDogs).length;
 
     this.AllDogs = manageService.getAllMyDogs();
+    */
+
   }
   invitebutton(){
-    console.log("dogname :" + this.inviteduser );
-    console.log("dogage :" + this.inviteddog );
-    console.log(this.inviteduser);
+    console.log("invited dog :" + this.inviteddog );
     this.manageService.invite(this.inviteduser, this.inviteddog.toString());
   }
 
