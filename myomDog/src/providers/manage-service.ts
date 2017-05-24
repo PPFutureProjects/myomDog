@@ -38,7 +38,7 @@ export class ManageService {
       snap.forEach((group)=>{
         let g = new Group();
         let g_key = group.key;
-        
+
         firebase.database().ref('/userData/'+user_id+'/groups/'+g_key+'/dogs').once('value').then((dogs)=>{
           dogs.forEach((dog)=>{
             let d = new Dog();
@@ -235,4 +235,3 @@ export class Dog {
     return this.supermanager;
   }
 }
-

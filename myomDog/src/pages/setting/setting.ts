@@ -13,10 +13,8 @@ export class SettingPage {
 
   constructor(public modalCtrl: ModalController,
               public navCtrl: NavController,
-              public authService: AuthService,
-              public manageService: ManageService,
-              db: AngularFireDatabase) {
-
+              public authService: AuthService
+              ) {
   }
   addingDogModal(){
     let dogModal = this.modalCtrl.create(AddingDogPage);
@@ -62,7 +60,6 @@ export class AddingDogPage {
   templateUrl: './inviting.html'
 })
 export class InvitingPage {
-
   userKey: string;
   grouplist: FirebaseListObservable<any[]>;
   groupobject: FirebaseObjectObservable<any>;
