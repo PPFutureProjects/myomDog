@@ -18,11 +18,10 @@ export class WalkPage {
 
   constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
- addpincininfo(){
-   console.log();
+ addpicnic(){
+   console.log('test');
  }
-
-  ionViewDidLoad() {
+ ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
   }
 
