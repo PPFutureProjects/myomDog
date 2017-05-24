@@ -11,9 +11,9 @@ import {ModalController, Platform, NavParams, ViewController } from 'ionic-angul
 })
 export class SettingPage {
 
-  constructor(public modalCtrl: ModalController, 
-              public navCtrl: NavController, 
-              public authService: AuthService, 
+  constructor(public modalCtrl: ModalController,
+              public navCtrl: NavController,
+              public authService: AuthService,
               public manageService: ManageService,
               db: AngularFireDatabase) {
   }
@@ -61,7 +61,7 @@ export class AddingDogPage {
   templateUrl: './inviting.html'
 })
 export class InvitingPage {
-  GroupAndDogs: any; 
+  GroupAndDogs: any;
   nameOfGroups: any;
   AllDogs: any;
   inviteduser:string;
@@ -72,7 +72,7 @@ export class InvitingPage {
     this.GroupAndDogs = manageService.getAllMyDogsToDict(); //{ groupName : dogs[] pair }
     this.nameOfGroups = Object.keys(this.GroupAndDogs);
     let NumberOfGroups = Object.keys(this.GroupAndDogs).length;
-    
+
     this.AllDogs = manageService.getAllMyDogs();
   }
   invitebutton(){
@@ -103,4 +103,3 @@ export class ChangeInfoPage {
     this._viewCtrl.dismiss();
   }
 }
-
