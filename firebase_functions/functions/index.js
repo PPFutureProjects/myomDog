@@ -3,16 +3,15 @@ let admin = require('firebase-admin');
 
 admin.initializeApp(functions.config().firebase);
 
-exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation').onWrite(event => {
+exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation/{identify}').onWrite(event => {
     let eventData = event.data.val();
     let dog_id = eventData.dog_id;
     let receiver = event.params.user_id;
     let sender = eventData.sender;
-    console.log('dog_id: '+dog_id+'receiver: '+receiver+'sender: '+sender);
+    console.log('dog_id: '+dog_id+' receiver: '+receiver+' sender: '+sender);
 
-    let message = sender+' invited you';
-
-    getToken(receiver).then(token => {
+    getToken(receiver).then((token, name) => {
+        let message = name + ' invited you';
         if(token!==null) console.log(token);
         let payload = {
             notification: {
@@ -37,7 +36,13 @@ exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation')
 
 function getToken(user){
     let dbRef = admin.database().ref('userData/'+user);
-    let snap =  dbRef.once('value');
-    let token = snap.val().pushToken;
-    return token;
+    let defer = new Promise((resolve, reject) => {
+        dbRef.once('value', (snap) => {
+            let data = snap.val();
+            resolve(data.pushToken, data.name);
+        }, (err) => {
+            reject(err);
+        });
+    });
+    return defer;
 }
