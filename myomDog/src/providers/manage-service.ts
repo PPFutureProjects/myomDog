@@ -14,50 +14,13 @@ import firebase  from 'firebase';
 export class ManageService {
 
   currentUser: any = null;
+  userKey: string;
   //groups: FirebaseObjectObservable<any>;
   myGroups: Array<Group> = null;
   myDogs: Array<Dog> = null;
   constructor(public http: Http, db: AngularFireDatabase) {
-    /*
-    console.log("manage Service --> "+firebase.auth().currentUser);
-    this.groups = db.object('/userData', {preserveSnapshot: true});
-    this.groups.subscribe(snapshot => {
-      console.log(snapshot.key)
-      console.log(snapshot.val())
-    });
-    */
     this.myGroups = new Array();
     this.myDogs = new Array();
-  }
-
-  syncData(){
-    let email = this.currentUser.email;
-    let strArr = email.split('.');
-    let user_id = strArr[0]+'-'+strArr[1];
-    firebase.database().ref('/userData/'+user_id+'/groups').once('value').then((snap)=>{
-      snap.forEach((group)=>{
-        let g = new Group();
-        let g_key = group.key;
-        
-        firebase.database().ref('/userData/'+user_id+'/groups/'+g_key+'/dogs').once('value').then((dogs)=>{
-          dogs.forEach((dog)=>{
-            let d = new Dog();
-            let dogKey = dog.key;
-            firebase.database().ref('/dogData/'+dogKey+'/managers').once('value').then((manager)=>{
-              d.addManager(manager.key);
-            });
-            d.setSuperManager(dog.super);
-            d.setDogKey(dog.key);
-            d.setDogName(dog.val().name);
-            g.addDog(d);
-            this.myDogs.push(d);
-          });
-        });
-        g.setGroupKey(group.key);
-        g.setGroupName(group.val().groupName);
-        this.myGroups.push(g);
-      });
-    });
   }
 
   getMyGroupKeys(){
@@ -120,7 +83,8 @@ export class ManageService {
 
   setUser(user){
     this.currentUser = user;
-    this.syncData();
+    let str = user.email.split('.');
+    this.userKey = str[0]+'-'+str[1];
   }
 
   registToken(token){
@@ -129,7 +93,7 @@ export class ManageService {
     let strArr = this.currentUser.email.split('.');
     let uid = strArr[0]+'-'+strArr[1];
 
-    return firebase.database().ref('userData/' + uid).set({
+    return firebase.database().ref('userData/' + uid).update({
       pushToken: token
     });
   }
@@ -146,7 +110,7 @@ export class ManageService {
         name: dogName
       }).then((newDogKey)=> {
            firebase.database().ref('dogData/').child(newDogKey.key).set(
-            {name: "STRONG",
+            {name: dogName,
             super: this.currentUser.email
             });
         });
@@ -154,13 +118,10 @@ export class ManageService {
   }
 
   invite(receiver, dog){
-    this.currentUser = firebase.auth().currentUser;
-    let strArr = this.currentUser.email.split('.');
-    let user_id = strArr[0]+'-'+strArr[1];
     let strArr2 = receiver.split('.');
     firebase.database().ref('userData/'+strArr2[0]+'-'+strArr2[1]+'/invitation').push({
-      sender: user_id,
-      dog_id: "dog"
+      sender: this.userKey,
+      dog_id: dog
     });
   }
 
