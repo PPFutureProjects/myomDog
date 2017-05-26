@@ -44,121 +44,125 @@
 
 <ion-toolbar no-border-top>
   <ion-segment [(ngModel)]="history">
-    <ion-segment-button value="total">
+    <ion-segment-button value="total" (click)="filterBy()">
       전체
     </ion-segment-button>
-    <ion-segment-button value="food">
+    <ion-segment-button value="food" (click)="filterBy('food')">
       식사
     </ion-segment-button>
-    <ion-segment-button value="walk">
+    <ion-segment-button value="walk" (click)="filterBy('walk')">
       산책
     </ion-segment-button>
-    <ion-segment-button value="etc">
+    <ion-segment-button value="etc" (click)="filterBy('etc')">
       그 외
     </ion-segment-button>
   </ion-segment>
 </ion-toolbar>
-
 <div [ngSwitch]="history">
-  <ion-list *ngSwitchCase="'total'">
-    <!-- *ngFor="let histroy of dogHistory | async" -->
-    <ion-item-sliding>
+  <ion-list>
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
-        <ion-icon name="medkit" item-left></ion-icon>
-          예방 주사
-        <ion-note item-right>03/03 10:30</ion-note>
+        <ion-icon name="{{history.icon}}" item-left></ion-icon>
+          {{history.name}}
+        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
+        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+            <ion-icon name="create"></ion-icon>
+            편집
+          </button>
+          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+            <ion-icon name="trash"></ion-icon>
+            삭제
+          </button>
       </ion-item-options>
     </ion-item-sliding>
 
-    <ion-item-sliding>
+    <!-- <health-list></health-list> -->
+  </ion-list>
+<!-->
+
+  <ion-list *ngSwitchCase="total">
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
-        <ion-icon name="restaurant" item-left></ion-icon>
-          밥
-        <ion-note item-right>05/20 17:00</ion-note>
+        <ion-icon name="{{history.icon}}" item-left></ion-icon>
+          {{history.name}}
+        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
+        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+            <ion-icon name="create"></ion-icon>
+            편집
+          </button>
+          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+            <ion-icon name="trash"></ion-icon>
+            삭제
+          </button>
       </ion-item-options>
     </ion-item-sliding>
-
-    <ion-item-sliding>
-      <ion-item>
-        <ion-icon name="paw" item-left></ion-icon>
-          산책
-        <ion-note item-right>05/20 19:30</ion-note>
-      </ion-item>
-      <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
-      </ion-item-options>
-    </ion-item-sliding>
-
-    <ion-item-sliding>
-      <ion-item>
-        <ion-icon name="nutrition" item-left></ion-icon>
-          간식
-        <ion-note item-right>05/20 20:00</ion-note>
-      </ion-item>
-      <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
-      </ion-item-options>
-    </ion-item-sliding>
-
   </ion-list>
 
   <ion-list *ngSwitchCase="food">
-    <ion-item-sliding>
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
-        <ion-icon name="restaurant" item-left></ion-icon>
-          밥
-        <ion-note item-right>05/20 17:00</ion-note>
+        <ion-icon name="{{history.icon}}" item-left></ion-icon>
+          {{history.name}}
+        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
-      </ion-item-options>
-    </ion-item-sliding>
-
-    <ion-item-sliding>
-      <ion-item>
-        <ion-icon name="nutrition" item-left></ion-icon>
-          간식
-        <ion-note item-right>05/20 20:00</ion-note>
-      </ion-item>
-      <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
+        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+            <ion-icon name="create"></ion-icon>
+            편집
+          </button>
+          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+            <ion-icon name="trash"></ion-icon>
+            삭제
+          </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 
   <ion-list *ngSwitchCase="'walk'">
-    <ion-item-sliding>
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
-        <ion-icon name="paw" item-left></ion-icon>
-          산책
-        <ion-note item-right>05/20 19:30</ion-note>
+        <ion-icon name="{{history.icon}}" item-left></ion-icon>
+          {{history.name}}
+        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
+        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+            <ion-icon name="create"></ion-icon>
+            편집
+          </button>
+          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+            <ion-icon name="trash"></ion-icon>
+            삭제
+          </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
 
   <ion-list *ngSwitchCase="'etc'">
-    <ion-item-sliding>
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
-        <ion-icon name="medkit" item-left></ion-icon>
-          예방 주사
-        <ion-note item-right>03/03 10:30</ion-note>
+        <ion-icon name="{{history.icon}}" item-left></ion-icon>
+          {{history.name}}
+        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <edit-remove-slide-options></edit-remove-slide-options>
+        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+            <ion-icon name="create"></ion-icon>
+            편집
+          </button>
+          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+            <ion-icon name="trash"></ion-icon>
+            삭제
+          </button>
       </ion-item-options>
     </ion-item-sliding>
   </ion-list>
+</!-->
 </div>
-
 
 <ion-fab right bottom>
   <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>

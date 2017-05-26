@@ -14,7 +14,7 @@ import { RegisterPage } from '../pages/register/register';
 import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 
 import { HomePage } from '../pages/home/home';
-import { HealthPage, SlideOptions } from '../pages/health/health';
+import { HealthPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
 import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage } from '../pages/setting/setting';
 import { TabsPage } from '../pages/tabs/tabs';
@@ -54,7 +54,6 @@ firebase.initializeApp(firebaseConfig);
 
     HomePage,
     HealthPage,
-    SlideOptions,
     WalkPage,
     SettingPage,
     AddingDogPage,
@@ -64,7 +63,6 @@ firebase.initializeApp(firebaseConfig);
 
     OrderbyPipe,
     KeysPipe,
-    TimerComponent,
     TimerComponent,
     HealthListComponent
   ],
@@ -83,6 +81,7 @@ firebase.initializeApp(firebaseConfig);
 
     HomePage,
     HealthPage,
+    HealthListComponent,
     WalkPage,
     SettingPage,
     AddingDogPage,

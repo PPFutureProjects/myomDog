@@ -1,9 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { ManageService } from '../../providers/manage-service';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+// import { ManageService } from '../../providers/manage-service';
+// import { Subject } from 'rxjs/Subject';
+import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
 import { History } from './History'
-import { HealthListComponent } from '../../component/health-list/health-list'
 
 /**
  * Generated class for the Health page.
@@ -19,60 +21,58 @@ import { HealthListComponent } from '../../component/health-list/health-list'
 export class HealthPage {
 
   graph: string = "week"; //탭에 처음 들어왔을 때 default 세그먼트 탭
-  history: string = "everything"; //탭에 처음 들어왔을 때 default 세그먼트 탭
+  history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
+  myMainDogKey: any;
+  dogHistory: FirebaseListObservable<any[]>;
+  segSubject: BehaviorSubject<any>;
 
-
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public manageService: ManageService) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, db: AngularFireDatabase) {
     this.isAndroid = platform.is('android');
+    this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
+
+    this.segSubject = new BehaviorSubject(undefined);
+
+    var subscription = this.segSubject.subscribe(
+      function (x) {
+        // if(x !== null || x !== undefined){
+        //   console.log('Next: ' + x.toString());
+        // }
+        // else {
+        //   console.log('Next: total');
+        // }
+      },
+      function (err) {
+          console.log('Error: ' + err);
+      },
+      function () {
+          console.log('Completed');
+      });
+
+    this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
+      query: {
+        orderByChild: 'category',
+        equalTo: this.segSubject
+      }
+    });
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
   }
 
-}
+  ionViewWillLeave() {
+    //초기화
+    this.graph = "week";
+    this.history = "total";
+  }
 
-@Component({
-  selector: 'sliding-list-item',
-  template:
-  `<ion-item-sliding>
-    <ion-item>
-    <!--
-      <ion-icon name="{{history.icon}}" item-left></ion-icon>
-        {{history.name}}
-      <ion-note item-right>{{history.time | date:'MM/dd jm'}}</ion-note>
-    </ion-item>
-    -->
-    <ion-item>
-      <ion-icon name="medkit" item-left></ion-icon>
-        예방 주사
-      <ion-note item-right>03/03 10:30</ion-note>
-    </ion-item>
-    <ion-item-options>
-      <edit-remove-slide-options></edit-remove-slide-options>
-    </ion-item-options>
-  </ion-item-sliding>`
-})
-export class SlideItem {
-  constructor(){
+  // public get getHealthItems(){
+  //   return this.dogHistory;
+  // }
 
+  // Null 을 넘겨야하므로 옵셔널
+  filterBy(segVal?: string) {
+    this.segSubject.next(segVal);
   }
 }
-// Slide List의 옵션 컴포넌트 -------------------------------------
-@Component({
-  selector: 'edit-remove-slide-options',
-  template: `<button ion-button color="primary" icon-left>
-      <ion-icon name="create"></ion-icon>
-      편집
-    </button>
-    <button ion-button color="danger" icon-left>
-      <ion-icon name="trash"></ion-icon>
-      삭제
-    </button>`
-})
-export class SlideOptions {
-  constructor(){
-  }
-}
-// ------------------------------------- Slide List의 옵션 컴포넌트

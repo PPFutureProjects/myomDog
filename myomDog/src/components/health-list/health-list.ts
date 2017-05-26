@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
-
+// import { HealthPage } from '../../pages/health/health'
+// import { FirebaseListObservable } from 'angularfire2/database';
 /**
  * Generated class for the HealthListComponent component.
  *
@@ -12,12 +13,11 @@ import { Component } from '@angular/core';
 })
 export class HealthListComponent {
 
-  text: string;
-  dogHistory:[History]
+  // dogHistory:FirebaseListObservable<any[]>;
 
   constructor() {
     console.log('Hello HealthListComponent Component');
-    this.text = 'Hello World';
+    // this.dogHistory = getHealthItems;
   }
 
   editItem(history){
@@ -27,5 +27,5 @@ export class HealthListComponent {
   deleteItem(history){
     console.log('delete item');
   }
-  
+
 }
