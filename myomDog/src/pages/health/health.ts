@@ -63,7 +63,9 @@ export class HealthPage {
 
   ionViewWillLeave() {
     //초기화
+    console.log('ionViewWillLeave Health');
     this.graph = "week";
+    this.segSubject.next(undefined);
     this.history = "total";
   }
 
