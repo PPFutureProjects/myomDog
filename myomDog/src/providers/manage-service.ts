@@ -103,16 +103,29 @@ export class ManageService {
     console.log(this.currentUser);
 
      let strArr = this.currentUser.email.split('.');
+     
      firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups').push({
       groupName: groupName
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups/'+groupKey.key+'/dogs').push({
         name: dogName
       }).then((newDogKey)=> {
-           firebase.database().ref('dogData/').child(newDogKey.key).set(
-            {name: dogName,
-            super: this.currentUser.email
-            });
+          firebase.database().ref('dogData/').child(newDogKey.key).set({
+            name: dogName,
+            super: strArr[0]+strArr[1]
+          });
+          firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]).once('value').then((snap)=>{
+            if(snap.val().first===false){
+              console.log(snap.val().first);
+              let maindogKey = newDogKey.key;
+              let updates = {};
+              updates['/userData/'+strArr[0]+'-'+strArr[1]] = {
+                first: true,
+                mainDog: maindogKey
+              }
+              firebase.database().ref().update(updates);
+            }
+          });
         });
      });
   }
