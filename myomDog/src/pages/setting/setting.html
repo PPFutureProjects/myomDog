@@ -18,18 +18,21 @@
       <ion-toggle checked= "true"></ion-toggle>
         <ion-label>알람</ion-label>
     </ion-item>
-    <a ion-item (click) = "logout()">
-      로그아웃
-    </a>
-    <a ion-item (click) = "changeinfoModal()">
-      강아지 정보 수정
-    </a>
-    <a ion-item (click) = "addingDogModal()">
-      강아지 등록
-    </a>
-    <a ion-item (click) = "invitingModal()">
-      사용자 초대
-    </a>
-
+    <button ion-item (click) = "logout()">로그아웃</button>
+    <button ion-item (click) = "changeinfoModal()">강아지 정보 수정</button>
+    <button ion-item (click) = "addingDogModal()">강아지 등록</button>
+    <button ion-item (click) = "invitingModal()">사용자 초대</button>
+    <ion-item>
+    <ion-label>즐개찾기</ion-label>
+    <ion-select [(ngModel)]="favorite" cancelText = "취소" okText = "등록" (ngModelChange)="savefavorite(favorite)">
+      <div *ngFor="let group of grouplist | async">
+        <div *ngFor="let dog of group.dogs | keys">
+          <ion-option value="{{dog.key}}">
+            [{{group.groupName}}] {{dog.value.name}}
+          </ion-option>
+        </div>
+      </div>
+    </ion-select>
+    </ion-item>
   </ion-list>
 </ion-content>

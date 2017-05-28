@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { AlertController, NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 import firebase from 'firebase';
@@ -10,12 +10,22 @@ import {ModalController, Platform, NavParams, ViewController } from 'ionic-angul
   templateUrl: './setting.html'
 })
 export class SettingPage {
+  userKey: string;
+  grouplist: FirebaseListObservable<any[]>;
+  groupobject: FirebaseObjectObservable<any>;
+  GroupAndDogs: any;
+  nameOfGroups: any;
+  AllDogs: any;
+  favorite: string;
 
-  constructor(public modalCtrl: ModalController,
-              public navCtrl: NavController,
-              public authService: AuthService
-              ) {
+  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase) {
+    this.userKey = manageService.userKey;
+    console.log(this.userKey);
+    this.grouplist = db.list('/userData/'+this.userKey+'/groups');
+    this.groupobject = db.object('/userData/'+this.userKey+'/groups');
+    console.log(this.grouplist);
   }
+
   addingDogModal(){
     let dogModal = this.modalCtrl.create(AddingDogPage);
     dogModal.present();
@@ -27,6 +37,10 @@ export class SettingPage {
   changeinfoModal(){
     let changeModal = this.modalCtrl.create(ChangeInfoPage);
     changeModal.present();
+  }
+
+  savefavorite(SelectedValue){
+    console.log("Favorite: ", SelectedValue);
   }
 
   logout() {
@@ -43,15 +57,40 @@ export class AddingDogPage {
   groupname: string;
   dogage:number;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService){
+  constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService){
   }
-  addingbutton(){
-    console.log("dogname :" + this.dogname);
-    console.log("dogage :" + this.dogage);
-    this.manageService.addDog(this.dogname, this.groupname);
-  }
+  // addingbutton(){
+  //   console.log("dogname :" + this.dogname);
+  //   console.log("dogage :" + this.dogage);
+  //   this.manageService.addDog(this.dogname, this.groupname);
+  // }
   dismiss(){
     this._viewCtrl.dismiss();
+  }
+
+  addingbutton(){
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: '추가할거야?',
+     buttons: [
+       {
+         text: 'Disagree',
+         handler: () => {
+           console.log('Disagree');
+         }
+       },
+       {
+         text: 'Agree',
+         handler: () => {
+           console.log('Agree');
+           console.log("dogname :" + this.dogname);
+           console.log("dogage :" + this.dogage);
+           this.manageService.addDog(this.dogname, this.groupname);
+         }
+       }
+     ]
+   });
+   confirm.present()
   }
 
 }
@@ -99,9 +138,20 @@ export class InvitingPage {
   templateUrl : './changeinfo.html'
 })
 export class ChangeInfoPage {
-  changeddog:string;
-  constructor(public _viewCtrl: ViewController, db: AngularFireDatabase){
+  userKey: string;
+  grouplist: FirebaseListObservable<any[]>;
+  groupobject: FirebaseObjectObservable<any>;
+  GroupAndDogs: any;
+  nameOfGroups: any;
+  AllDogs: any;
+  changeddog: string;
 
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
+    this.userKey = manageService.userKey;
+    console.log(this.userKey);
+    this.grouplist = db.list('/userData/'+this.userKey+'/groups');
+    this.groupobject = db.object('/userData/'+this.userKey+'/groups');
+    console.log(this.grouplist);
   }
   changeinfobutton(){
     console.log("changed dog :" + this.changeddog );
