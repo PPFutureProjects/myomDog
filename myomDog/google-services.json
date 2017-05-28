@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "835408454244",
+    "firebase_url": "https://myomdog.firebaseio.com",
+    "project_id": "myomdog",
+    "storage_bucket": "myomdog.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835408454244:android:a6f8977b8deb9f47",
+        "android_client_info": {
+          "package_name": "com.myom.myomDog"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835408454244-8rag0nvq0pt7i2idml1t2c9e45i33udd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCEwFCQSVmZ-Y8_FyKzvwZQE5tbojgZI6g"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

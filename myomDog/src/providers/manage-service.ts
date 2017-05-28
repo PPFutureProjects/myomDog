@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import 'rxjs/add/operator/map';
 
-import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase } from 'angularfire2/database';
 import firebase  from 'firebase';
 /*
   Generated class for the ManageService provider.
@@ -196,4 +196,3 @@ export class Dog {
     return this.supermanager;
   }
 }
-

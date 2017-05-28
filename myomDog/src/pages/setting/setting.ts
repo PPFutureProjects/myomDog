@@ -2,17 +2,17 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import {ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
+import {ModalController, ViewController } from 'ionic-angular';
 
 @Component({
   templateUrl: './setting.html'
 })
 export class SettingPage {
 
-  constructor(public modalCtrl: ModalController, 
-              public navCtrl: NavController, 
+  constructor(public modalCtrl: ModalController,
+              public navCtrl: NavController,
               public authService: AuthService
               ) {
   }
@@ -63,7 +63,7 @@ export class InvitingPage {
   userKey: string;
   grouplist: FirebaseListObservable<any[]>;
   groupobject: FirebaseObjectObservable<any>;
-  GroupAndDogs: any; 
+  GroupAndDogs: any;
   nameOfGroups: any;
   AllDogs: any;
   inviteduser:string;
@@ -80,10 +80,10 @@ export class InvitingPage {
     this.GroupAndDogs = manageService.getAllMyDogsToDict(); //{ groupName : dogs[] pair }
     this.nameOfGroups = Object.keys(this.GroupAndDogs);
     let NumberOfGroups = Object.keys(this.GroupAndDogs).length;
-    
+
     this.AllDogs = manageService.getAllMyDogs();
     */
-    
+
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
@@ -111,4 +111,3 @@ export class ChangeInfoPage {
     this._viewCtrl.dismiss();
   }
 }
-

@@ -5,7 +5,7 @@ import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/databa
 // import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
-import { History } from './History'
+// import { History } from './History'
 
 /**
  * Generated class for the Health page.
@@ -32,7 +32,7 @@ export class HealthPage {
     this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
-
+    /*
     var subscription = this.segSubject.subscribe(
       function (x) {
         // if(x !== null || x !== undefined){
@@ -48,7 +48,7 @@ export class HealthPage {
       function () {
           console.log('Completed');
       });
-
+    */
     this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
       query: {
         orderByChild: 'category',
