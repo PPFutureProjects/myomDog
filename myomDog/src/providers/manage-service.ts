@@ -108,7 +108,8 @@ export class ManageService {
       groupName: groupName
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups/'+groupKey.key+'/dogs').push({
-        name: dogName
+        name: dogName,
+        super: this.currentUser.email
       }).then((newDogKey)=> {
           firebase.database().ref('dogData/').child(newDogKey.key).set({
             name: dogName,
@@ -120,8 +121,10 @@ export class ManageService {
               let maindogKey = newDogKey.key;
               let updates = {};
               updates['/userData/'+strArr[0]+'-'+strArr[1]] = {
+                email: this.currentUser.email,
                 first: true,
-                mainDog: maindogKey
+                mainDog: maindogKey,
+                groups: snap.val().groups
               }
               firebase.database().ref().update(updates);
             }
