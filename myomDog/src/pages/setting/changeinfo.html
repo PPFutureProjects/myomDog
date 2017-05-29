@@ -28,7 +28,7 @@
   <ion-list>
     <ion-item>
       <ion-label>수정할 강아지 이름</ion-label>
-        <ion-select [(ngModel)]="changeddog" cancelText = "취소" okText = "확인" >
+        <ion-select interface="action-sheet" [(ngModel)]="changeddog" (ngModelChange)="editdog(changeddog)" >
           <div *ngFor="let group of grouplist | async">
             <div *ngFor="let dog of group.dogs | keys">
               <ion-option value="{{dog.key}}">
@@ -40,29 +40,32 @@
       </ion-item>
 
       <ion-list>
-        <ion-item> //ngfor
-          <ion-label floating>변경할 그룹</ion-label>
+        <ion-item>
+          <ion-label stacked>변경할 그룹</ion-label>
           <ion-input type = "text" value="" [(ngModel)]="editdoggroup"></ion-input>
         </ion-item>
 
-        <ion-item> //ngfor
-          <ion-label floating>이름</ion-label>
+        <ion-item>
+          <ion-label stacked>이름</ion-label>
           <ion-input type = "text" value="" [(ngModel)]="editdogname"></ion-input>
         </ion-item>
 
         <ion-item>
-          <ion-label floating>생일</ion-label>
-          <ion-input type = "number" value="" [(ngModel)]="dogname"></ion-input>
+          <ion-label stacked>성별</ion-label>
+          <ion-select [(ngModel)]="editdogsex" cancelText = "취소" okText = "확인" >
+          <ion-option value="maledog">수컷</ion-option>
+          <ion-option value="femaledog">암컷</ion-option>
+        </ion-select>
         </ion-item>
 
         <ion-item>
-          <ion-label floating>성별</ion-label>
-          <ion-input type= "text" value="" [(ngModel)]="dogage"></ion-input>
+          <ion-label stacked>생년월일</ion-label>
+          <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="editdogbirth"></ion-datetime>
         </ion-item>
 
         <ion-item>
           <ion-label>식사시간</ion-label>
-          <ion-select [(ngModel)]="changeddog" multiple = "true" cancelText = "취이소" okText = "확이인" >
+          <ion-select [(ngModel)]="editmealtime" multiple = "true" cancelText = "취이소" okText = "확이인" >
             <ion-option value="time1">00:00~02:00</ion-option>
             <ion-option value="time2">02:00~04:00</ion-option>
             <ion-option value="time3">04:00~06:00</ion-option>
