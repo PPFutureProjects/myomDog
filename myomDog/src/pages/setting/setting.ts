@@ -17,6 +17,7 @@ export class SettingPage {
   nameOfGroups: any;
   AllDogs: any;
   favorite: string;
+  pushboolean: boolean = false;
 
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase) {
     this.userKey = manageService.userKey;
@@ -24,6 +25,11 @@ export class SettingPage {
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
     this.groupobject = db.object('/userData/'+this.userKey+'/groups');
     console.log(this.grouplist);
+    this.pushboolean = true;
+  }
+  pushcheck(pushboolean){
+    this.pushboolean = pushboolean;
+    console.log("puchcheck: "+this.pushboolean);
   }
 
   addingDogModal(){
@@ -67,6 +73,8 @@ export class AddingDogPage {
   dogage:number;
   grouplist: FirebaseListObservable<any[]>;
   alreadygroupname: string;
+  adddogsex: string;
+  mealtime: string[];
 
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
@@ -94,6 +102,8 @@ export class AddingDogPage {
            console.log('Agree');
            console.log("dogname :" + this.dogname);
            console.log("birth :" + this.birth);
+           console.log("sex : "+ this.adddogsex);
+           console.log("mealtime: "+ this.mealtime);
            this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
          }
        }
@@ -158,6 +168,7 @@ export class ChangeInfoPage {
   AllDogs: any;
   changeddog: string;
 
+  //editdoggroup: string;
   editdogname: string;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){

@@ -15,15 +15,15 @@
       SETTINGS
     </ion-list-header>
     <ion-item>
-      <ion-toggle checked= "true"></ion-toggle>
-        <ion-label>알람</ion-label>
+      <ion-label>알람</ion-label>
+      <ion-toggle [checked]= "pushboolean" [(ngModel)]="pushonoff" (ionChange)="pushcheck(pushonoff)"></ion-toggle>
     </ion-item>
     <button ion-item (click) = "logout()">로그아웃</button>
     <button ion-item (click) = "changeinfoModal()">강아지 정보 수정</button>
     <button ion-item (click) = "addingDogModal()">강아지 등록</button>
     <button ion-item (click) = "invitingModal()">사용자 초대</button>
     <button ion-item (click) = "deleteModal()">강아지와 작별하기</button>
-    
+
     <ion-item>
     <ion-label>즐개찾기</ion-label>
     <ion-select [(ngModel)]="favorite" cancelText = "취소" okText = "등록" (ngModelChange)="savefavorite(favorite)">
