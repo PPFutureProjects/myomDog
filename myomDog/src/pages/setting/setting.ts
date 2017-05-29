@@ -38,6 +38,10 @@ export class SettingPage {
     let changeModal = this.modalCtrl.create(ChangeInfoPage);
     changeModal.present();
   }
+  deleteModal(){
+    let deletedogModal = this.modalCtrl.create(GoodByePage);
+    deletedogModal.present();
+  }
 
   savefavorite(SelectedValue){
     console.log("Favorite: ", SelectedValue);
@@ -179,4 +183,53 @@ export class ChangeInfoPage {
   dismiss(){
     this._viewCtrl.dismiss();
   }
+}
+@Component({
+  templateUrl: './saygoodbye.html'
+})
+export class GoodByePage {
+  userKey: string;
+  grouplist: FirebaseListObservable<any[]>;
+  groupobject: FirebaseObjectObservable<any>;
+  // GroupAndDogs: any;
+  // nameOfGroups: any;
+  // AllDogs: any;
+  // inviteduser:string;
+  goodbyedog:string;
+
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController){
+    this.userKey = manageService.userKey;
+
+    this.grouplist = db.list('/userData/'+this.userKey+'/groups');
+    this.groupobject = db.object('/userData/'+this.userKey+'/groups');
+    console.log(this.grouplist);
+
+  }
+  deletebutton(){
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: '이별하시겠습니까?',
+     buttons: [
+       {
+         text: 'Disagree',
+         handler: () => {
+           console.log('Disagree');
+         }
+       },
+       {
+         text: 'Agree',
+         handler: () => {
+           console.log("del dog"+this.goodbyedog);
+           //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
+           //삭제 메소드 goodbyedog변수에 삭제할 강아지key값 가지고 있음.
+         }
+       }
+     ]
+   });
+   confirm.present()
+  }
+
+   dismiss(){
+     this._viewCtrl.dismiss();
+   }
 }
