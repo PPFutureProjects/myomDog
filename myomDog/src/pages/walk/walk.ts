@@ -60,29 +60,7 @@ export class WalkPage {
             });
           })
         });
-<<<<<<< HEAD
-      });
 
-      alert.addInput({  // 이부분은 샘플데이터인데, 이부분을 지우면 이상하게 체크박스 목록에 하얗게 비어서 나옴.
-        type: 'checkbox',
-        label: 'Alderaan',
-        value: 'value1',
-        checked: true
-      })
-
-
-      alert.addButton('Cancel');
-      alert.addButton({
-        text: 'Okay',
-        handler: data => {
-          console.log('Checkbox data:', data);
-          this.checkboxOpen = false;
-          this.selectedDogs = data;
-        }
-      });
-      alert.present().then(() => {
-        this.checkboxOpen = true;
-=======
         alert.addButton('Cancel');
         alert.addButton({
           text: 'Okay',
@@ -95,7 +73,6 @@ export class WalkPage {
         alert.present().then(() => {
           this.checkboxOpen = true;
         });
->>>>>>> origin/master
       });
     }
   }
