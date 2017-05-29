@@ -29,25 +29,31 @@ $colors: (
   danger:     #f53d3d,
   // myom colors
   light:      #f4f4f4,
+  gray:       #73808c,
   dark:       #3e454c,
   main:       #24c5a9,
   emphasis:   #1b9998,
   point:      #fd806a
 );
 
+$text-color: dark;
 
+$list-background-color: color($colors, light);
+$list-ios-activated-background-color: color($colors, light);
+$list-md-activated-background-color: color($colors, light);
 // App iOS Variables
 // --------------------------------------------------
 // iOS only Sass variables can go here
-
-
-
+$toolbar-ios-title-text-align: center;
+$tabs-ios-tab-icon-color-active: color($colors, main);
+$tabs-ios-tab-text-color-active: color($colors, main);
 
 // App Material Design Variables
 // --------------------------------------------------
 // Material Design only Sass variables can go here
-
-
+$toolbar-ios-title-text-align: center;
+$tabs-md-tab-icon-color-active: color($colors, main);
+$tabs-md-tab-text-color-active: color($colors, main);
 
 
 // App Windows Variables

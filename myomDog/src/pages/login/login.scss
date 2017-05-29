@@ -1,6 +1,6 @@
 page-login {
     .background {
-        background-image: url('../../assets/bg_login.png');
+        background-color: color($colors, light);
     }
     .scroll-content {
         align-content: center;
@@ -9,34 +9,40 @@ page-login {
         justify-content: flex-end;
         text-align: center;
     }
+    ion-img {
+      background-color: color($colors, light);
+    }
     ion-card.card{
         box-shadow: none;
-        background: rgba(204,102,000,0.1);
+        background: color($colors, light);
+        border-radius: 1em;
     }
 
     .item {
         margin-bottom: 10px;
-        background: rgba(204,102,000,0.3);
-        border: medium none;
+        background: color($colors, light);
+        border: 0.5px solid;
+        border-radius: 0.5em;
+        border-color: color($colors, gray);
 
         text.input {
-            color: #fff;
+            color: color($colors, gray);
         }
 
         input::-moz-placeholder {
-            color: #fff!important;
+            color: color($colors, gray);
         }
         input:-moz-placeholder {
-            color: #fff!important;
+            color: color($colors, gray);
         }
         *::-webkit-input-placeholder {
-            color: #fff!important;
+            color: color($colors, gray);
         }
         *:-ms-input-placeholder {
-            color: #fff!important
+            color: color($colors, gray);
         }
         *:-moz-placeholder {
-            color: #fff!important
+            color: color($colors, gray);
         }
     }
 

@@ -1,12 +1,12 @@
 <ion-header>
-  <ion-navbar no-border-bottom>
+  <ion-navbar color="main" no-border-bottom>
     <ion-title>
-      Graph n History
+      Health
     </ion-title>
   </ion-navbar>
 
-  <ion-toolbar no-border-top>
-    <ion-segment [(ngModel)]="graph">
+  <ion-toolbar color="main" no-border-top>
+    <ion-segment [(ngModel)]="graph" color="light">
       <ion-segment-button value="week">
         주간
       </ion-segment-button>
@@ -20,7 +20,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content padding>
   <div [ngSwitch]="graph">
     <ion-list *ngSwitchCase="'week'">
       <ion-item>
@@ -43,7 +43,7 @@
 <!-- ///////////////// -->
 
 <ion-toolbar no-border-top>
-  <ion-segment [(ngModel)]="history">
+  <ion-segment [(ngModel)]="history" color="emphasis">
     <ion-segment-button value="total" (click)="filterBy()">
       전체
     </ion-segment-button>
@@ -60,7 +60,7 @@
 </ion-toolbar>
 <div [ngSwitch]="history">
   <ion-list>
-    <ion-item-sliding *ngFor="let history of dogHistory | async">
+    <ion-item-sliding [animateItemSliding]="shouldAnimate" *ngFor="let history of dogHistory | async">
       <ion-item>
         <ion-icon name="{{history.icon}}" item-left></ion-icon>
           {{history.name}}
@@ -167,11 +167,11 @@
 <ion-fab right bottom>
   <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
       <ion-fab-list side="left">
-        <button ion-fab color="danger"><ion-icon name="nutrition"></ion-icon></button>
+        <button ion-fab color="emphasis"><ion-icon name="nutrition"></ion-icon></button>
       <!-- </ion-fab-list> -->
       <!-- <ion-fab-list side="left"> -->
-        <button ion-fab color="primary"><ion-icon name="paw"></ion-icon></button>
-        <button ion-fab color="light"><ion-icon name="medkit"></ion-icon></button>
+        <button ion-fab color="emphasis"><ion-icon name="paw"></ion-icon></button>
+        <button ion-fab color="emphasis"><ion-icon name="medkit"></ion-icon></button>
 
       </ion-fab-list>
     </ion-fab>

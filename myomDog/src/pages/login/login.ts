@@ -16,7 +16,7 @@ import { ResetpwdPage } from '../resetpwd/resetpwd';
 @IonicPage()
 @Component({
   selector: 'page-login',
-  templateUrl: 'login.html',
+  templateUrl: 'login.html'
 })
 export class LoginPage {
 

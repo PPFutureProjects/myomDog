@@ -33,6 +33,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Push } from '@ionic-native/push';
 import { TimerComponent } from '../components/timer/timer';
 import { HealthListComponent } from '../components/health-list/health-list';
+import { AnimateItemSlidingComponent } from '../components/animate-item-sliding/animate-item-sliding';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
@@ -64,7 +65,8 @@ firebase.initializeApp(firebaseConfig);
     OrderbyPipe,
     KeysPipe,
     TimerComponent,
-    HealthListComponent
+    HealthListComponent,
+    AnimateItemSlidingComponent
   ],
   imports: [
     HttpModule,

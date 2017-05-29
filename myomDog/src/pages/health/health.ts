@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -19,7 +19,7 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
   templateUrl: 'health.html'
 })
 export class HealthPage {
-
+  shouldAnimate: boolean = true;
   graph: string = "week"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
@@ -28,7 +28,7 @@ export class HealthPage {
   segSubject: BehaviorSubject<any>;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, db: AngularFireDatabase,
-              public manageService: ManageService) 
+              public manageService: ManageService)
     {
     this.isAndroid = platform.is('android');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
