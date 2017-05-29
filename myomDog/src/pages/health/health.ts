@@ -33,22 +33,33 @@ export class HealthPage {
     this.isAndroid = platform.is('android');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
     firebaseData.subscribe((snapshot)=>{
-      console.log("대표개: "+snapshot.val().mainDog);
-      if(snapshot.val().mainDog)
-      this.myMainDogKey = snapshot.val().mainDog;
+      if(snapshot.val().mainDog) {
+        this.myMainDogKey = snapshot.val().mainDog;
+        console.log("대표개: "+ this.myMainDogKey);
+      }
+      else {
+        console.log("No 대표개");
+      }
+
+      this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
+        query: {
+          orderByChild: 'category',
+          equalTo: this.segSubject
+        }
+      });
     });
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
-    /*
+
     var subscription = this.segSubject.subscribe(
       function (x) {
-        // if(x !== null || x !== undefined){
-        //   console.log('Next: ' + x.toString());
-        // }
-        // else {
-        //   console.log('Next: total');
-        // }
+        if(x){
+          console.log('Next: ' + x.toString());
+        }
+        else {
+          console.log('Next: total');
+        }
       },
       function (err) {
           console.log('Error: ' + err);
@@ -56,13 +67,7 @@ export class HealthPage {
       function () {
           console.log('Completed');
       });
-    */
-    this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
-      query: {
-        orderByChild: 'category',
-        equalTo: this.segSubject
-      }
-    });
+
   }
 
   ionViewDidLoad() {
@@ -84,5 +89,13 @@ export class HealthPage {
   // Null 을 넘겨야하므로 옵셔널
   filterBy(segVal?: string) {
     this.segSubject.next(segVal);
+  }
+
+  editItem(history){
+    console.log('edit item : ' + history);
+  }
+
+  deleteItem(history){
+    console.log('delete item : ' + history);
   }
 }
