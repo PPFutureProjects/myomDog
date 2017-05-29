@@ -41,7 +41,7 @@ export class ManageService {
     console.log(this.currentUser);
 
      let strArr = this.currentUser.email.split('.');
-     
+
      firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups').push({
       groupName: groupName
      }).then((groupKey)=>{
@@ -91,10 +91,20 @@ export class ManageService {
         category: 'walk',
         icon: 'paw',
         name: '산책',
-        time: time.toString(),
+        time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
         content: content
-      }) 
+      })
     })
+  }
+
+  changMainDog(newMainDog) {
+    this.currentUser = firebase.auth().currentUser;
+    let strArr = this.currentUser.email.split('.');
+
+    firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/').update({
+      mainDog: newMainDog
+    });
+    console.log("mainDog changed to "+newMainDog);
   }
 
 }
