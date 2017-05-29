@@ -1,5 +1,8 @@
 import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
+
+import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { ManageService } from '../../providers/manage-service';
 
 // import { TimerComponent } from '../../component/timer/timer'
 
@@ -15,15 +18,69 @@ import { IonicPage, NavController, NavParams } from 'ionic-angular';
   templateUrl: 'walk.html',
 })
 export class WalkPage {
+  walkedTime: number;
+  checkboxOpen: boolean;
+  dogChecked: boolean;
+  dogs: FirebaseObjectObservable<any>;
+  selectedDogs;
+  constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
+            public db: AngularFireDatabase, public manageService: ManageService) {
 
-  constructor(public navCtrl: NavController, public navParams: NavParams) {
   }
- addpincininfo(){
-   //미완성
- }
 
-  ionViewDidLoad() {
+ outputEvent(time: number){
+   this.walkedTime = time;
+   console.log("time : "+this.walkedTime);
+ }
+ ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
+  }
+
+  ionViewDidEnter(){
+    console.log("entered");
+    if(!this.selectedDogs){
+      let user = this.manageService.userKey;
+      this.dogs = this.db.object('userData/'+user+'/groups', {preserveSnapshot: true});
+
+      let alert = this.alertCtrl.create();
+      alert.setTitle('누구랑 산책할까 ?');
+      this.dogs.subscribe((snapshot)=>{
+        snapshot.forEach(snap=>{
+          let groupName = snap.val().groupName;
+          console.log("groupName: "+groupName);
+          let dogs = snap.child('dogs');
+          dogs.forEach((dog)=>{
+            console.log("dog: "+dog.val().name);
+            alert.addInput({
+              type: 'checkbox',
+              label: dog.val().name,
+              value: dog.key,
+              checked: false
+            });
+          })
+        });
+      });
+
+      alert.addInput({  // 이부분은 샘플데이터인데, 이부분을 지우면 이상하게 체크박스 목록에 하얗게 비어서 나옴.
+        type: 'checkbox',
+        label: 'Alderaan',
+        value: 'value1',
+        checked: true
+      });
+
+      alert.addButton('Cancel');
+      alert.addButton({
+        text: 'Okay',
+        handler: data => {
+          console.log('Checkbox data:', data);
+          this.checkboxOpen = false;
+          this.selectedDogs = data;
+        }
+      });
+      alert.present().then(() => {
+        this.checkboxOpen = true;
+      });
+    }
   }
 
 }

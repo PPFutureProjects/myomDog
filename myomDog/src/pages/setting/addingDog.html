@@ -13,7 +13,7 @@
 <ion-content>
 
   <ion-list>
-    <ion-item> //ngfor
+    <ion-item>
       <ion-label floating>추가할 그룹명</ion-label>
       <ion-input type = "text" value="" [(ngModel)]="groupname"></ion-input>
     </ion-item>
@@ -22,15 +22,33 @@
       <ion-label floating>그룹명</ion-label>
       <ion-input type="text" value="" [(ngModel)]="groupname"></ion-input>
     </ion-item>
-    
+
     <ion-item>
-      <ion-label floating>DogName</ion-label>
+      <ion-label floating>강아지 이름</ion-label>
       <ion-input type = "text" value="" [(ngModel)]="dogname"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>DogAge</ion-label>
-      <ion-input type= "number" value="" [(ngModel)]="dogage"></ion-input>
+      <ion-label floating>강아지 생년월일</ion-label>
+      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="picnic_start"></ion-datetime>
+    </ion-item>
+
+    <ion-item>
+      <ion-label>식사시간</ion-label>
+      <ion-select [(ngModel)]="changeddog" multiple = "true" cancelText = "취이소" okText = "확이인" >
+        <ion-option value="time1">00:00~02:00</ion-option>
+        <ion-option value="time2">02:00~04:00</ion-option>
+        <ion-option value="time3">04:00~06:00</ion-option>
+        <ion-option value="time4">06:00~08:00</ion-option>
+        <ion-option value="time5">08:00~10:00</ion-option>
+        <ion-option value="time6">10:00~12:00</ion-option>
+        <ion-option value="time7">12:00~14:00</ion-option>
+        <ion-option value="time8">14:00~16:00</ion-option>
+        <ion-option value="time9">16:00~18:00</ion-option>
+        <ion-option value="time10">18:00~20:00</ion-option>
+        <ion-option value="time11">20:00~22:00</ion-option>
+        <ion-option value="time12">22:00~24:00</ion-option>
+      </ion-select>
     </ion-item>
 
   </ion-list>

@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
-// import { ManageService } from '../../providers/manage-service';
+import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 
@@ -27,9 +27,17 @@ export class HealthPage {
   dogHistory: FirebaseListObservable<any[]>;
   segSubject: BehaviorSubject<any>;
 
-  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, db: AngularFireDatabase) {
+  constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, db: AngularFireDatabase,
+              public manageService: ManageService) 
+    {
     this.isAndroid = platform.is('android');
-    this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
+    let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    firebaseData.subscribe((snapshot)=>{
+      console.log("대표개: "+snapshot.val().mainDog);
+      if(snapshot.val().mainDog)
+      this.myMainDogKey = snapshot.val().mainDog;
+    });
+    //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
     /*

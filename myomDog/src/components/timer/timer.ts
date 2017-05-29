@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { PTimer } from './PTimer';
 
 /**
@@ -13,14 +13,18 @@ import { PTimer } from './PTimer';
 })
 export class TimerComponent {
 
+
+  @Output() outputProperty = new EventEmitter<number>();
   private timeInSeconds: number;
   public timer: PTimer;
-  constructor() {} 
+  constructor() {}
 
   ngOnInit() {
     this.initTimer();
   }
-
+  addpicnicinfo(){
+    this.outputProperty.emit(this.timer.timePassed);
+  }
   hasFinished() {
     return this.timer.hasFinished;
   }
@@ -65,8 +69,13 @@ export class TimerComponent {
     setTimeout(() => {
       if (!this.timer.runTimer) { return; }
       this.timer.timePassed++;
+      console.log(this.timer.timePassed+"in timerTick()");
       this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
       this.timerTick();
     }, 1000);
   }
+  saveTime(){
+    console.log('test: ' + this.timer.timePassed);
+  }
+
 }

@@ -25,7 +25,7 @@ exports.reactToInvite = functions.database.ref('/userData/{user_id}/invitation/{
                 message: dog_id
             }
         };
-        
+
         return admin.messaging().sendToDevice(token, payload).then((response) =>{
             console.log("pushed notification");
         }).catch((err)=> {
