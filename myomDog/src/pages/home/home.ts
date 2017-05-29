@@ -12,28 +12,21 @@ declare var FCMPlugin;
   templateUrl: 'home.html'
 })
 export class HomePage {
-  today:any;
-  // TESTING AngularFire2 -----------------------
-      msgs: FirebaseListObservable<any[]>;
-      // msgsObj: FirebaseObjectObservable<any[]>;
-      // dogs: FirebaseListObservable<any[]>;
-      user: any = null;
-      // userDogRef: FirebaseListObservable<any[]>;
-      // temp_uid:string = '1111';
-      // userDogs:any;
-    // ---------------- END OF TESTING AngularFire2
+    today:any;
+    mygroups: FirebaseListObservable<any[]>;
+    userKey;
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, private db: AngularFireDatabase) {
       this.today = Date.now();
-      this.msgs = db.list('/checkMsg');
-      this.user = firebase.auth().currentUser;
-      console.log("currnet user in home : " + this.user);
-      this.tokenSetup().then((token) => {
+      this.userKey = manageService.userKey;
+      this.mygroups = db.list('/userData/'+this.userKey+'/groups');
+      this.tokenSetup().then((token) => { // 토큰셋업 처음에만?
         this.registerToken(token);
       })
+    }
 
-
-        // this.userDogRef = db.list('/mockUserData/' + this.temp_uid + '/groups');
-        // this.dogs = db.list('/mockDogData');
+    ionViewDidEnter(){
+      this.userKey = this.manageService.userKey;
+      this.mygroups = this.db.list('/userData/'+this.userKey+'/groups');
     }
 
     ionViewDidLoad() {
