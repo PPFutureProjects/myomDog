@@ -13,10 +13,11 @@ import { PTimer } from './PTimer';
 })
 export class TimerComponent {
 
+
   @Output() outputProperty = new EventEmitter<number>();
   private timeInSeconds: number;
   public timer: PTimer;
-  constructor() {} 
+  constructor() {}
 
   ngOnInit() {
     this.initTimer();
@@ -68,8 +69,13 @@ export class TimerComponent {
     setTimeout(() => {
       if (!this.timer.runTimer) { return; }
       this.timer.timePassed++;
+      console.log(this.timer.timePassed+"in timerTick()");
       this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
       this.timerTick();
     }, 1000);
   }
+  saveTime(){
+    console.log('test: ' + this.timer.timePassed);
+  }
+
 }

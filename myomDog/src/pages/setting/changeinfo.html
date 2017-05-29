@@ -11,16 +11,31 @@
 </ion-header>
 
 <ion-content>
-
+  <ul>
+    <h4>List</h4>
+    <li *ngFor="let group of grouplist | async">
+      ID : {{ group.$key }} <br>
+      이름 : {{ group.groupName }} <br>
+      개들: <br>
+      {{(group.dogs | json)}}
+        <ul>
+          <li *ngFor="let dog of group.dogs | keys">
+            {{ dog.key }}
+          </li>
+        </ul>
+    </li>
+  </ul>
   <ion-list>
     <ion-item>
       <ion-label>수정할 강아지 이름</ion-label>
-
-        <ion-select [(ngModel)]="changeddog" cancelText = "취이소" okText = "확이인" >
-          <ion-option value="dog1">흰둥이</ion-option>
-          <ion-option value="dog2">깜지</ion-option>
-          <ion-option value="dog3">단비</ion-option>
-          <ion-option value="dog4">승호</ion-option>
+        <ion-select [(ngModel)]="changeddog" cancelText = "취소" okText = "확인" >
+          <div *ngFor="let group of grouplist | async">
+            <div *ngFor="let dog of group.dogs | keys">
+              <ion-option value="{{dog.key}}">
+                [{{group.groupName}}] {{dog.value.name}}
+              </ion-option>
+            </div>
+          </div>
         </ion-select>
       </ion-item>
 

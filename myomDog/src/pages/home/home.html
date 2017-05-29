@@ -5,32 +5,42 @@
 </ion-header>
 
 <ion-content padding>
-  <h3>Hello {{ user.email }}</h3>
-  메세지 :
-  <ul>
-    <li *ngFor="let msg of msgs | async">
-      {{ msg.$value }}
-    </li>
-  </ul>
-  <div>
-    <p>Today is {{today | date}}</p>
-    <p>The time is {{today | date:'HH:mm'}}</p>
-  </div>
 
-  <!-- Real floating action button, fixed. It will not scroll with the content -->
+  <ion-list>
+    <ion-list-header>
+      그룹1
+    </ion-list-header>
 
-    <ion-fab right bottom>
-      <button ion-fab color="light"><ion-icon name="add-circle"></ion-icon></button>
-          <ion-fab-list side="top">
-            <button ion-fab color="danger"><ion-icon name="nutrition"></ion-icon></button>
-          </ion-fab-list>
-          <ion-fab-list side="left">
-            <button ion-fab color="primary"><ion-icon name="paw"></ion-icon></button>
-          </ion-fab-list>
-        </ion-fab>
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="img/test.png">
+      </ion-avatar>
+      <h2>개1</h2>
+      <h3>개년월일</h3>
+      <p>개인포</p>
+    </ion-item>
 
 
-  <!-- <ul>
+    <ion-list-header>
+      그룹2
+    </ion-list-header>
+
+    <ion-item>
+      <ion-avatar item-start>
+        <img src="img/notread.png">
+      </ion-avatar>
+      <h2>개1</h2>
+      <h3>개년월일</h3>
+      <p>개인포</p>
+    </ion-item>
+
+  </ion-list>
+  <button ion-fab color="primary"><ion-icon name="nutrition"></ion-icon></button>
+
+
+</ion-content>
+
+ <!-- <!— <ul>
     <h4>List</h4>
     <li *ngFor="let dog of dogs | async">
       ID : {{ dog.$key }} <br>
@@ -44,5 +54,4 @@
           </li>
         </ul>
     </li>
-  </ul> -->
-</ion-content>
+  </ul> —> -->

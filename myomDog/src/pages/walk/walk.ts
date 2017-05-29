@@ -25,15 +25,14 @@ export class WalkPage {
   selectedDogs;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
             public db: AngularFireDatabase, public manageService: ManageService) {
-    
+
   }
-  
+
  outputEvent(time: number){
    this.walkedTime = time;
    console.log("time : "+this.walkedTime);
  }
-
-  ionViewDidLoad() {
+ ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
   }
 
@@ -42,7 +41,7 @@ export class WalkPage {
     if(!this.selectedDogs){
       let user = this.manageService.userKey;
       this.dogs = this.db.object('userData/'+user+'/groups', {preserveSnapshot: true});
-      
+
       let alert = this.alertCtrl.create();
       alert.setTitle('누구랑 산책할까 ?');
       this.dogs.subscribe((snapshot)=>{
@@ -61,14 +60,14 @@ export class WalkPage {
           })
         });
       });
-      
+
       alert.addInput({  // 이부분은 샘플데이터인데, 이부분을 지우면 이상하게 체크박스 목록에 하얗게 비어서 나옴.
         type: 'checkbox',
         label: 'Alderaan',
         value: 'value1',
         checked: true
       });
-      
+
       alert.addButton('Cancel');
       alert.addButton({
         text: 'Okay',
@@ -83,5 +82,5 @@ export class WalkPage {
       });
     }
   }
-  
+
 }

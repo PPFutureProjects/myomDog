@@ -212,4 +212,3 @@ export class Dog {
     return this.supermanager;
   }
 }
-
