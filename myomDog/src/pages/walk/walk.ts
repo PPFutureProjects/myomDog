@@ -49,6 +49,7 @@ export class WalkPage {
           let groupName = snap.val().groupName;
           console.log("groupName: "+groupName);
           let dogs = snap.child('dogs');
+
           dogs.forEach((dog)=>{
             console.log("dog: "+dog.val().name);
             alert.addInput({
@@ -66,7 +67,8 @@ export class WalkPage {
         label: 'Alderaan',
         value: 'value1',
         checked: true
-      });
+      })
+
 
       alert.addButton('Cancel');
       alert.addButton({

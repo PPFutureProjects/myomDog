@@ -53,17 +53,19 @@ export class SettingPage {
   templateUrl: './addingDog.html'
 })
 export class AddingDogPage {
+  userKey: string;
+
   dogname:string;
   groupname: string;
   dogage:number;
+  grouplist: FirebaseListObservable<any[]>;
+  alreadygroupname: string;
 
-  constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService){
+  constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
+    this.userKey = manageService.userKey;
+    this.grouplist = db.list('/userData/'+this.userKey+'/groups');
   }
-  // addingbutton(){
-  //   console.log("dogname :" + this.dogname);
-  //   console.log("dogage :" + this.dogage);
-  //   this.manageService.addDog(this.dogname, this.groupname);
-  // }
+
   dismiss(){
     this._viewCtrl.dismiss();
   }
@@ -91,6 +93,9 @@ export class AddingDogPage {
      ]
    });
    confirm.present()
+  }
+  addalreadygroupname(SelectedGroup){
+    console.log("Selected Group: " + SelectedGroup);
   }
 
 }
@@ -146,7 +151,9 @@ export class ChangeInfoPage {
   AllDogs: any;
   changeddog: string;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
+  editdogname: string;
+
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
     console.log(this.userKey);
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -154,7 +161,16 @@ export class ChangeInfoPage {
     console.log(this.grouplist);
   }
   changeinfobutton(){
-    console.log("changed dog :" + this.changeddog );
+    console.log("changed dog :"+ this.changeddog );
+  }
+  editdog(SelectedDog){
+    console.log("changed dog: "+ SelectedDog);
+    let dog = this.db.object('dogData/'+SelectedDog, {preserveSnapshot: true});
+
+    dog.subscribe(snap=>{
+      this.editdogname = snap.val().name;
+      console.log("name==>"+name);
+    })
   }
 
   dismiss(){
