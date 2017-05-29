@@ -3,6 +3,9 @@
  <h1 text-center color="primary" class="timer-button timer-text">{{timer.displayTime}}</h1>
  </ion-item>
 </div>
+<div>
+    <button ion-button click = 'addpicnicinfo()'>산책정보등록</button>
+</div>
 
 <ion-fab bottom left *ngIf="timer.runTimer && timer.hasStarted && !timer.hasFinished">
     <button ion-fab color="primary" (click)="pauseTimer()">

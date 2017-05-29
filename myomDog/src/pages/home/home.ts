@@ -12,6 +12,7 @@ declare var FCMPlugin;
   templateUrl: 'home.html'
 })
 export class HomePage {
+  today:any;
   // TESTING AngularFire2 -----------------------
       msgs: FirebaseListObservable<any[]>;
       // msgsObj: FirebaseObjectObservable<any[]>;
@@ -22,12 +23,13 @@ export class HomePage {
       // userDogs:any;
     // ---------------- END OF TESTING AngularFire2
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, private db: AngularFireDatabase) {
-        this.msgs = db.list('/checkMsg');
-        this.user = firebase.auth().currentUser;
-        console.log("currnet user in home : " + this.user);
-        this.tokenSetup().then((token) => {
-          this.registerToken(token);
-        })
+      this.today = Date.now();
+      this.msgs = db.list('/checkMsg');
+      this.user = firebase.auth().currentUser;
+      console.log("currnet user in home : " + this.user);
+      this.tokenSetup().then((token) => {
+        this.registerToken(token);
+      })
 
 
         // this.userDogRef = db.list('/mockUserData/' + this.temp_uid + '/groups');

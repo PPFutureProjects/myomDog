@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { PTimer } from './PTimer';
 
 /**
@@ -13,14 +13,18 @@ import { PTimer } from './PTimer';
 })
 export class TimerComponent {
 
-  public timeInSeconds: number;
+
+  @Output() outputProperty = new EventEmitter<number>();
+  private timeInSeconds: number;
   public timer: PTimer;
   constructor() {}
 
   ngOnInit() {
     this.initTimer();
   }
-
+  addpicnicinfo(){
+    this.outputProperty.emit(this.timer.timePassed);
+  }
   hasFinished() {
     return this.timer.hasFinished;
   }
