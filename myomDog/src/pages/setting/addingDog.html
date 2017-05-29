@@ -1,3 +1,5 @@
+//dogname,groupname,gender,birth
+
 <ion-header>
   <ion-toolbar>
       <ion-title>개 등 록</ion-title>
@@ -14,28 +16,47 @@
 
   <ion-list>
     <ion-item>
-      <ion-label floating>추가할 그룹명</ion-label>
-      <ion-input type = "text" value="" [(ngModel)]="groupname"></ion-input>
-    </ion-item>
+      <ion-label>기존 그룹에 추가</ion-label>
+      <ion-select interface="action-sheet" [(ngModel)]="alreadygroupname" (ngModelChange) = "addalreadygroupname(alreadygroupname)">
+        <div *ngFor="let group of grouplist | async">
+          <ion-option value="{{group.groupName}}">
+            {{group.groupName}}
+          </ion-option>
+        </div>
+    </ion-select>
+  </ion-item>
 
     <ion-item>
+      <ion-label stacked>새 그룹 생성</ion-label>
+      <ion-input type = "text" value="" [(ngModel)]="newgroupname"></ion-input>
+    </ion-item>
+
+    <!-- <ion-item>
       <ion-label floating>그룹명</ion-label>
       <ion-input type="text" value="" [(ngModel)]="groupname"></ion-input>
+    </ion-item> -->
+
+    <ion-item>
+      <ion-label stacked>강아지 이름</ion-label>
+      <ion-input type = "text" value="" [(ngModel)]="adddogname"></ion-input>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>강아지 이름</ion-label>
-      <ion-input type = "text" value="" [(ngModel)]="dogname"></ion-input>
+      <ion-label stacked>강아지 생년월일</ion-label>
+      <ion-datetime displayFormat= "YYYY-MM-DD" [(ngModel)]="adddogbirth"></ion-datetime>
     </ion-item>
 
     <ion-item>
-      <ion-label floating>강아지 생년월일</ion-label>
-      <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="picnic_start"></ion-datetime>
+      <ion-label stacked>성별</ion-label>
+      <ion-select [(ngModel)]="adddogsex" cancelText = "취소" okText = "확인" >
+      <ion-option value="maledog">수컷</ion-option>
+      <ion-option value="femaledog">암컷</ion-option>
+    </ion-select>
     </ion-item>
 
     <ion-item>
       <ion-label>식사시간</ion-label>
-      <ion-select [(ngModel)]="changeddog" multiple = "true" cancelText = "취이소" okText = "확이인" >
+      <ion-select [(ngModel)]="mealtime" multiple = "true" cancelText = "취이소" okText = "확이인" >
         <ion-option value="time1">00:00~02:00</ion-option>
         <ion-option value="time2">02:00~04:00</ion-option>
         <ion-option value="time3">04:00~06:00</ion-option>

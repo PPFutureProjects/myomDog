@@ -4,32 +4,31 @@
  </ion-item>
 </div>
 <div>
-    <button ion-button click = 'addpicnicinfo()'>산책정보등록</button>
+    <button color="emphasis" ion-button (click) = 'updateParent()'>산책정보등록</button>
 </div>
 
 <ion-fab bottom left *ngIf="timer.runTimer && timer.hasStarted && !timer.hasFinished">
-    <button ion-fab color="primary" (click)="pauseTimer()">
+    <button ion-fab color="emphasis" (click)="pauseTimer()">
     <ion-icon name="pause"></ion-icon>
     </button>
  </ion-fab>
 
  <ion-fab bottom left *ngIf="!timer.runTimer && timer.hasStarted && !timer.hasFinished">
-    <button ion-fab color="primary" (click)="resumeTimer()">
+    <button ion-fab color="emphasis" (click)="resumeTimer()">
     <ion-icon name="play"></ion-icon>
     </button>
  </ion-fab>
 
  <ion-fab bottom left *ngIf="!timer.hasStarted">
-    <button ion-fab color="primary" (click)="startTimer()" item-right>
+    <button ion-fab color="emphasis" (click)="startTimer()" item-right>
     <ion-icon name="play"></ion-icon>
     </button>
  </ion-fab>
 
 <ion-fab bottom right *ngIf="!timer.runTimer && (timer.hasStarted || timer.hasFinished) || timer.hasFinished">
-    <button ion-fab color="danger" (click)="initTimer()" item-left>
+    <button ion-fab color="point" (click)="initTimer()" item-left>
     <ion-icon name="refresh"></ion-icon>
     </button>
 </ion-fab>
 
 <!--  -->
-<button ion-button (click) = 'saveTime()'>산책추가</button>
