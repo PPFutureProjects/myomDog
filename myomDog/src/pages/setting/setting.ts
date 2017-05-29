@@ -2,9 +2,9 @@ import { Component } from '@angular/core';
 import { AlertController, NavController } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
-import firebase from 'firebase';
+// import firebase from 'firebase';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import {ModalController, Platform, NavParams, ViewController } from 'ionic-angular';
+import {ModalController, ViewController } from 'ionic-angular';
 
 @Component({
   templateUrl: './setting.html'

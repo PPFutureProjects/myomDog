@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 
-import { TimerComponent } from '../../component/timer/timer'
+// import { TimerComponent } from '../../component/timer/timer'
 
 /**
  * Generated class for the Walk page.
