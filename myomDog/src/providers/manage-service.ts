@@ -97,7 +97,7 @@ export class ManageService {
     })
   }
 
-  changMainDog(newMainDog) {
+  changeMainDog(newMainDog) {
     this.currentUser = firebase.auth().currentUser;
     let strArr = this.currentUser.email.split('.');
 
