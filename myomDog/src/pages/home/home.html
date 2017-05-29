@@ -5,37 +5,21 @@
 </ion-header>
 
 <ion-content padding>
-  <ion-list *ngFor="let group in mygroups">
-    <ion-list-header></ion-list-header>
-  </ion-list>
-  <ion-list>
+  <ion-list *ngFor="let group of mygroups | async">
     <ion-list-header>
-      그룹1
+      {{group.groupName}}
     </ion-list-header>
-
     <ion-item>
-      <ion-avatar item-start>
-        <img src="../../assets/shiba_inu.jpg">
-      </ion-avatar>
-      <h2>개1</h2>
-      <h3>개년월일</h3>
-      <p>개인포</p>
+      <div *ngFor="let dog of group.dogs | keys">
+        <!--<ion-input type="text" hidden [(ngModel)]="selectedDog" >{{dog.key}}</ion-input>-->
+        <ion-avatar item-start>
+          <button (click)="selectDog()"><img src="../../assets/shiba_inu.jpg"></button>
+        </ion-avatar>
+        <h2>{{dog.value.name}}</h2>
+        <h3>{{dog.value.birth}}</h3>
+        <!-- other information -->
+      </div>
     </ion-item>
-
-
-    <ion-list-header>
-      그룹2
-    </ion-list-header>
-
-    <ion-item>
-      <ion-avatar item-start>
-        <img src="../../assets/shiba_inu.jpg">
-      </ion-avatar>
-      <h2>개1</h2>
-      <h3>개년월일</h3>
-      <p>개인포</p>
-    </ion-item>
-
   </ion-list>
   <button ion-fab color="emphasis"><ion-icon name="nutrition"></ion-icon></button>
 

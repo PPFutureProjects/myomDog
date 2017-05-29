@@ -3,7 +3,6 @@ import { NavController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
-import firebase from 'firebase';
 
 declare var FCMPlugin;
 
@@ -15,7 +14,10 @@ export class HomePage {
     today:any;
     mygroups: FirebaseListObservable<any[]>;
     userKey;
-    constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, private db: AngularFireDatabase) {
+    selectedDog;
+    constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, 
+                private db: AngularFireDatabase) 
+    {
       this.today = Date.now();
       this.userKey = manageService.userKey;
       this.mygroups = db.list('/userData/'+this.userKey+'/groups');
@@ -60,5 +62,11 @@ export class HomePage {
       }).catch(() => {
         alert('Token register error');
       });
+    }
+
+    selectDog(val){
+      console.log("button was clicked");
+      console.log(val);
+      console.log(this.selectedDog);
     }
 }
