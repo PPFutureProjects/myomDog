@@ -27,7 +27,6 @@
     "@ionic/storage": "2.0.1",
     "angularfire2": "^4.0.0-rc.0",
     "chart.js": "^2.5.0",
-    "cordova-android": "^6.2.3",
     "cordova-ios": "^4.4.0",
     "cordova-plugin-console": "^1.0.5",
     "cordova-plugin-device": "^1.1.4",
@@ -39,6 +38,7 @@
     "ionic-angular": "3.1.1",
     "ionic-plugin-keyboard": "^2.2.1",
     "ionicons": "3.0.0",
+    "phonegap-plugin-puh": "~2.0.0-rc3",
     "phonegap-plugin-push": "^2.0.0-rc3",
     "rxjs": "5.1.1",
     "sw-toolbox": "3.4.0",
@@ -77,10 +77,11 @@
       "ionic-plugin-keyboard": {},
       "phonegap-plugin-push": {
         "SENDER_ID": "835408454244"
+      },
+      "phonegap-plugin-puh": {
+        "SENDER_ID": "835408454244"
       }
     },
-    "platforms": [
-      "ios"
-    ]
+    "platforms": []
   }
 }
