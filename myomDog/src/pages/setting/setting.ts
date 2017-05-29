@@ -51,6 +51,7 @@ export class SettingPage {
 
   savefavorite(SelectedValue){
     console.log("Favorite: ", SelectedValue);
+    this.manageService.changMainDog(SelectedValue);
   }
 
   logout() {
