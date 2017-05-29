@@ -17,7 +17,7 @@ export class SettingPage {
   nameOfGroups: any;
   AllDogs: any;
   favorite: string;
-  pushboolean: boolean = false;
+  pushboolean: boolean = true;
 
   constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase) {
     this.userKey = manageService.userKey;
