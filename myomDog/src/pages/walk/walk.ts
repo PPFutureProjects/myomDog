@@ -29,8 +29,13 @@ export class WalkPage {
   }
 
  outputEvent(time: number){
+   let current = new Date();
+   //let currenttime = current.getFullYear()+'/'+current.getMonth()+'/'+current.getDate()+' '+current.getHours()+':'+current.getMinutes();
    this.walkedTime = time;
    console.log("time : "+this.walkedTime);
+   console.log("dogs waking with me : "+this.selectedDogs+"type: "+typeof this.selectedDogs);
+   this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
+   this.dogChecked = false;
  }
  ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
@@ -63,7 +68,6 @@ export class WalkPage {
         alert.addButton({
           text: 'Okay',
           handler: data => {
-            console.log('Checkbox data:', data);
             this.checkboxOpen = false;
             this.selectedDogs = data;
           }

@@ -4,7 +4,7 @@
  </ion-item>
 </div>
 <div>
-    <button ion-button click = 'addpicnicinfo()'>산책정보등록</button>
+    <button ion-button (click) = 'updateParent()'>산책정보등록</button>
 </div>
 
 <ion-fab bottom left *ngIf="timer.runTimer && timer.hasStarted && !timer.hasFinished">
@@ -32,4 +32,3 @@
 </ion-fab>
 
 <!--  -->
-<button ion-button (click) = 'saveTime()'>산책추가</button>

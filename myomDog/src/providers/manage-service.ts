@@ -16,69 +16,7 @@ export class ManageService {
   currentUser: any = null;
   userKey: string;
   //groups: FirebaseObjectObservable<any>;
-  myGroups: Array<Group> = null;
-  myDogs: Array<Dog> = null;
   constructor(public http: Http, db: AngularFireDatabase) {
-    this.myGroups = new Array();
-    this.myDogs = new Array();
-  }
-
-  getMyGroupKeys(){
-    let groups: Array<string> = new Array();
-    for (let i in this.myGroups){
-      groups.push(this.myGroups[i].getGroupKey());
-    }
-    return groups;
-  }
-
-  getGroupName(key){
-    for (let i in this.myGroups){
-      if(this.myGroups[i].getGroupKey()==key)
-        return this.myGroups[i].getGroupName();
-    }
-  }
-
-  getAllMyDogsToDict(){
-    let groupNameAndDogs = {};
-    this.myGroups.forEach((group)=>{
-      let dogs: Array<Dog> = group.getDogs();
-      groupNameAndDogs[group.getGroupName()] = dogs;
-    });
-    return groupNameAndDogs;
-  }
-
-  getAllMyDogs(){
-    let mydogs: Array<Dog> = new Array();
-    this.myGroups.forEach((group)=>{
-      let d = group.getDogs()
-      d.forEach((eachdog)=>{
-        mydogs.push(eachdog);
-      });
-    });
-    return mydogs;
-  }
-
-
-
-  getDogsAreOnGroup(groupKey){
-    let dogs: Array<Dog>;
-    this.myGroups.forEach((group)=>{
-      if(group.getGroupKey()==groupKey)
-        dogs = (group.getDogs());
-    });
-    console.log(dogs[0]);
-    return dogs;
-  }
-
-  getOwnersOfDog(dogKey){
-    this.myDogs.forEach((dog)=>{
-      if(dog.getDogKey()==dogKey){
-        return {
-          super: dog.getSuperManager(),
-          owners: dog.getManagers()
-        };
-      }
-    });
   }
 
   setUser(user){
@@ -98,7 +36,7 @@ export class ManageService {
     });
   }
 
-  addDog(dogName: String, groupName: String){
+  addDog(dogName: String, groupName: String, gender: string, birth: Date){
     this.currentUser = firebase.auth().currentUser;
     console.log(this.currentUser);
 
@@ -109,10 +47,14 @@ export class ManageService {
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/groups/'+groupKey.key+'/dogs').push({
         name: dogName,
-        super: this.currentUser.email
+        super: this.currentUser.email,
+        birth: birth,
+        gender: gender
       }).then((newDogKey)=> {
           firebase.database().ref('dogData/').child(newDogKey.key).set({
             name: dogName,
+            gender: gender,
+            birth: birth,
             super: strArr[0]+strArr[1]
           });
           firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]).once('value').then((snap)=>{
@@ -141,74 +83,18 @@ export class ManageService {
     });
   }
 
-}
-
-export class Group {
-  groupKey;
-  groupName;
-  dogs: Array<Dog>;
-
-  constructor(){
-    this.dogs = new Array();
-  }
-  setGroupKey(key){
-    this.groupKey = key;
-  }
-  setGroupName(name){
-    this.groupName = name;
-  }
-  setDogs(dog){
-    this.dogs = dog;
+  addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){ // category, icon, name, time(date), content?:any
+    console.log("category: "+category+" icon: "+icon+ " date: "+time+" name: "+name+" walked time : "+content+" dogs: "+dogs);
+    dogs.forEach((dog)=>{
+      console.log("dog: "+dog);
+      firebase.database().ref('/dogData/'+dog+'/history').push({
+        category: 'walk',
+        icon: 'paw',
+        name: '산책',
+        time: time.toString(),
+        content: content
+      }) 
+    })
   }
 
-  addDog(dog){
-    this.dogs.push(dog);
-  }
-
-  getGroupKey(){
-    return this.groupKey;
-  }
-  getGroupName(){
-    return this.groupName;
-  }
-  getDogs(){
-    return this.dogs;
-  }
-}
-
-export class Dog {
-  dogKey;
-  dogName;
-  supermanager;
-  managers
-
-  constructor(){
-    this.managers = new Array<string>();
-  }
-
-  setDogKey(key){
-    this.dogKey = key;
-  }
-  setDogName(name){
-    this.dogName = name;
-  }
-  setSuperManager(manager){
-    this.supermanager = manager;
-  }
-  addManager(manager){
-    this.managers.push(manager);
-  }
-
-  getDogKey(){
-    return this.dogKey;
-  }
-  getDogname(){
-    return this.dogName;
-  }
-  getManagers(){
-    return this.managers;
-  }
-  getSuperManager(){
-    return this.supermanager;
-  }
 }

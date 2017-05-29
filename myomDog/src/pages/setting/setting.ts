@@ -55,7 +55,9 @@ export class SettingPage {
 export class AddingDogPage {
   dogname:string;
   groupname: string;
-  dogage:number;
+  birth:Date;
+  gender: string;
+
 
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService){
   }
@@ -84,8 +86,8 @@ export class AddingDogPage {
          handler: () => {
            console.log('Agree');
            console.log("dogname :" + this.dogname);
-           console.log("dogage :" + this.dogage);
-           this.manageService.addDog(this.dogname, this.groupname);
+           console.log("birth :" + this.birth);
+           this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
          }
        }
      ]

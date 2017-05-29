@@ -22,7 +22,7 @@ export class TimerComponent {
   ngOnInit() {
     this.initTimer();
   }
-  addpicnicinfo(){
+  updateParent(){
     this.outputProperty.emit(this.timer.timePassed);
   }
   hasFinished() {
@@ -73,9 +73,6 @@ export class TimerComponent {
       this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
       this.timerTick();
     }, 1000);
-  }
-  saveTime(){
-    console.log('test: ' + this.timer.timePassed);
   }
 
 }
