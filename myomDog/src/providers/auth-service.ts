@@ -56,13 +56,16 @@ export class AuthService {
     this.currentUser = user;
   }
 
-  register(email: string, password: string): any {
+  register(email: string, password: string, name: string): any {
     return firebase.auth().createUserWithEmailAndPassword(email, password)
       .then((newUser) => {
         let id = newUser.email.split('.');
         let key = id[0]+'-'+id[1];
         this.userData.child(key)
-        .set({email: email
+        .set({
+          email: email,
+          name: name,
+          first: false
         });
     });
   }

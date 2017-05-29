@@ -4,7 +4,7 @@ import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angu
 import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 
-import { TimerComponent } from '../../component/timer/timer'
+// import { TimerComponent } from '../../component/timer/timer'
 
 /**
  * Generated class for the Walk page.
@@ -60,6 +60,7 @@ export class WalkPage {
             });
           })
         });
+<<<<<<< HEAD
       });
 
       alert.addInput({  // 이부분은 샘플데이터인데, 이부분을 지우면 이상하게 체크박스 목록에 하얗게 비어서 나옴.
@@ -81,6 +82,20 @@ export class WalkPage {
       });
       alert.present().then(() => {
         this.checkboxOpen = true;
+=======
+        alert.addButton('Cancel');
+        alert.addButton({
+          text: 'Okay',
+          handler: data => {
+            console.log('Checkbox data:', data);
+            this.checkboxOpen = false;
+            this.selectedDogs = data;
+          }
+        });
+        alert.present().then(() => {
+          this.checkboxOpen = true;
+        });
+>>>>>>> origin/master
       });
     }
   }
