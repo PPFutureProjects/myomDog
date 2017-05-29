@@ -16,7 +16,7 @@ import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 import { HomePage } from '../pages/home/home';
 import { HealthPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
-import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage } from '../pages/setting/setting';
+import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage } from '../pages/setting/setting';
 import { TabsPage } from '../pages/tabs/tabs';
 
 // SERVICES
@@ -33,6 +33,7 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 import { Push } from '@ionic-native/push';
 import { TimerComponent } from '../components/timer/timer';
 import { HealthListComponent } from '../components/health-list/health-list';
+import { AnimateItemSlidingComponent } from '../components/animate-item-sliding/animate-item-sliding';
 
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
@@ -60,11 +61,13 @@ firebase.initializeApp(firebaseConfig);
     InvitingPage,
     ChangeInfoPage,
     TabsPage,
+    GoodByePage,
 
     OrderbyPipe,
     KeysPipe,
     TimerComponent,
-    HealthListComponent
+    HealthListComponent,
+    AnimateItemSlidingComponent
   ],
   imports: [
     HttpModule,
@@ -87,7 +90,8 @@ firebase.initializeApp(firebaseConfig);
     AddingDogPage,
     InvitingPage,
     ChangeInfoPage,
-    TabsPage
+    TabsPage,
+    GoodByePage
   ],
   providers: [
     StatusBar,
