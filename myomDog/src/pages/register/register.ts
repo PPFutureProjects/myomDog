@@ -49,7 +49,7 @@ export class RegisterPage {
     if (!this.registerForm.valid){
       console.log(this.registerForm.value);
     } else {
-      this.authService.register(this.registerForm.value.email, this.registerForm.value.password).then( authService => {
+      this.authService.register(this.registerForm.value.email, this.registerForm.value.password, this.registerForm.value.fullname).then( authService => {
         this.navCtrl.pop(TabsPage);
       }, error => {
         this.loading.dismiss().then( () => {
