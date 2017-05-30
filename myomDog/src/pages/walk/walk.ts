@@ -36,6 +36,7 @@ export class WalkPage {
    console.log("dogs waking with me : "+this.selectedDogs+"type: "+typeof this.selectedDogs);
    this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
    this.dogChecked = false;
+   this.selectedDogs = null;
  }
  ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');

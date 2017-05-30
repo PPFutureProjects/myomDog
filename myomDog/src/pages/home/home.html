@@ -4,7 +4,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding *ngIf="!isNull()">
   <ion-list *ngFor="let group of mygroups | async">
     <ion-list-header>
       {{group.groupName}}

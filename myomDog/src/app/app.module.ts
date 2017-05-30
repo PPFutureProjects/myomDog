@@ -16,7 +16,7 @@ import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 import { HomePage } from '../pages/home/home';
 import { HealthPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
-import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage } from '../pages/setting/setting';
+import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage, DeleteGroupPage } from '../pages/setting/setting';
 import { TabsPage } from '../pages/tabs/tabs';
 
 // SERVICES
@@ -62,6 +62,7 @@ firebase.initializeApp(firebaseConfig);
     ChangeInfoPage,
     TabsPage,
     GoodByePage,
+    DeleteGroupPage,
 
     OrderbyPipe,
     KeysPipe,
@@ -91,7 +92,8 @@ firebase.initializeApp(firebaseConfig);
     InvitingPage,
     ChangeInfoPage,
     TabsPage,
-    GoodByePage
+    GoodByePage,
+    DeleteGroupPage
   ],
   providers: [
     StatusBar,
