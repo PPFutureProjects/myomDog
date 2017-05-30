@@ -9,22 +9,28 @@
     <ion-list-header>
       {{group.groupName}}
     </ion-list-header>
-    <ion-item>
+    <button ion-item (click)="selectDog()">
       <div *ngFor="let dog of group.dogs | keys">
         <!--<ion-input type="text" hidden [(ngModel)]="selectedDog" >{{dog.key}}</ion-input>-->
         <ion-avatar item-start>
-          <button (click)="selectDog()"><img src="../../assets/shiba_inu.jpg"></button>
+          <img src="../../assets/shiba_inu.jpg">
         </ion-avatar>
         <h2>{{dog.value.name}}</h2>
         <h3>{{dog.value.birth}}</h3>
         <!-- other information -->
       </div>
-    </ion-item>
+    </button>
   </ion-list>
-  <button ion-fab color="emphasis"><ion-icon name="nutrition"></ion-icon></button>
-
-
+  <ion-fab right bottom>
+    <button ion-fab color="emphasis">
+    <ion-icon name="nutrition"></ion-icon>
+  </button>
+</ion-fab>
 </ion-content>
+<!--
+<ion-footer>
+
+</ion-footer> -->
 
  <!-- <!— <ul>
 >>>>>>> 6832ef0963030223ffd3bc6cfcb2be8e23f41f7b

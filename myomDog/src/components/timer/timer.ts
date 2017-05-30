@@ -65,16 +65,6 @@ export class TimerComponent {
   startTimer() {
     this.timer.hasStarted = true;
     this.timer.runTimer = true;
-    this.timerTick();
-  }
-  timerTick() {
-    setTimeout(() => {
-      if (!this.timer.runTimer) { return; }
-      this.timer.timePassed++;
-      console.log(this.timer.timePassed+"in timerTick()");
-      this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
-      this.timerTick();
-    }, 1000);
   }
 
 }
