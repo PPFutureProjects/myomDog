@@ -67,11 +67,11 @@
         <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="emphasis" icon-left (click)="editItem(history)">
+        <button ion-button color="emphasis" icon-left (click)="editItem(history.$key)">
             <ion-icon name="create"></ion-icon>
             편집
           </button>
-          <button ion-button color="point" icon-left (click)="deleteItem(history)">
+          <button ion-button color="point" icon-left (click)="deleteItem(history.$key)">
             <ion-icon name="trash"></ion-icon>
             삭제
           </button>

@@ -92,10 +92,10 @@ export class HealthPage {
   }
 
   editItem(history){
-    console.log('edit item : ' + history);
+    console.log('edit item : ' + JSON.stringify(history));
   }
 
   deleteItem(history){
-    console.log('delete item : ' + history);
+    console.log('delete item : ' + JSON.stringify(history));
   }
 }
