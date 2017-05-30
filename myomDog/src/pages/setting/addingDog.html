@@ -15,20 +15,20 @@
 <ion-content>
 
   <ion-list>
-    <ion-item>
+    <ion-item *ngIf="groupname==null">
       <ion-label>기존 그룹에 추가</ion-label>
-      <ion-select interface="action-sheet" [(ngModel)]="alreadygroupname" (ngModelChange) = "addalreadygroupname(alreadygroupname)">
+      <ion-select interface="action-sheet" [(ngModel)]="alreadygroup">
         <div *ngFor="let group of grouplist | async">
-          <ion-option value="{{group.groupName}}">
+          <ion-option value="{{group.$key}}">
             {{group.groupName}}
           </ion-option>
         </div>
     </ion-select>
   </ion-item>
 
-    <ion-item>
+    <ion-item *ngIf="alreadygroup==null">
       <ion-label stacked>새 그룹 생성</ion-label>
-      <ion-input type = "text" value="" [(ngModel)]="newgroupname"></ion-input>
+      <ion-input type = "text" value="" [(ngModel)]="groupname"></ion-input>
     </ion-item>
 
     <!-- <ion-item>
@@ -38,17 +38,17 @@
 
     <ion-item>
       <ion-label stacked>강아지 이름</ion-label>
-      <ion-input type = "text" value="" [(ngModel)]="adddogname"></ion-input>
+      <ion-input type = "text" value="" [(ngModel)]="dogname"></ion-input>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>강아지 생년월일</ion-label>
-      <ion-datetime displayFormat= "YYYY-MM-DD" [(ngModel)]="adddogbirth"></ion-datetime>
+      <ion-datetime displayFormat= "YYYY-MM-DD" [(ngModel)]="birth"></ion-datetime>
     </ion-item>
 
     <ion-item>
       <ion-label stacked>성별</ion-label>
-      <ion-select [(ngModel)]="adddogsex" cancelText = "취소" okText = "확인" >
+      <ion-select [(ngModel)]="gender" cancelText = "취소" okText = "확인" >
       <ion-option value="maledog">수컷</ion-option>
       <ion-option value="femaledog">암컷</ion-option>
     </ion-select>
