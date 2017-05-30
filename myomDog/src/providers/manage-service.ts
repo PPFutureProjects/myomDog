@@ -80,15 +80,13 @@ export class ManageService {
       birth: birth,
       gender: gender
     }).then((newDog)=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+g).child('dogs').update({
-        newDog: {
-          name: dogName,
-          gender: gender,
-          birth: birth,
-          super: this.userKey
-        }
-      })
-    })
+      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'dogs').child('newDog').update({
+        name: dogName,
+        gender: gender,
+        birth: birth,
+        super: this.userKey
+      });
+    });
   }
 
   invite(receiver, dog){
