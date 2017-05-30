@@ -24,6 +24,8 @@ export class TimerComponent {
   }
   updateParent(){
     this.outputProperty.emit(this.timer.timePassed);
+    this.timeInSeconds = null;
+    this.initTimer();
   }
   hasFinished() {
     return this.timer.hasFinished;
