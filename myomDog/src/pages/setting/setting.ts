@@ -160,11 +160,12 @@ export class AddingDogPage {
                 console.log("newAdd");
                 this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
            }
+           this._viewCtrl.dismiss();
          }
        }
      ]
    });
-   confirm.present()
+   confirm.present();
   }
   addalreadygroupname(SelectedGroup){
     console.log("Selected Group: " + SelectedGroup);
