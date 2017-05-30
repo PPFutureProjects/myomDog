@@ -80,7 +80,7 @@ export class ManageService {
       birth: birth,
       gender: gender
     }).then((newDog)=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'dogs').child('newDog').update({
+      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs').child(newDog.key).set({
         name: dogName,
         gender: gender,
         birth: birth,
