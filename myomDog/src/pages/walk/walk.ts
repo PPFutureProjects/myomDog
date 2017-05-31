@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
 
-import { AngularFireDatabase, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 
 // import { TimerComponent } from '../../component/timer/timer'
@@ -19,10 +19,11 @@ import { ManageService } from '../../providers/manage-service';
 })
 export class WalkPage {
   walkedTime: number;
-  checkboxOpen: boolean;
-  dogChecked: boolean;
+  //checkboxOpen: boolean;
+  //dogChecked: boolean;
   dogs: FirebaseObjectObservable<any>;
   selectedDogs;
+  walkingDog :FirebaseListObservable<any[]>;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
             public db: AngularFireDatabase, public manageService: ManageService) {
 
@@ -30,18 +31,22 @@ export class WalkPage {
 
  outputEvent(time: number){
    let current = new Date();
-   //let currenttime = current.getFullYear()+'/'+current.getMonth()+'/'+current.getDate()+' '+current.getHours()+':'+current.getMinutes();
    this.walkedTime = time;
    console.log("time : "+this.walkedTime);
    console.log("dogs waking with me : "+this.selectedDogs+"type: "+typeof this.selectedDogs);
+   console.log("!!!!!!!"+typeof this.selectedDogs+"!!!!!!!!"+this.selectedDogs);
    this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
-   this.dogChecked = false;
+   //this.dogChecked = false;
    this.selectedDogs = null;
  }
  ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
   }
 
+  ionViewDidEnter(){
+    this.walkingDog = this.db.list('/userData/'+this.manageService.userKey+'/groups');
+  }
+/*
   ionViewDidEnter(){
     console.log("entered");
     if(!this.selectedDogs){
@@ -81,5 +86,5 @@ export class WalkPage {
       });
     }
   }
-
+*/
 }
