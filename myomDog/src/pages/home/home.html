@@ -9,7 +9,7 @@
     <ion-list-header>
       {{group.groupName}}
     </ion-list-header>
-    <ion-item>
+    <button ion-item>
       <div *ngFor="let dog of group.dogs | keys">
         <!--<ion-input type="text" hidden [(ngModel)]="selectedDog" >{{dog.key}}</ion-input>-->
         <ion-avatar item-start>
@@ -19,7 +19,7 @@
         <h3>{{dog.value.birth}}</h3>
         <!-- other information -->
       </div>
-    </ion-item>
+    </button>
   </ion-list>
   <button ion-fab color="emphasis"><ion-icon name="nutrition"></ion-icon></button>
 
