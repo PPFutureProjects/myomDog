@@ -26,6 +26,10 @@ export class HomePage {
       })
     }
 
+    isNull(){
+      return this.mygroups==null
+    }
+
     ionViewDidEnter(){
       this.userKey = this.manageService.userKey;
       this.mygroups = this.db.list('/userData/'+this.userKey+'/groups');

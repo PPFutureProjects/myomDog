@@ -103,3 +103,7 @@ function getDogname(dog){
     });
     return defer; 
 }
+
+exports.notifyFoodTime = functions.database.ref('dogData').onWrite(event =>{
+    console.log("dogData event Invoked");
+});

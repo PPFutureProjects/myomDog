@@ -99,6 +99,7 @@ export class ManageService {
 
   addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){ // category, icon, name, time(date), content?:any
     console.log("category: "+category+" icon: "+icon+ " date: "+time+" name: "+name+" walked time : "+content+" dogs: "+dogs);
+    console.log("current time : "+firebase.database.ServerValue.TIMESTAMP+"   type: "+typeof firebase.database.ServerValue.TIMESTAMP);
     dogs.forEach((dog)=>{
       console.log("dog: "+dog);
       firebase.database().ref('/dogData/'+dog+'/history').push({
@@ -117,8 +118,8 @@ export class ManageService {
     let userData: any;
     firebase.database().ref('userData/'+this.userKey).once('value').then(snap=>{
       userData = snap;
-    });//
-    firebase.database().ref('userData/'+strArr[0]+'-'+strArr[1]+'/').update({
+    });// 업데이트 성공적인지 확인피료
+    firebase.database().ref('userData/'+this.userKey+'/').update({
       mainDog: newMainDog
     });
     console.log("mainDog changed to "+newMainDog);
