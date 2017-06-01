@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { NavController, AlertController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
@@ -15,8 +15,12 @@ export class HomePage {
     mygroups: FirebaseListObservable<any[]>;
     userKey;
     selectedDog;
-    constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService, 
-                private db: AngularFireDatabase) 
+
+    testCheckboxOpen: boolean;
+    testCheckboxResult;
+
+    constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
+                private db: AngularFireDatabase, public alertCtrl: AlertController)
     {
       this.today = Date.now();
       this.userKey = manageService.userKey;
@@ -68,5 +72,36 @@ export class HomePage {
       console.log("button was clicked");
       console.log(val);
       console.log(this.selectedDog);
+    }
+
+    givemeal(){
+      let alert = this.alertCtrl.create();
+    alert.setTitle('Which planets have you visited?');
+
+    alert.addInput({
+      type: 'checkbox',
+      label: 'Alderaan',
+      value: 'value1',
+      checked: true
+    });
+
+    alert.addInput({
+      type: 'checkbox',
+      label: 'Bespin',
+      value: 'value2'
+    });
+
+    alert.addButton('취소');
+    alert.addButton({
+      text: '지금 밥 주셨나요?',
+      handler: data => {
+        console.log('Checkbox data:', data);
+        this.testCheckboxOpen = false;
+        this.testCheckboxResult = data;
+      }
+    });
+    alert.present().then(() => {
+      this.testCheckboxOpen = true;
+    });
     }
 }
