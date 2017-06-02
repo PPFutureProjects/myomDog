@@ -16,10 +16,10 @@
 
   <ion-list>
     <ion-item>
-      <ion-label>기존 그룹에 추가</ion-label>
+      <ion-label>삭제할 그룹</ion-label>
       <ion-select interface="action-sheet" [(ngModel)]="selectedGroup">
         <div *ngFor="let group of grouplist | async">
-          <ion-option value="{{group.groupName}}">
+          <ion-option value="{{group.$key}}">
             {{group.groupName}}
           </ion-option>
         </div>

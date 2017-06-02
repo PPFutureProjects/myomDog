@@ -7,13 +7,13 @@
 
   <ion-toolbar color="main" no-border-top>
     <ion-segment [(ngModel)]="graph" color="light">
-      <ion-segment-button value="week">
+      <ion-segment-button value="week" (click)="weekBTN()">
         주간
       </ion-segment-button>
-      <ion-segment-button value="month">
+      <ion-segment-button value="month" (click)="monthBTN()">
         월간
       </ion-segment-button>
-      <ion-segment-button value="3months">
+      <ion-segment-button value="3months" (click)="threemonthBTN()">
         3개월간
       </ion-segment-button>
     </ion-segment>
@@ -58,6 +58,16 @@
     </ion-segment-button>
   </ion-segment>
 </ion-toolbar>
+<div> <!-- Chart -->
+  <ion-card>
+   <ion-card-header>
+     Line Chart
+   </ion-card-header>
+   <ion-card-content>
+     <canvas #lineCanvas></canvas>
+   </ion-card-content>
+  </ion-card>
+</div>
 <div [ngSwitch]="history">
   <ion-list>
     <ion-item-sliding [animateItemSliding]="shouldAnimate" *ngFor="let history of dogHistory | async">
