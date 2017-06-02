@@ -41,7 +41,7 @@
         "ionic-angular": "3.1.1",
         "ionic-plugin-keyboard": "^2.2.1",
         "ionicons": "3.0.0",
-        "phonegap-plugin-push": "^2.0.0-rc3",
+        "phonegap-plugin-push": "^1.10.4",
         "rxjs": "5.1.1",
         "sw-toolbox": "3.4.0",
         "zone.js": "^0.8.5"
@@ -82,7 +82,7 @@
             }
         },
         "platforms": [
-            "android"
+            "ios"
         ]
     }
 }
