@@ -40,6 +40,16 @@
       </ion-item>
     </ion-list>
   </div>
+  <div> <!-- Chart -->
+    <ion-card>
+    <ion-card-header>
+      Line Chart
+    </ion-card-header>
+    <ion-card-content>
+      <canvas #lineCanvas></canvas>
+    </ion-card-content>
+    </ion-card>
+  </div>
 <!-- ///////////////// -->
 
 <ion-toolbar no-border-top>
@@ -58,16 +68,7 @@
     </ion-segment-button>
   </ion-segment>
 </ion-toolbar>
-<div> <!-- Chart -->
-  <ion-card>
-   <ion-card-header>
-     Line Chart
-   </ion-card-header>
-   <ion-card-content>
-     <canvas #lineCanvas></canvas>
-   </ion-card-content>
-  </ion-card>
-</div>
+
 <div [ngSwitch]="history">
   <ion-list>
     <ion-item-sliding *ngFor="let history of dogHistory | async">
@@ -75,7 +76,7 @@
         <ion-icon name="{{history.icon}}" item-left></ion-icon>
           {{history.name}}
           <div *ngIf="history.content">
-            {{history.content}} 분
+            {{history.content}} 분 <!--분은 안맞췃어요~-->
           </div>
         <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
