@@ -79,9 +79,11 @@
             "ionic-plugin-keyboard": {},
             "phonegap-plugin-push": {
                 "SENDER_ID": "835408454244"
-            }
+            },
+            "cordova-plugin-fcm": {}
         },
         "platforms": [
+            "android",
             "ios"
         ]
     }
