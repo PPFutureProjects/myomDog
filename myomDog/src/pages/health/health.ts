@@ -157,8 +157,6 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   }
 
   monthBTN(){
-<<<<<<< HEAD
-=======
      //var result=((x%4 ==0 && x%100!=0 ) || x%400==0)? "윤년" : "윤년X";
      let current = new Date();
       let year = current.getFullYear();
@@ -242,14 +240,11 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     }).then(()=>{
       this.lineChart = this.getLineChart(label, data);
     })
->>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     this.graph = "month"
     this.lineChart = this.getLineChart([],[]);
   }
 
   threemonthBTN(){
-<<<<<<< HEAD
-=======
     let current = new Date();
     let year = current.getFullYear();
     let month = current.getMonth();
@@ -311,7 +306,6 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     }).then(result=>{
       this.lineChart = this.getLineChart(label, result);
     })
->>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     this.graph = "3months"
     this.lineChart = this.getLineChart([],[]);
   }
