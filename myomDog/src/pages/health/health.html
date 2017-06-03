@@ -70,7 +70,7 @@
 </div>
 <div [ngSwitch]="history">
   <ion-list>
-    <ion-item-sliding [animateItemSliding]="shouldAnimate" *ngFor="let history of dogHistory | async">
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
         <ion-icon name="{{history.icon}}" item-left></ion-icon>
           {{history.name}}
