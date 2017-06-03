@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { NavParams, ViewController, NavController, AlertController, ModalController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
-import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
+import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
 
 declare var FCMPlugin;
@@ -13,21 +13,12 @@ declare var FCMPlugin;
 export class HomePage {
     today:any;
     mygroups: FirebaseListObservable<any[]>; //grouplist
+    mydata: FirebaseListObservable<any[]>;
     userKey;
     selectedDog;
 
     testCheckboxOpen: boolean;
     testCheckboxResult;
-
-/////
-  groupobject: FirebaseObjectObservable<any>;
-  GroupAndDogs: any;
-  nameOfGroups: any;
-  AllDogs: any;
-  inviteduser:string;
-  inviteddog:string;
-
-//
 
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
                 private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController, public _viewCtrl: ViewController)
@@ -35,8 +26,7 @@ export class HomePage {
       this.today = Date.now();
       this.userKey = manageService.userKey;
       this.mygroups = db.list('/userData/'+this.userKey+'/groups');
-      this.groupobject = db.object('/userData/'+this.userKey+'/groups');
-
+      this.mydata = db.list('/userData/'+this.userKey+'/groups', {preserveSnapshot: true})
 
       this.tokenSetup().then((token) => { // 토큰셋업 처음에만?
         this.registerToken(token);
@@ -50,6 +40,7 @@ export class HomePage {
     ionViewDidEnter(){
       this.userKey = this.manageService.userKey;
       this.mygroups = this.db.list('/userData/'+this.userKey+'/groups');
+      this.mydata = this.db.list('/userData/'+this.userKey+'/groups', {preserveSnapshot: true})
     }
 
     ionViewDidLoad() {
@@ -97,13 +88,40 @@ export class HomePage {
     givemeal(){
       let alert = this.alertCtrl.create();
       alert.setTitle('어떤 강아지에게 밥 주셨나요?');
-
-      alert.addInput({
-        type: 'checkbox',
-        label: '',
-        value: 'value1',
+      let param = new Promise((resolve,reject)=>{
+        this.mydata.subscribe(snaps=>{
+          console.log('snaps', snaps);
+          snaps.forEach((group)=>{
+            console.log('group', group.key)
+            let groupName = group.val().groupName;
+            let dogs = group.child('dogs');
+            dogs.forEach((dog)=>{
+              alert.addInput({
+                type: 'checkbox',
+                label: '['+groupName+'] '+dog.val().name,
+                value: dog.key,
+                checked: false
+              });
+            })
+            resolve(alert);
+          }), err=>{
+            reject(err);
+          }
+        })
+      }).then(()=>{
+        alert.addButton('취소');
+        alert.addButton({
+          text: '지금 밥 주셨나요?',
+          handler: data => {
+            this.testCheckboxOpen = false;
+            this.testCheckboxResult = data;
+            this.manageService.feedDogs(data);
+          }
       });
-
+    alert.present().then(() => {
+      this.testCheckboxOpen = true;
+    });
+  })
 
     alert.addButton('취소');
     alert.addButton({
