@@ -113,12 +113,6 @@ export class ManageService {
   }
 
   changeMainDog(newMainDog) {
-    this.currentUser = firebase.auth().currentUser;
-    let strArr = this.currentUser.email.split('.');
-    let userData: any;
-    firebase.database().ref('userData/'+this.userKey).once('value').then(snap=>{
-      userData = snap;
-    });// 업데이트 성공적인지 확인피료
     firebase.database().ref('userData/'+this.userKey+'/').update({
       mainDog: newMainDog
     });
@@ -135,7 +129,7 @@ export class ManageService {
           if(dog.key==key) {
             firebase.database().ref('userData/'+this.userKey+'/groups/'+group.key+'/dogs').child(key).set(null);
           }
-        }); 
+        });
       });
     });
     firebase.database().ref('dogData/').child(key).set(null);
@@ -146,7 +140,14 @@ export class ManageService {
   }
 
   removeGroup(key){
+    console.log("key: "+key);
     firebase.database().ref('userData/'+this.userKey+'/groups').child(key).set(null);
+  }
+
+  removeHistory(key, dog){
+    let strArr = key.split('"');
+    console.log("dogData/"+dog+"/history/"+strArr[1]);
+    firebase.database().ref('dogData/'+dog+'/history').child(strArr[1]).set(null);
   }
 
 }
