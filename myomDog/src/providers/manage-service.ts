@@ -129,7 +129,7 @@ export class ManageService {
           if(dog.key==key) {
             firebase.database().ref('userData/'+this.userKey+'/groups/'+group.key+'/dogs').child(key).set(null);
           }
-        }); 
+        });
       });
     });
     firebase.database().ref('dogData/').child(key).set(null);

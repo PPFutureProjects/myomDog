@@ -38,7 +38,7 @@ export class HealthPage {
         else {
           console.log("No 대표개");
         }
-        
+
         this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
@@ -47,12 +47,12 @@ export class HealthPage {
         });
         resolve(this.dogHistory);
       }), err=>{
-        
+
       }
     }).then(()=>{
       this.weekBTN();
     })
-    
+
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
@@ -181,17 +181,17 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
-                  '1','1','1']; 
+                  '1','1','1'];
       let noleap = ['1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1'
-                  ]; 
+                  ];
       let leap = ['1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
                   '1','1','1','1','1','1','1',
-                  '1'];                   
+                  '1'];
      let param = new Promise((resolve, reject)=>{
       let result = ((year%4 ==0 && year%100!=0 ) || year%400==0)? "윤년" : "윤년X";
       if(month%2==0 && month!=2){
@@ -263,7 +263,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 
       this.dogHistory.subscribe(shots=>{
         if(Math.floor(current.getDate()/7)==0){
-          label = 
+          label =
         [
             month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
             month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
@@ -271,7 +271,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==1){
-          label = 
+          label =
         [
             month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
             month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
@@ -280,7 +280,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==2){
-          label = 
+          label =
         [
             month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
             month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
@@ -289,7 +289,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==3){
-          label = 
+          label =
         [
           month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
             month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
