@@ -110,6 +110,24 @@ export class ManageService {
         content: content
       })
     })
+    
+  }
+
+  feedDogs(dogs){
+    let current = new Date();
+    let cnt: number = 1;
+    for(let i=0; i<dogs.length; i++){
+      firebase.database().ref('dogData/'+dogs[i]).update({
+        lastmeal: current
+      });
+      firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+        category: 'food',
+        icon:'restaurant',
+        name: '식사',
+        time: current.toString(),
+        content: cnt
+      })
+    }
   }
 
   changeMainDog(newMainDog) {
