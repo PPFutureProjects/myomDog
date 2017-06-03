@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavController, AlertController } from 'ionic-angular';
+import { NavParams, ViewController, NavController, AlertController, ModalController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
@@ -30,7 +30,7 @@ export class HomePage {
 //
 
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
-                private db: AngularFireDatabase, public alertCtrl: AlertController)
+                private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController, public _viewCtrl: ViewController)
     {
       this.today = Date.now();
       this.userKey = manageService.userKey;
@@ -86,9 +86,12 @@ export class HomePage {
     }
 
     selectDog(val){
-      console.log("button was clicked");
-      console.log(val);
-      console.log(this.selectedDog);
+      // console.log("button was clicked");
+      // console.log(val.value.name);
+      // console.log(this.selectedDog);
+      let moreinfo = this.modalCtrl.create(MoreInfoPage, {val: val});
+      moreinfo.present();
+
     }
 
     givemeal(){
@@ -115,4 +118,21 @@ export class HomePage {
       this.testCheckboxOpen = true;
     });
     }
+
+
+}
+
+@Component({
+  templateUrl: './doginfo.html'
+})
+export class MoreInfoPage {
+  dogname: string;
+
+  constructor(public _viewCtrl: ViewController, public params: NavParams){
+    this.dogname = params.get('val').value.name;
+    console.log("bang test:", this.dogname);
+  }
+  dismiss(){
+    this._viewCtrl.dismiss();
+  }
 }
