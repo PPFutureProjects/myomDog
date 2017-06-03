@@ -7,9 +7,9 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>835408454244-0jvrd10o4g429vcv66g29urbdbnvcl0b.apps.googleusercontent.com</string>
+	<string>835408454244-o4h43rlurc8a04dd3p2b0j853j8rb5nf.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.835408454244-0jvrd10o4g429vcv66g29urbdbnvcl0b</string>
+	<string>com.googleusercontent.apps.835408454244-o4h43rlurc8a04dd3p2b0j853j8rb5nf</string>
 	<key>API_KEY</key>
 	<string>AIzaSyBtLQ-Mandu3b6h_506Xnmj6it0VrzVRxg</string>
 	<key>GCM_SENDER_ID</key>
@@ -17,7 +17,7 @@
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.4st.myomdog</string>
+	<string>com.myom.myomDog</string>
 	<key>PROJECT_ID</key>
 	<string>myomdog</string>
 	<key>STORAGE_BUCKET</key>
@@ -33,7 +33,7 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true/>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:835408454244:ios:b6aa5427e515e20b</string>
+	<string>1:835408454244:ios:a6f8977b8deb9f47</string>
 	<key>DATABASE_URL</key>
 	<string>https://myomdog.firebaseio.com</string>
 </dict>

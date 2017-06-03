@@ -36,6 +36,7 @@ export class HealthPage {
     {
     this.isAndroid = platform.is('android');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+<<<<<<< HEAD
     firebaseData.subscribe((snapshot)=>{
       if(snapshot.val().mainDog) {
         this.myMainDogKey = snapshot.val().mainDog;
@@ -52,6 +53,32 @@ export class HealthPage {
         }
       });
     });
+=======
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        if(snapshot.val().mainDog) {
+          this.myMainDogKey = snapshot.val().mainDog;
+          console.log("대표개: "+ this.myMainDogKey);
+        }
+        else {
+          console.log("No 대표개");
+        }
+
+        this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+
+>>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
@@ -149,11 +176,161 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   }
 
   monthBTN(){
+<<<<<<< HEAD
+=======
+     //var result=((x%4 ==0 && x%100!=0 ) || x%400==0)? "윤년" : "윤년X";
+     let current = new Date();
+      let year = current.getFullYear();
+      let month = current.getMonth();
+      let label;
+      let data;
+      let even = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1'];
+      let odd = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1'];
+      let noleap = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1'
+                  ];
+      let leap = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1'];
+     let param = new Promise((resolve, reject)=>{
+      let result = ((year%4 ==0 && year%100!=0 ) || year%400==0)? "윤년" : "윤년X";
+      if(month%2==0 && month!=2){
+        label = even;
+        data = [0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0]
+      }
+      else if(month==2 && result=='윤년'){
+        label = leap;
+        data = [0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                ]
+      }
+      else if(month==2 && result=='윤년X'){
+        label = noleap;
+        data = [0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0]
+      }
+      else if(month%2!=0 && month!=7){
+        label = odd;
+        data = [0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0]
+      }
+      else if(month%2!=0 && month==8){
+        label = even;
+        data = [0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0,0,0,0,0,
+                0,0,0]
+      }
+      this.dogHistory.subscribe(shots=>{
+        shots.forEach(history=>{
+          let x = new Date(history.time);
+          if(x.getMonth()==month){
+            data[x.getDate()-1] += history.content;
+          }
+        })
+        resolve(data);
+      }),
+      err=>{
+        reject(err);
+      }
+    }).then(()=>{
+      this.lineChart = this.getLineChart(label, data);
+    })
+>>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     this.graph = "month"
     this.lineChart = this.getLineChart([],[]);
   }
 
   threemonthBTN(){
+<<<<<<< HEAD
+=======
+    let current = new Date();
+    let year = current.getFullYear();
+    let month = current.getMonth();
+    let label;
+    let data;
+
+    let param = new Promise((resolve, reject)=>{
+
+      this.dogHistory.subscribe(shots=>{
+        if(Math.floor(current.getDate()/7)==0){
+          label =
+        [
+            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',month+1+'_1'
+        ];
+          data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }else if(Math.floor(current.getDate()/7)==1){
+          label =
+        [
+            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1',month+1+'_2'
+        ];
+          data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }else if(Math.floor(current.getDate()/7)==2){
+          label =
+        [
+            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1', month+1+'_2', month+1+'_3'
+        ];
+          data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }else if(Math.floor(current.getDate()/7)==3){
+          label =
+        [
+          month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1', month+1+'_2', month+1+'_3', month+1+'_4'
+        ];
+          data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
+        }
+        shots.forEach(history=>{
+          let x = new Date(history.time);
+          if(x.getFullYear()==year && (0 <= month - x.getMonth() && month - x.getMonth() <= 3 )){
+            let day = x.getDate();
+            let pos = Math.floor(day/7);
+            data[(x.getMonth()-month+3)*4 + pos] += history.content;
+          }
+        })
+        resolve(data);
+      }),
+      err=>{
+        reject(err);
+      }
+    }).then(result=>{
+      this.lineChart = this.getLineChart(label, result);
+    })
+>>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     this.graph = "3months"
     this.lineChart = this.getLineChart([],[]);
   }
