@@ -123,18 +123,18 @@ export class HomePage {
     });
   })
 
-    alert.addButton('취소');
-    alert.addButton({
-      text: '지금 밥 주셨나요?',
-      handler: data => {
-        console.log('Checkbox data:', data);
-        this.testCheckboxOpen = false;
-        this.testCheckboxResult = data;
-      }
-    });
-    alert.present().then(() => {
-      this.testCheckboxOpen = true;
-    });
+    // alert.addButton('취소');
+    // alert.addButton({
+    //   text: '지금 밥 주셨나요?',
+    //   handler: data => {
+    //     console.log('Checkbox data:', data);
+    //     this.testCheckboxOpen = false;
+    //     this.testCheckboxResult = data;
+    //   }
+    // });
+    // alert.present().then(() => {
+    //   this.testCheckboxOpen = true;
+    // });
     }
 
 
@@ -149,7 +149,7 @@ export class MoreInfoPage {
   doggender: string;
   doglastmeal: string;
 
-  constructor(public _viewCtrl: ViewController, public params: NavParams){
+  constructor(public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController){
     this.dogname = params.get('val').value.name;
     this.dogbirth = params.get('val').value.birth;
     this.doggender = params.get('val').value.gender;
@@ -158,6 +158,52 @@ export class MoreInfoPage {
 
     console.log("bang test:", this.dogname);
   }
+
+  doginfofavorite(){
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: this.dogname+'을 즐겨찾기?',
+     buttons: [
+       {
+         text: 'Disagree',
+         handler: () => {
+           console.log('Disagree');
+         }
+       },
+       {
+         text: 'Agree',
+         handler: () => {
+
+         }
+       }
+     ]
+   });
+   confirm.present()
+  }
+
+  doginfogivemeal(){
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: this.dogname+'에게 밥주기?',
+     buttons: [
+       {
+         text: 'Disagree',
+         handler: () => {
+           console.log('Disagree');
+         }
+       },
+       {
+         text: 'Agree',
+         handler: () => {
+
+         }
+       }
+     ]
+    });
+    confirm.present()
+    }
+
+
   dismiss(){
     this._viewCtrl.dismiss();
   }
