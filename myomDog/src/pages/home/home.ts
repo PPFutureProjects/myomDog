@@ -145,9 +145,17 @@ export class HomePage {
 })
 export class MoreInfoPage {
   dogname: string;
+  dogbirth: string;
+  doggender: string;
+  doglastmeal: string;
 
   constructor(public _viewCtrl: ViewController, public params: NavParams){
     this.dogname = params.get('val').value.name;
+    this.dogbirth = params.get('val').value.birth;
+    this.doggender = params.get('val').value.gender;
+    this.doglastmeal = params.get('val').value.lastmeal;
+
+
     console.log("bang test:", this.dogname);
   }
   dismiss(){

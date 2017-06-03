@@ -10,7 +10,48 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content>
+<ion-content class="cards-bg">
+  <div style="position: relative">
 
-<ion-label>{{dogname}}</ion-label>
+    <ion-card>
+      <ion-card-content>
+        <ion-card-title>
+          {{dogname}}
+        </ion-card-title>
+        <img src="../../assets/shiba_inu.jpg">
+
+    <ion-item>
+      <ion-icon name = "rose" item-left large></ion-icon>
+      <h2>{{dogname}}의 생일 {{dogbirth}}</h2>
+
+    </ion-item>
+        <p>
+          이런시바
+        </p>
+      </ion-card-content>
+
+      <ion-row no-padding>
+        <ion-col>
+          <button ion-button clear small color="danger" icon-left>
+            <ion-icon name='star'></ion-icon>
+            Favorite
+          </button>
+        </ion-col>
+        <ion-col text-center>
+          <button ion-button clear small color="danger" icon-left>
+            <ion-icon name='musical-notes'></ion-icon>
+            Listen
+          </button>
+        </ion-col>
+        <ion-col text-right>
+          <button ion-button clear small color="danger" icon-left>
+            <ion-icon name='share-alt'></ion-icon>
+            Share
+          </button>
+        </ion-col>
+      </ion-row>
+
+    </ion-card>
+</div>
+
 </ion-content>
