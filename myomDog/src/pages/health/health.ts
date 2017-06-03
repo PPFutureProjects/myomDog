@@ -36,24 +36,6 @@ export class HealthPage {
     {
     this.isAndroid = platform.is('android');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
-<<<<<<< HEAD
-    firebaseData.subscribe((snapshot)=>{
-      if(snapshot.val().mainDog) {
-        this.myMainDogKey = snapshot.val().mainDog;
-        console.log("대표개: "+ this.myMainDogKey);
-      }
-      else {
-        console.log("No 대표개");
-      }
-
-      this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
-        query: {
-          orderByChild: 'category',
-          equalTo: this.segSubject
-        }
-      });
-    });
-=======
     let p = new Promise((resolve,reject)=>{
       firebaseData.subscribe((snapshot)=>{
         if(snapshot.val().mainDog) {
@@ -78,7 +60,6 @@ export class HealthPage {
       this.weekBTN();
     })
 
->>>>>>> 567edea83122c4757a43e861a786bf1aef0c2aca
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
