@@ -67,6 +67,7 @@ export class LoginPage {
             buttons: [
               {
                 text: "Ok",
+                cssClass: 'buttoncss',
                 role: 'cancel'
               }
             ]

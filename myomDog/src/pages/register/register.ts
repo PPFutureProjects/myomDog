@@ -58,6 +58,7 @@ export class RegisterPage {
             buttons: [
               {
                 text: "Ok",
+                cssClass: 'buttoncss',
                 role: 'cancel'
               }
             ]
