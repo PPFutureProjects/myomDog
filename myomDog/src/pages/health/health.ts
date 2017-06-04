@@ -7,6 +7,13 @@ import { BehaviorSubject } from 'rxjs/BehaviorSubject';
 import { Chart } from 'chart.js'
 
 // import { History } from './History'
+
+/**
+ * Generated class for the Health page.
+ *
+ * See http://ionicframework.com/docs/components/#navigation for more info
+ * on Ionic pages and navigation.
+ */
 @IonicPage()
 @Component({
   selector: 'page-health',
@@ -56,6 +63,7 @@ export class HealthPage {
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
     this.segSubject = new BehaviorSubject(undefined);
+
     var subscription = this.segSubject.subscribe(
       function (x) {
         if(x){
@@ -71,11 +79,12 @@ export class HealthPage {
       function () {
           console.log('Completed');
       });
-      console.log(this.dogHistory);
+
   }
 
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
+    this.lineChart = this.getLineChart([], []);
   }
 
   ionViewWillLeave() {
@@ -126,32 +135,14 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   weekBTN(){
     let current = new Date();
     let labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-    let d = current.toString().split(' ')[0];
-    console.log(d);
-    if(d=='Mon'){
-      labels = ["Tue","Wed","Thu","Fri","Sat","Sun","Mon"];
-    }else if(d=='Tue'){
-      labels = ["Wed","Thu","Fri","Sat","Sun","Mon","Tue"];
-    }else if(d=='Wed'){
-      labels = ["Thu","Fri","Sat","Sun","Mon","Tue","Wed"];
-    }else if(d=='Thu'){
-      labels = ["Fri","Sat","Sun","Mon","Tue","Wed","Thu"];
-    }else if(d=='Fri'){
-      labels = ["Sat","Sun","Mon","Tue","Wed","Thu","Fri"];
-    }else if(d=='Sat'){
-      labels = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-    }else if(d=='Sun'){
-      labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-    }
     let param = new Promise((resolve,reject)=>{
       this.dogHistory.subscribe(shots=>{
         let cnt = [0, 0, 0, 0, 0, 0, 0];
         shots.forEach(history=>{
-          if(Math.floor( (current.getTime()-(new Date(history.time)).getTime())/1000/60/60/24 ) <= 7 ){
-            for(let i=0; i<7; i++){
-              if(history.time.split(" ")[0]==labels[i]){
-                cnt[i] += history.content;
-              }
+          // 이번주인지확인...
+          for(let i=0; i<7; i++){
+            if(history.time.split(" ")[0]==labels[i]){
+              cnt[i] += history.content;
             }
           }
         })
@@ -250,6 +241,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       this.lineChart = this.getLineChart(label, data);
     })
     this.graph = "month"
+    this.lineChart = this.getLineChart([],[]);
   }
 
   threemonthBTN(){
@@ -313,19 +305,13 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       }
     }).then(result=>{
       this.lineChart = this.getLineChart(label, result);
-    })
-    this.graph = "3months"
+    });
+    this.graph = "3months";
+    this.lineChart = this.getLineChart([],[]);
   }
 
   filterBy(segVal?: string) {
     this.segSubject.next(segVal);
-    if(this.graph == "3months"){
-      this.weekBTN();
-    }else if(this.graph == "month"){
-      this.monthBTN();
-    }else if(this.graph == "week"){
-      this.threemonthBTN();
-    }
   }
 
   editItem(history){
@@ -377,4 +363,16 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 
    return this.getChart(this.lineCanvas.nativeElement, "line", data);
  }
+
+ // 추가 버튼 이벤트
+ addFoodHistory(){
+   console.log("addFoodHistory clicked");
+ }
+ addWalkHistory(){
+   console.log("addWalkHistory clicked");
+ }
+ addEtcHistory(){
+   console.log("addEtcHistory clicked");
+ }
+
 }

@@ -40,16 +40,6 @@
       </ion-item>
     </ion-list>
   </div>
-  <div> <!-- Chart -->
-    <ion-card>
-    <ion-card-header>
-      Line Chart
-    </ion-card-header>
-    <ion-card-content>
-      <canvas #lineCanvas></canvas>
-    </ion-card-content>
-    </ion-card>
-  </div>
 <!-- ///////////////// -->
 
 <ion-toolbar no-border-top>
@@ -68,17 +58,26 @@
     </ion-segment-button>
   </ion-segment>
 </ion-toolbar>
-
+<div> <!-- Chart -->
+  <ion-card>
+   <ion-card-header>
+     Line Chart
+   </ion-card-header>
+   <ion-card-content>
+     <canvas #lineCanvas></canvas>
+   </ion-card-content>
+  </ion-card>
+</div>
 <div [ngSwitch]="history">
   <ion-list>
-    <ion-item-sliding [animateItemSliding]="shouldAnimate" *ngFor="let history of dogHistory | async">
+    <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
         <ion-icon name="{{history.icon}}" item-left></ion-icon>
-          {{history.name}}
-          <div *ngIf="history.content">
-            {{history.content}} 분 <!--분은 안맞췃어요~-->
-          </div>
-        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
+          <div class="historyName">
+            {{history.name}}
+            <p *ngIf="history.name==='산책' && history.content" class="walkTime">{{history.content}} 분</p>
+        </div>
+        <ion-note item-right class="historyTime">{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
         <button ion-button color="emphasis" icon-left (click)="editItem(history.$key)">
@@ -181,11 +180,11 @@
 <ion-fab right bottom>
   <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
       <ion-fab-list side="left">
-        <button ion-fab color="emphasis"><ion-icon name="nutrition"></ion-icon></button>
+        <button ion-fab color="emphasis" (click)="addFoodHistory()"><ion-icon name="nutrition"></ion-icon></button>
       <!-- </ion-fab-list> -->
       <!-- <ion-fab-list side="left"> -->
-        <button ion-fab color="emphasis"><ion-icon name="paw"></ion-icon></button>
-        <button ion-fab color="emphasis"><ion-icon name="medkit"></ion-icon></button>
+        <button ion-fab color="emphasis" (click)="addWalkHistory()"><ion-icon name="paw"></ion-icon></button>
+        <button ion-fab color="emphasis" (click)="addEtcHistory()"><ion-icon name="medkit"></ion-icon></button>
 
       </ion-fab-list>
     </ion-fab>
