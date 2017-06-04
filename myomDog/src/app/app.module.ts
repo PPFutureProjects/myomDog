@@ -13,7 +13,7 @@ import { LoginPage } from '../pages/login/login';
 import { RegisterPage } from '../pages/register/register';
 import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 
-import { HomePage } from '../pages/home/home';
+import { HomePage, MoreInfoPage } from '../pages/home/home';
 import { HealthPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
 import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage, DeleteGroupPage } from '../pages/setting/setting';
@@ -53,6 +53,7 @@ firebase.initializeApp(firebaseConfig);
     ResetpwdPage,
 
     HomePage,
+    MoreInfoPage,
     HealthPage,
     WalkPage,
     SettingPage,
@@ -80,6 +81,7 @@ firebase.initializeApp(firebaseConfig);
     LoginPage,
     RegisterPage,
     ResetpwdPage,
+    MoreInfoPage,
 
     HomePage,
     HealthPage,
