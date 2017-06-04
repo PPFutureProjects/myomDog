@@ -73,11 +73,11 @@
     <ion-item-sliding *ngFor="let history of dogHistory | async">
       <ion-item>
         <ion-icon name="{{history.icon}}" item-left></ion-icon>
-          {{history.name}}
-          <div *ngIf="history.content">
-            {{history.content}} 분
-          </div>
-        <ion-note item-right>{{history.time | date:'MM/dd HH:mm'}}</ion-note>
+          <div class="historyName">
+            {{history.name}}
+            <p *ngIf="history.name==='산책' && history.content" class="walkTime">{{history.content}} 분</p>
+        </div>
+        <ion-note item-right class="historyTime">{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
         <button ion-button color="emphasis" icon-left (click)="editItem(history.$key)">
