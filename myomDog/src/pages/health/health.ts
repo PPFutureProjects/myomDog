@@ -305,8 +305,8 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       }
     }).then(result=>{
       this.lineChart = this.getLineChart(label, result);
-    })
-    this.graph = "3months"
+    });
+    this.graph = "3months";
     this.lineChart = this.getLineChart([],[]);
   }
 
