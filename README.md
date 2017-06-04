@@ -31,3 +31,7 @@ myomDog/node_modules/source-map/lib/source-node.js
 var nextLine = remainingLines[0];
 if (!nextLine) return;
 ```
+
+#### 이미지 참조시
+
+```src="assets/img/img_name.png"``` 로 했는데, 실제 기기에서 테스트 해봐야함
