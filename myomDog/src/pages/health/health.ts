@@ -96,7 +96,7 @@ export class HealthPage {
   }
   
   ionViewDidEnter(){
-this.isAndroid = this.platform.is('android');
+    this.isAndroid = this.platform.is('android');
     this.mydogs = this.db.list('/userData/'+this.manageService.userKey+'/groups');
     let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
     let p = new Promise((resolve,reject)=>{
@@ -129,6 +129,7 @@ this.isAndroid = this.platform.is('android');
       this.weekBTN();
     })
     this.segSubject.next(undefined);
+    this.history = "total";
   }
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
@@ -188,6 +189,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       this.weekBTN();
     })
     this.segSubject.next(undefined);
+    this.history = "total";
   }
 
   weekBTN(){
