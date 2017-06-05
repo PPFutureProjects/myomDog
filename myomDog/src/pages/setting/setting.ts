@@ -198,7 +198,7 @@ export class AddingDogPage {
            console.log("birth :" + this.birth);
            console.log("sex : "+ this.gender);
            console.log("mealtime: "+ this.mealtime);
-           if(this.alreadygroup){
+           if(this.alreadygroup && this.alreadygroup!='moo_exception'){
              console.log("alreadygroup: "+this.alreadygroup);
             this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth);
            }  else {
@@ -407,7 +407,7 @@ export class ChangeInfoPage {
     this.groupobject = db.object('/userData/'+this.userKey+'/groups');
     console.log(this.grouplist);
   }
-  changeinfobutton(){
+  changeinfobutton(){ //해야해
     console.log("changed dog :"+ this.changeddog );
   }
   editdog(SelectedDog){

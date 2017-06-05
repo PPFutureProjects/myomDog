@@ -553,10 +553,6 @@ export class PopoverPage {
     }
   }
 
-  dismiss(){
-    this.viewCtrl.dismiss();
-  }
-
   check(){
     //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){
     let icon;
@@ -567,6 +563,7 @@ export class PopoverPage {
       console.log(this.date);
       console.log(new Date(this.date));
       this.manageService.feedDogs(this.selected, this.date);
+
     }else{
       if(this.category=='etc'){
         icon = 'medkit';
@@ -577,10 +574,14 @@ export class PopoverPage {
         name = '산책';
       }
       this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
-      this.viewCtrl.dismiss();
     }
+    this.viewCtrl.dismiss();
+
   }
 
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
 }
 
 @Component({
@@ -609,9 +610,19 @@ export class HistoryEditPage{
       this.editwhat = this.navParams.data.name;
       this.editfoodtype = this.navParams.data.icon;
 
-      console.log("test123:"+this.editfoodtype);
-      //console.log("test123:"+this.editdate);
-      //console.log("test123:"+this.editcategory);
+    }
+  }
+  editcheck(){
+    if(this.editcategory == 'food'){
+
+    }
+
+    else if(this.editcategory == 'walk'){
+
+    }
+
+    else if(this.editcategory == 'etc'){
+
     }
   }
 
