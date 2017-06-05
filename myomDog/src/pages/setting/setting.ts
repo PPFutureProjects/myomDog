@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 // import firebase from 'firebase';
@@ -39,6 +39,12 @@ export class SettingPage {
   invitingModal(){
     let inviteModal = this.modalCtrl.create(InvitingPage);
     inviteModal.present();
+  }
+  inviteinfoModal(){
+    let inviteinfoModal = this.modalCtrl.create(InviteInfoPage, {
+      userKey: this.userKey,
+    });
+    inviteinfoModal.present();
   }
   changeinfoModal(){
     let changeModal = this.modalCtrl.create(ChangeInfoPage);
@@ -255,6 +261,139 @@ export class InvitingPage {
     this._viewCtrl.dismiss();
   }
 }
+
+@Component({
+  template: `
+    <ion-header>
+  <ion-toolbar>
+      <ion-title>수신 초대 목록</ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text color="main" showWhen="ios">Cancel</span>
+          <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let item of invitations | async">
+    <button ion-item (click)="select(item)">
+      {{item.dog_name}}
+    </button>
+  </ion-list>
+</ion-content>
+
+  `
+})
+export class InviteInfoPage {
+  userKey: string;
+  invitations: FirebaseListObservable<any[]>;
+  selected;
+  groups;
+
+  constructor(public navParam: NavParams, public viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController){
+    this.userKey = navParam.data.userKey;
+    this.groups = this.db.list('/userData/'+this.userKey+'/groups', {preserveSnapshot: true});
+  }
+
+  ionViewDidEnter(){
+    if(this.userKey){
+      this.invitations = this.db.list('/userData/'+this.userKey+'/invitation');
+
+    }
+  }
+
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
+
+  select(item){
+    console.log(item.$key)
+  let alert = this.alertCtrl.create();
+  alert.setTitle('초대를 수락?');
+  alert.addInput({
+    type:'checkbox',
+    label: '새 그룹에 추가',
+    value: null,
+    checked: true
+  })
+  this.groups.subscribe((snapshot)=>{
+        snapshot.forEach(snap=>{
+          let groupName = snap.val().groupName;
+          let grouopKey = snap.key;
+          alert.addInput({
+            type: 'checkbox',
+            label: snap.val().groupName,
+            value: snap.key,
+            checked: false
+          });
+        })
+      });
+
+        alert.addButton({
+          text: '거절',
+          handler: data=>{
+            this.manageService.rejectInvitation(item);
+          }
+        });
+        alert.addButton({
+          text: '수락',
+          handler: data => {
+            console.log(data);
+            if(data.length>1){
+              let confirm = this.alertCtrl.create({
+              title: '알림',
+              message: '하나의 그룹만 선택하세요',
+              buttons: [
+                {
+                  text: '확인',
+                  handler: () => {
+                  }
+                }
+              ]
+              });
+              confirm.present();
+            }
+            else if(data==""){
+              console.log("-")
+              let prompt = this.alertCtrl.create({
+                title: '새 그룹에 추가',
+                message: "추가할 그룹명을 입력하세요",
+                inputs: [
+                  {
+                    name: 'groupname',
+                    placeholder: '그룹명'
+                  },
+                ],
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    handler: data => {
+                    }
+                  },
+                  {
+                    text: 'Save',
+                    handler: data => {
+                      this.manageService.receiveInvitationOnExists(data, item);
+                    }
+                  }
+                ]
+              });
+              prompt.present();
+            }else{
+              console.log("+")
+              this.manageService.receiveInvitation(data[0], item);
+            }
+          }
+        });
+        alert.present().then(() => {
+
+        });
+      }
+
+}
+
 
 @Component({
   templateUrl : './changeinfo.html'
