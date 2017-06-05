@@ -154,9 +154,9 @@ export class MoreInfoPage {
     this.dogbirth = params.get('val').value.birth;
     this.doggender = params.get('val').value.gender;
     this.doglastmeal = params.get('val').value.lastmeal;
+    
 
-
-    console.log("bang test:", this.dogname);
+    //console.log("bang test:", this.dogname);
   }
 
   doginfofavorite(){
