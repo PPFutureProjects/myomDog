@@ -165,13 +165,23 @@ export class ManageService {
     console.log("current time : "+firebase.database.ServerValue.TIMESTAMP+"   type: "+typeof firebase.database.ServerValue.TIMESTAMP);
     dogs.forEach((dog)=>{
       console.log("dog: "+dog);
-      firebase.database().ref('/dogData/'+dog+'/history').push({
-        category: 'walk',
-        icon: 'paw',
-        name: '산책',
-        time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
-        content: content
-      })
+      if(!content){
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+        })
+      }else{
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          content: content
+        })
+      }
+      
     })
 
   }

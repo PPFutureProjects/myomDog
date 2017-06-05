@@ -148,15 +148,17 @@ export class MoreInfoPage {
   dogbirth: string;
   doggender: string;
   doglastmeal: string;
+  dogKey;
 
-  constructor(public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController){
+  constructor(public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService){
     this.dogname = params.get('val').value.name;
     this.dogbirth = params.get('val').value.birth;
     this.doggender = params.get('val').value.gender;
     this.doglastmeal = params.get('val').value.lastmeal;
-
-
-    console.log("bang test:", this.dogname);
+    if(params){
+      this.dogKey = params.data.val.key;
+      console.log(this.dogKey);
+    }
   }
 
   doginfofavorite(){
@@ -173,7 +175,7 @@ export class MoreInfoPage {
        {
          text: 'Agree',
          handler: () => {
-
+          this.manageService.changeMainDog(this.dogKey);
          }
        }
      ]
@@ -195,7 +197,7 @@ export class MoreInfoPage {
        {
          text: 'Agree',
          handler: () => {
-
+          this.manageService.feedDogs([this.dogKey]);
          }
        }
      ]
