@@ -313,7 +313,7 @@ export class InviteInfoPage {
   let alert = this.alertCtrl.create();
   alert.setTitle('초대를 수락?');
   alert.addInput({
-    type:'checkbox',
+    type:'radio',
     label: '새 그룹에 추가',
     value: null,
     checked: true
@@ -323,7 +323,7 @@ export class InviteInfoPage {
           let groupName = snap.val().groupName;
           let grouopKey = snap.key;
           alert.addInput({
-            type: 'checkbox',
+            type: 'radio',
             label: snap.val().groupName,
             value: snap.key,
             checked: false

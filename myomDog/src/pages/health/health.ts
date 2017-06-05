@@ -61,8 +61,6 @@ export class HealthPage {
         else {
           console.log("No 대표개");
         }
-
-
         this.walkHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
