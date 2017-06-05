@@ -1,6 +1,6 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController,ModalController } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable,FirebaseObjectObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -25,26 +25,44 @@ export class HealthPage {
   history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
   myMainDogKey: any;
+  original;
+
+  mydogs: FirebaseListObservable<any[]>;
   dogHistory: FirebaseListObservable<any[]>;
+  walkHistory: FirebaseListObservable<any[]>;
   segSubject: BehaviorSubject<any>;
 
+  edittime: string;
+
+  addcategory;
+
   @ViewChild('lineCanvas') lineCanvas;
+  @ViewChild('popoverContent', { read: ElementRef }) content: ElementRef;
+  @ViewChild('popoverText', { read: ElementRef }) text: ElementRef;
   lineChart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public db: AngularFireDatabase,
-              public manageService: ManageService)
+              public manageService: ManageService, public popoverCtrl: PopoverController, public modalCtrl: ModalController)
     {
     this.isAndroid = platform.is('android');
+    this.mydogs = db.list('/userData/'+this.manageService.userKey+'/groups');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
     let p = new Promise((resolve,reject)=>{
       firebaseData.subscribe((snapshot)=>{
         if(snapshot.val().mainDog) {
           this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
           console.log("대표개: "+ this.myMainDogKey);
         }
         else {
           console.log("No 대표개");
         }
+        this.walkHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
         this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
@@ -57,7 +75,10 @@ export class HealthPage {
       }
     }).then(()=>{
       this.weekBTN();
-    })
+    }
+
+
+  )
 
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
@@ -81,6 +102,42 @@ export class HealthPage {
 
   }
 
+  ionViewDidEnter(){
+    this.isAndroid = this.platform.is('android');
+    this.mydogs = this.db.list('/userData/'+this.manageService.userKey+'/groups');
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        if(snapshot.val().mainDog) {
+          this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
+          console.log("대표개: "+ this.myMainDogKey);
+        }
+        else {
+          console.log("No 대표개");
+        }
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject.next(undefined);
+    this.history = "total";
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
     this.lineChart = this.getLineChart([], []);
@@ -92,32 +149,13 @@ export class HealthPage {
     this.graph = "week";
     this.segSubject.next(undefined);
     this.history = "total";
+    this.myMainDogKey = this.original;
+    this.original = null;
   }
 
   // public get getHealthItems(){
   //   return this.dogHistory;
   // }
-
-  // Null 을 넘겨야하므로 옵셔널
-
-/*
-loadUsers() {
-	let dbRef = admin.database().ref('/users');
-	let defer = new Promise((resolve, reject) => {
-		dbRef.once('value', (snap) => {
-			let data = snap.val();
-      let users = [];
-      for (var property in data) {
-	      users.push(data[property]);
-      }
-			resolve(users);
-		}, (err) => {
-			reject(err);
-		});
-	});
-	return defer;
-}*/
-
 
 /*
 getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 차이에다가
@@ -131,11 +169,42 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 24를 또 나누면 일 단위의 차이가 되는것이다.
 
 */
+
+  changeDog(){
+    console.log(this.myMainDogKey);
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject.next(undefined);
+
+    this.history = "total";
+  }
+
   weekBTN(){
     let current = new Date();
     let labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
     let param = new Promise((resolve,reject)=>{
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         let cnt = [0, 0, 0, 0, 0, 0, 0];
         shots.forEach(history=>{
           // 이번주인지확인...
@@ -224,7 +293,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
                 0,0,0,0,0,0,0,
                 0,0,0]
       }
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         shots.forEach(history=>{
           let x = new Date(history.time);
           if(x.getMonth()==month){
@@ -252,7 +321,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 
     let param = new Promise((resolve, reject)=>{
 
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         if(Math.floor(current.getDate()/7)==0){
           label =
         [
@@ -313,8 +382,23 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     this.segSubject.next(segVal);
   }
 
-  editItem(history){
+  editItem(history, ev){
     console.log('edit item : ' + JSON.stringify(history));
+    console.log('edit item : ' + this.myMainDogKey);
+
+    let editlist = this.db.object('/dogData/'+this.myMainDogKey+'/history/'+JSON.stringify(history), {preserveSnapshot: true});
+    console.log("obj" + editlist);
+    editlist.subscribe(snap=>{
+      this.edittime = snap.val().time;
+      //console.log("name==>"+time);
+    })
+
+    let popover = this.popoverCtrl.create(PopoverPage, {
+     category: this.addcategory
+    });
+    popover.present({
+      ev: ev
+    });
   }
 
   deleteItem(history){
@@ -364,14 +448,93 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
  }
 
  // 추가 버튼 이벤트
- addFoodHistory(){
+ addFoodHistory(ev){
+   this.addcategory = "food";
+   this.presentPopover(ev);
    console.log("addFoodHistory clicked");
  }
- addWalkHistory(){
+ addWalkHistory(ev){
+   this.addcategory = "walk";
+   this.presentPopover(ev);
    console.log("addWalkHistory clicked");
  }
- addEtcHistory(){
+ addEtcHistory(ev){
+   this.addcategory = "etc";
+   this.presentPopover(ev);
    console.log("addEtcHistory clicked");
  }
+  presentPopover(ev) {
+     let popover = this.popoverCtrl.create(PopoverPage, {
+      category: this.addcategory
+     });
+     popover.present({
+       ev: ev
+     });
+  }
 
+
+}
+
+@Component({
+  templateUrl: './popover.html'
+})
+export class PopoverPage {
+  grouplist: FirebaseListObservable<any[]>;
+  selected;
+  category;
+  walktime;
+  date;
+  what;
+  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+    //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
+    //console.log('dogs: ', this.dogs);
+    let userKey = this.manageService.userKey
+    this.grouplist = db.list('/userData/'+userKey+'/groups');
+  }
+
+  ngOnInit() {
+    if (this.navParams.data) {
+      this.category = this.navParams.data.category;
+    }
+  }
+
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
+
+  check(){
+    //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){
+    let icon;
+    let name;
+    if(this.category=='food'){
+      icon = 'restaurant';
+      name = '식사';
+      console.log(this.date);
+      console.log(new Date(this.date));
+      this.manageService.feedDogs(this.selected, this.date);
+    }else{
+      if(this.category=='etc'){
+        icon = '';
+        name = this.what;
+      }
+      if(this.category=='walk'){
+        icon= 'paw';
+        name = '산책';
+      }
+      this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
+    }
+  }
+
+}
+
+@Component({
+  templateUrl : 'historyedit.html'
+})
+export class HistoryEditPage{
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
+
+  }
+  dismiss(){
+    this._viewCtrl.dismiss();
+  }
 }

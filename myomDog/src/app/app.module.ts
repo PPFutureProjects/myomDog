@@ -14,9 +14,10 @@ import { RegisterPage } from '../pages/register/register';
 import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 
 import { HomePage, MoreInfoPage } from '../pages/home/home';
-import { HealthPage } from '../pages/health/health';
+import { HealthPage,HistoryEditPage } from '../pages/health/health';
+import { PopoverPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
-import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage, DeleteGroupPage } from '../pages/setting/setting';
+import { SettingPage, AddingDogPage, InvitingPage, InviteInfoPage, ChangeInfoPage, GoodByePage, DeleteGroupPage } from '../pages/setting/setting';
 import { TabsPage } from '../pages/tabs/tabs';
 
 // SERVICES
@@ -59,10 +60,13 @@ firebase.initializeApp(firebaseConfig);
     SettingPage,
     AddingDogPage,
     InvitingPage,
+    InviteInfoPage,
     ChangeInfoPage,
     TabsPage,
     GoodByePage,
     DeleteGroupPage,
+    PopoverPage,
+    HistoryEditPage,
 
     OrderbyPipe,
     KeysPipe,
@@ -86,14 +90,17 @@ firebase.initializeApp(firebaseConfig);
     HomePage,
     HealthPage,
     HealthListComponent,
+    HistoryEditPage,
     WalkPage,
     SettingPage,
     AddingDogPage,
     InvitingPage,
+    InviteInfoPage,
     ChangeInfoPage,
     TabsPage,
     GoodByePage,
-    DeleteGroupPage
+    DeleteGroupPage,
+    PopoverPage
   ],
   providers: [
     StatusBar,

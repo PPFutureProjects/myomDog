@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController } from 'ionic-angular';
+import { AlertController, NavController, NavParams } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 // import firebase from 'firebase';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import {ModalController, ViewController } from 'ionic-angular';
+import {ModalController, ViewController, ToastController } from 'ionic-angular';
 
 @Component({
   templateUrl: './setting.html'
@@ -40,6 +40,12 @@ export class SettingPage {
     let inviteModal = this.modalCtrl.create(InvitingPage);
     inviteModal.present();
   }
+  inviteinfoModal(){
+    let inviteinfoModal = this.modalCtrl.create(InviteInfoPage, {
+      userKey: this.userKey,
+    });
+    inviteinfoModal.present();
+  }
   changeinfoModal(){
     let changeModal = this.modalCtrl.create(ChangeInfoPage);
     changeModal.present();
@@ -72,7 +78,9 @@ export class DeleteGroupPage {
   userKey: string;
 
   grouplist: FirebaseListObservable<any[]>;
-  selectedGroup: string
+  selectedGroup: string;
+  editGroup: string;
+  changegroupname: string;
 
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
@@ -100,6 +108,11 @@ export class DeleteGroupPage {
          cssClass: 'buttoncss',
          handler: () => {
            this.manageService.removeGroup(this.selectedGroup);
+           let alertOK = this.alertCtrl.create({
+            title: '삭제완료',
+            subTitle: '해당 그룹을 삭제했습니다.',
+            buttons: ['확인']
+          });
          }
        }
      ]
@@ -107,6 +120,34 @@ export class DeleteGroupPage {
    confirm.present()
   }
 
+  editButton(){
+    let confirm = this.alertCtrl.create({
+      title: '확인창',
+      message: '해당 그룹을 수정할까요?',
+      buttons: [
+        {
+          text: 'Disagree',
+          cssClass: 'buttoncss',
+          handler: () => {
+            console.log('Disagree');
+          }
+        },
+        {
+          text: 'Agree',
+          cssClass: 'buttoncss',
+          handler: () => {
+            //editGroup->changegroupname
+            let alertOK = this.alertCtrl.create({
+             title: '수정완료',
+             subTitle: '수정되었습니다.',
+             buttons: ['확인']
+           });
+          }
+        }
+      ]
+    });
+    confirm.present()
+   }
 }
 
 @Component({
@@ -164,6 +205,11 @@ export class AddingDogPage {
                 console.log("newAdd");
                 this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
            }
+           let alertOK = this.alertCtrl.create({
+            title: '강아지 등록',
+            subTitle: '등록되었습니다.',
+            buttons: ['확인']
+          });
            this._viewCtrl.dismiss();
          }
        }
@@ -217,6 +263,139 @@ export class InvitingPage {
 }
 
 @Component({
+  template: `
+    <ion-header>
+  <ion-toolbar>
+      <ion-title>수신 초대 목록</ion-title>
+      <ion-buttons start>
+        <button ion-button (click)="dismiss()">
+          <span ion-text color="main" showWhen="ios">Cancel</span>
+          <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
+        </button>
+      </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list *ngFor="let item of invitations | async">
+    <button ion-item (click)="select(item)">
+      {{item.dog_name}}
+    </button>
+  </ion-list>
+</ion-content>
+
+  `
+})
+export class InviteInfoPage {
+  userKey: string;
+  invitations: FirebaseListObservable<any[]>;
+  selected;
+  groups;
+
+  constructor(public navParam: NavParams, public viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController){
+    this.userKey = navParam.data.userKey;
+    this.groups = this.db.list('/userData/'+this.userKey+'/groups', {preserveSnapshot: true});
+  }
+
+  ionViewDidEnter(){
+    if(this.userKey){
+      this.invitations = this.db.list('/userData/'+this.userKey+'/invitation');
+
+    }
+  }
+
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
+
+  select(item){
+    console.log(item.$key)
+  let alert = this.alertCtrl.create();
+  alert.setTitle('초대를 수락?');
+  alert.addInput({
+    type:'checkbox',
+    label: '새 그룹에 추가',
+    value: null,
+    checked: true
+  })
+  this.groups.subscribe((snapshot)=>{
+        snapshot.forEach(snap=>{
+          let groupName = snap.val().groupName;
+          let grouopKey = snap.key;
+          alert.addInput({
+            type: 'checkbox',
+            label: snap.val().groupName,
+            value: snap.key,
+            checked: false
+          });
+        })
+      });
+
+        alert.addButton({
+          text: '거절',
+          handler: data=>{
+            this.manageService.rejectInvitation(item);
+          }
+        });
+        alert.addButton({
+          text: '수락',
+          handler: data => {
+            console.log(data);
+            if(data.length>1){
+              let confirm = this.alertCtrl.create({
+              title: '알림',
+              message: '하나의 그룹만 선택하세요',
+              buttons: [
+                {
+                  text: '확인',
+                  handler: () => {
+                  }
+                }
+              ]
+              });
+              confirm.present();
+            }
+            else if(data==""){
+              console.log("-")
+              let prompt = this.alertCtrl.create({
+                title: '새 그룹에 추가',
+                message: "추가할 그룹명을 입력하세요",
+                inputs: [
+                  {
+                    name: 'groupname',
+                    placeholder: '그룹명'
+                  },
+                ],
+                buttons: [
+                  {
+                    text: 'Cancel',
+                    handler: data => {
+                    }
+                  },
+                  {
+                    text: 'Save',
+                    handler: data => {
+                      this.manageService.receiveInvitationOnExists(data, item);
+                    }
+                  }
+                ]
+              });
+              prompt.present();
+            }else{
+              console.log("+")
+              this.manageService.receiveInvitation(data[0], item);
+            }
+          }
+        });
+        alert.present().then(() => {
+
+        });
+      }
+
+}
+
+
+@Component({
   templateUrl : './changeinfo.html'
 })
 export class ChangeInfoPage {
@@ -230,6 +409,10 @@ export class ChangeInfoPage {
 
   //editdoggroup: string;
   editdogname: string;
+  editdogsex: string;
+  editdogbirth: Date;
+
+  moveanothergroup: string;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
@@ -247,6 +430,8 @@ export class ChangeInfoPage {
 
     dog.subscribe(snap=>{
       this.editdogname = snap.val().name;
+      this.editdogsex = snap.val().gender;
+      this.editdogbirth = snap.val().birth;
       console.log("name==>"+name);
     })
   }
@@ -267,8 +452,9 @@ export class GoodByePage {
   // AllDogs: any;
   // inviteduser:string;
   goodbyedog:string;
+  OKboolean: boolean = false;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController){
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController, public toastCtrl: ToastController){
     this.userKey = manageService.userKey;
 
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -277,6 +463,7 @@ export class GoodByePage {
 
   }
   deletebutton(){
+
     let confirm = this.alertCtrl.create({
      title: '확인창',
      message: '이별하시겠습니까?',
@@ -296,11 +483,25 @@ export class GoodByePage {
            //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
            //삭제 메소드 goodbyedog변수에 삭제할 강아지key값 가지고 있음.
            this.manageService.goodbyeDog(this.goodbyedog);
+           let alertOK = this.alertCtrl.create({
+            title: '이별완료',
+            subTitle: '이별하였습니다.',
+            buttons: ['확인']
+          });
+    alertOK.present();
          }
        }
      ]
    });
    confirm.present()
+  //  if(this.OKboolean){
+  //    let toast = this.toastCtrl.create({
+  //       message: 'User was added successfully',
+  //       duration: 3000
+  //     });
+  //     toast.present();
+  //  }
+
   }
 
    dismiss(){
