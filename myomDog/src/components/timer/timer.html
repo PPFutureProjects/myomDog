@@ -1,8 +1,12 @@
-<div>
- <ion-item class="no-bottom-border item">
- <h1 text-center color="primary" class="timer-button timer-text">{{timer.displayTime}}</h1>
- </ion-item>
+<div class="no-bottom-border item">
+  <ion-card>
+    <img src="assets/img/shiba_inu_walk2.jpg" />
+    <div class="card-title">{{timer.displayTime}}</div>
+      <!-- <h1 text-center color="primary" class="timer-button timer-text">{{timer.displayTime}}</h1> -->
+    <div class="card-subtitle">???</div>
+  </ion-card>
 </div>
+
 <div>
     <button color="emphasis" ion-button (click) = 'updateParent()'>산책정보등록</button>
 </div>
