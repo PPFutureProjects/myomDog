@@ -42,10 +42,10 @@
   </ion-item>
   <ion-item>
     <ion-label floating>새로운 그룹명</ion-label>
-    <ion-input type = "text" value="" [(ngModel)]="changegroupname"></ion-input>
+    <ion-input type = "text" value="newgroupname" [(ngModel)]="changegroupname"></ion-input>
   </ion-item>
   <div padding>
-    <button ion-button color = "emphasis" block (click) = "editButton()">수정 완료</button>
+    <button ion-button color = "emphasis" block (click) = "editButton(editGroup, changegroupname)">수정 완료</button>
   </div>
   </ion-list>
 

@@ -92,32 +92,40 @@ export class DeleteGroupPage {
   }
 
   deleteButton(){
-    let confirm = this.alertCtrl.create({
-     title: '확인창',
-     message: '해당 그룹을 정말로 삭제할까요?',
-     buttons: [
-       {
-         text: 'Disagree',
-         cssClass: 'buttoncss',
-         handler: () => {
-           console.log('Disagree');
+    if(!this.manageService.removeCheck(this.selectedGroup)){ //삭제할 수 없음, 그룹에 개가 있음
+      let alertOK = this.alertCtrl.create({
+       title: '삭제실패',
+       subTitle: '해당 그룹에 반려견이 존재합니다.',
+       buttons: ['확인']
+     });
+    }
+    else{ //삭제할 수 있음
+      let confirm = this.alertCtrl.create({
+       title: '확인창',
+       message: '해당 그룹을 정말로 삭제할까요?',
+       buttons: [
+         {
+           text: '취소',
+           cssClass: 'buttoncss',
+           handler: () => {
+           }
+         },
+         {
+           text: 'Agree',
+           cssClass: 'buttoncss',
+           handler: () => {
+             this.manageService.removeGroup(this.selectedGroup);
+             let alertOK = this.alertCtrl.create({
+              title: '삭제완료',
+              subTitle: '해당 그룹을 삭제했습니다.',
+              buttons: ['확인']
+            });
+           }
          }
-       },
-       {
-         text: 'Agree',
-         cssClass: 'buttoncss',
-         handler: () => {
-           this.manageService.removeGroup(this.selectedGroup);
-           let alertOK = this.alertCtrl.create({
-            title: '삭제완료',
-            subTitle: '해당 그룹을 삭제했습니다.',
-            buttons: ['확인']
-          });
-         }
-       }
-     ]
-   });
-   confirm.present()
+       ]
+     });
+     confirm.present()
+    }
   }
 
   editButton(){
@@ -126,22 +134,16 @@ export class DeleteGroupPage {
       message: '해당 그룹을 수정할까요?',
       buttons: [
         {
-          text: 'Disagree',
+          text: '취소',
           cssClass: 'buttoncss',
           handler: () => {
-            console.log('Disagree');
           }
         },
         {
-          text: 'Agree',
+          text: '수정',
           cssClass: 'buttoncss',
           handler: () => {
-            //editGroup->changegroupname
-            let alertOK = this.alertCtrl.create({
-             title: '수정완료',
-             subTitle: '수정되었습니다.',
-             buttons: ['확인']
-           });
+            this.manageService.editGroupName(this.editGroup, this.changegroupname);
           }
         }
       ]
