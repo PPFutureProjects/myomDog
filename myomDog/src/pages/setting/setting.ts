@@ -4,7 +4,7 @@ import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 // import firebase from 'firebase';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
-import {ModalController, ViewController } from 'ionic-angular';
+import {ModalController, ViewController, ToastController } from 'ionic-angular';
 
 @Component({
   templateUrl: './setting.html'
@@ -72,7 +72,9 @@ export class DeleteGroupPage {
   userKey: string;
 
   grouplist: FirebaseListObservable<any[]>;
-  selectedGroup: string
+  selectedGroup: string;
+  editGroup: string;
+  changegroupname: string;
 
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
@@ -100,6 +102,11 @@ export class DeleteGroupPage {
          cssClass: 'buttoncss',
          handler: () => {
            this.manageService.removeGroup(this.selectedGroup);
+           let alertOK = this.alertCtrl.create({
+            title: '삭제완료',
+            subTitle: '해당 그룹을 삭제했습니다.',
+            buttons: ['확인']
+          });
          }
        }
      ]
@@ -107,6 +114,34 @@ export class DeleteGroupPage {
    confirm.present()
   }
 
+  editButton(){
+    let confirm = this.alertCtrl.create({
+      title: '확인창',
+      message: '해당 그룹을 수정할까요?',
+      buttons: [
+        {
+          text: 'Disagree',
+          cssClass: 'buttoncss',
+          handler: () => {
+            console.log('Disagree');
+          }
+        },
+        {
+          text: 'Agree',
+          cssClass: 'buttoncss',
+          handler: () => {
+            //editGroup->changegroupname
+            let alertOK = this.alertCtrl.create({
+             title: '수정완료',
+             subTitle: '수정되었습니다.',
+             buttons: ['확인']
+           });
+          }
+        }
+      ]
+    });
+    confirm.present()
+   }
 }
 
 @Component({
@@ -164,6 +199,11 @@ export class AddingDogPage {
                 console.log("newAdd");
                 this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
            }
+           let alertOK = this.alertCtrl.create({
+            title: '강아지 등록',
+            subTitle: '등록되었습니다.',
+            buttons: ['확인']
+          });
            this._viewCtrl.dismiss();
          }
        }
@@ -230,6 +270,10 @@ export class ChangeInfoPage {
 
   //editdoggroup: string;
   editdogname: string;
+  editdogsex: string;
+  editdogbirth: Date;
+
+  moveanothergroup: string;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
@@ -247,6 +291,8 @@ export class ChangeInfoPage {
 
     dog.subscribe(snap=>{
       this.editdogname = snap.val().name;
+      this.editdogsex = snap.val().gender;
+      this.editdogbirth = snap.val().birth;
       console.log("name==>"+name);
     })
   }
@@ -267,8 +313,9 @@ export class GoodByePage {
   // AllDogs: any;
   // inviteduser:string;
   goodbyedog:string;
+  OKboolean: boolean = false;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController){
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase, public alertCtrl: AlertController, public toastCtrl: ToastController){
     this.userKey = manageService.userKey;
 
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -277,6 +324,7 @@ export class GoodByePage {
 
   }
   deletebutton(){
+
     let confirm = this.alertCtrl.create({
      title: '확인창',
      message: '이별하시겠습니까?',
@@ -296,11 +344,25 @@ export class GoodByePage {
            //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
            //삭제 메소드 goodbyedog변수에 삭제할 강아지key값 가지고 있음.
            this.manageService.goodbyeDog(this.goodbyedog);
+           let alertOK = this.alertCtrl.create({
+            title: '이별완료',
+            subTitle: '이별하였습니다.',
+            buttons: ['확인']
+          });
+    alertOK.present();
          }
        }
      ]
    });
    confirm.present()
+  //  if(this.OKboolean){
+  //    let toast = this.toastCtrl.create({
+  //       message: 'User was added successfully',
+  //       duration: 3000
+  //     });
+  //     toast.present();
+  //  }
+
   }
 
    dismiss(){

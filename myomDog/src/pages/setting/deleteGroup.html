@@ -24,10 +24,29 @@
         </div>
     </ion-select>
   </ion-item>
-  </ion-list>
-
   <div padding>
     <button ion-button color = "emphasis" block (click) = "deleteButton()">그룹 삭제</button>
   </div>
+  </ion-list>
+
+  <ion-list>
+    <ion-item>
+      <ion-label>편집할 그룹</ion-label>
+      <ion-select interface="action-sheet" [(ngModel)]="editGroup">
+        <div *ngFor="let group of grouplist | async">
+          <ion-option value="{{group.$key}}">
+            {{group.groupName}}
+          </ion-option>
+        </div>
+    </ion-select>
+  </ion-item>
+  <ion-item>
+    <ion-label floating>새로운 그룹명</ion-label>
+    <ion-input type = "text" value="" [(ngModel)]="changegroupname"></ion-input>
+  </ion-item>
+  <div padding>
+    <button ion-button color = "emphasis" block (click) = "editButton()">수정 완료</button>
+  </div>
+  </ion-list>
 
 </ion-content>

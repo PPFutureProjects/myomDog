@@ -1,6 +1,6 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController } from 'ionic-angular';
-import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
+import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController,ModalController } from 'ionic-angular';
+import { AngularFireDatabase, FirebaseListObservable,FirebaseObjectObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
 import { BehaviorSubject } from 'rxjs/BehaviorSubject';
@@ -25,10 +25,14 @@ export class HealthPage {
   history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
   myMainDogKey: any;
+
   mydogs: FirebaseListObservable<any[]>;
   dogHistory: FirebaseListObservable<any[]>;
   walkHistory: FirebaseListObservable<any[]>;
   segSubject: BehaviorSubject<any>;
+
+  edittime: string;
+
   addcategory;
 
   @ViewChild('lineCanvas') lineCanvas;
@@ -37,7 +41,7 @@ export class HealthPage {
   lineChart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public db: AngularFireDatabase,
-              public manageService: ManageService, public popoverCtrl: PopoverController)
+              public manageService: ManageService, public popoverCtrl: PopoverController, public modalCtrl: ModalController)
     {
     this.isAndroid = platform.is('android');
     this.mydogs = db.list('/userData/'+this.manageService.userKey+'/groups');
@@ -51,6 +55,8 @@ export class HealthPage {
         else {
           console.log("No 대표개");
         }
+
+
         this.walkHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
@@ -69,7 +75,10 @@ export class HealthPage {
       }
     }).then(()=>{
       this.weekBTN();
-    })
+    }
+
+
+  )
 
     //this.myMainDogKey = '-Kkp6_SPSiCNeVWj1z5a';//하드코딩 : 공주 키 값
 
@@ -92,8 +101,8 @@ export class HealthPage {
       });
 
   }
-  
-  
+
+
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
     this.lineChart = this.getLineChart([], []);
@@ -129,7 +138,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
     let p = new Promise((resolve,reject)=>{
       firebaseData.subscribe((snapshot)=>{
-        
+
         this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
@@ -334,8 +343,23 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     this.segSubject.next(segVal);
   }
 
-  editItem(history){
+  editItem(history, ev){
     console.log('edit item : ' + JSON.stringify(history));
+    console.log('edit item : ' + this.myMainDogKey);
+
+    let editlist = this.db.object('/dogData/'+this.myMainDogKey+'/history/'+JSON.stringify(history), {preserveSnapshot: true});
+    console.log("obj" + editlist);
+    editlist.subscribe(snap=>{
+      this.edittime = snap.val().time;
+      //console.log("name==>"+time);
+    })
+
+    let popover = this.popoverCtrl.create(PopoverPage, {
+     category: this.addcategory
+    });
+    popover.present({
+      ev: ev
+    });
   }
 
   deleteItem(history){
@@ -434,13 +458,13 @@ export class PopoverPage {
       this.category = this.navParams.data.category;
     }
   }
-  
+
   dismiss(){
     this.viewCtrl.dismiss();
   }
 
   check(){
-    //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){ 
+    //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){
     let icon;
     let name;
     if(this.category=='food'){
@@ -462,4 +486,16 @@ export class PopoverPage {
     }
   }
 
+}
+
+@Component({
+  templateUrl : 'historyedit.html'
+})
+export class HistoryEditPage{
+  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
+
+  }
+  dismiss(){
+    this._viewCtrl.dismiss();
+  }
 }

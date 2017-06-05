@@ -94,7 +94,7 @@
         <ion-note item-right class="historyTime">{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="emphasis" icon-left (click)="editItem(history.$key)">
+        <button ion-button color="emphasis" icon-left (click)="editItem(history.$key, $event)">
             <ion-icon name="create"></ion-icon>
             편집
           </button>

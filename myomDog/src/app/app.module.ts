@@ -14,7 +14,7 @@ import { RegisterPage } from '../pages/register/register';
 import { ResetpwdPage } from '../pages/resetpwd/resetpwd';
 
 import { HomePage, MoreInfoPage } from '../pages/home/home';
-import { HealthPage } from '../pages/health/health';
+import { HealthPage,HistoryEditPage } from '../pages/health/health';
 import { PopoverPage } from '../pages/health/health';
 import { WalkPage } from '../pages/walk/walk';
 import { SettingPage, AddingDogPage, InvitingPage, ChangeInfoPage, GoodByePage, DeleteGroupPage } from '../pages/setting/setting';
@@ -65,6 +65,7 @@ firebase.initializeApp(firebaseConfig);
     GoodByePage,
     DeleteGroupPage,
     PopoverPage,
+    HistoryEditPage,
 
     OrderbyPipe,
     KeysPipe,
@@ -88,6 +89,7 @@ firebase.initializeApp(firebaseConfig);
     HomePage,
     HealthPage,
     HealthListComponent,
+    HistoryEditPage,
     WalkPage,
     SettingPage,
     AddingDogPage,
