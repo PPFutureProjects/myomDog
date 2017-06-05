@@ -113,19 +113,26 @@ export class ManageService {
     
   }
 
-  feedDogs(dogs){
+  feedDogs(dogs, time?){
     let current = new Date();
-    let cnt: number = 1;
     for(let i=0; i<dogs.length; i++){
-      firebase.database().ref('dogData/'+dogs[i]).update({
-        lastmeal: current
+      firebase.database().ref('dogData/'+dogs[i]).once('value').then(snap=>{
+        if(time && snap.val().lastmeal < time){
+          firebase.database().ref('dogData/'+dogs[i]).update({
+            lastmeal: current
+          });
+        }else{
+          firebase.database().ref('dogData/'+dogs[i]).update({
+            lastmeal: current
+          });
+        }
       });
+      
       firebase.database().ref('dogData/'+dogs[i]+'/history').push({
         category: 'food',
         icon:'restaurant',
         name: '식사',
         time: current.toString(),
-        content: cnt
       })
     }
   }

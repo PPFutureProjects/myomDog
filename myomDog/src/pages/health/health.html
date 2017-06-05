@@ -20,7 +20,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding>
+<ion-content padding><!--
   <div [ngSwitch]="graph">
     <ion-list *ngSwitchCase="'week'">
       <ion-item>
@@ -39,9 +39,23 @@
         <h2>3개월간 그래프</h2>
       </ion-item>
     </ion-list>
-  </div>
+  </div>-->
 <!-- ///////////////// -->
-
+  <button ion-button icon-only (click)="changeDog()">
+    <ion-icon name="star"></ion-icon>
+  </button>
+  <ion-item>
+      <ion-label>다른 강아지 보기</ion-label>
+        <ion-select [(ngModel)]="myMainDogKey" multiple="false" cancelText="cancel" okText="OK">
+            <div *ngFor="let group of mydogs | async">
+              <div *ngFor="let dog of group.dogs | keys">
+                <ion-option value="{{dog.key}}">
+                  [{{group.groupName}}] {{dog.value.name}}
+                </ion-option>
+              </div>
+            </div>
+        </ion-select>
+  </ion-item>
 <ion-toolbar no-border-top>
   <ion-segment [(ngModel)]="history" color="emphasis">
     <ion-segment-button value="total" (click)="filterBy()">
@@ -179,15 +193,15 @@
 
 <ion-fab right bottom>
   <button ion-fab color="light"><ion-icon name="add"></ion-icon></button>
-      <ion-fab-list side="left">
-        <button ion-fab color="emphasis" (click)="addFoodHistory()"><ion-icon name="nutrition"></ion-icon></button>
+  <ion-fab-list side="left">
+    <button ion-fab color="emphasis" (click)="addFoodHistory($event)"><ion-icon name="nutrition"></ion-icon></button>
       <!-- </ion-fab-list> -->
       <!-- <ion-fab-list side="left"> -->
-        <button ion-fab color="emphasis" (click)="addWalkHistory()"><ion-icon name="paw"></ion-icon></button>
-        <button ion-fab color="emphasis" (click)="addEtcHistory()"><ion-icon name="medkit"></ion-icon></button>
+    <button ion-fab color="emphasis" (click)="addWalkHistory($event)"><ion-icon name="paw"></ion-icon></button>
+    <button ion-fab color="emphasis" (click)="addEtcHistory($event)"><ion-icon name="medkit"></ion-icon></button>
 
-      </ion-fab-list>
-    </ion-fab>
+  </ion-fab-list>
+</ion-fab>
 
 
 

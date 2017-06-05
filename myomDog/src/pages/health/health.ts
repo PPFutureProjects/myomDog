@@ -1,5 +1,5 @@
-import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, Platform } from 'ionic-angular';
+import { Component, ViewChild, ElementRef } from '@angular/core';
+import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
@@ -25,16 +25,22 @@ export class HealthPage {
   history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
   myMainDogKey: any;
+  mydogs: FirebaseListObservable<any[]>;
   dogHistory: FirebaseListObservable<any[]>;
+  walkHistory: FirebaseListObservable<any[]>;
   segSubject: BehaviorSubject<any>;
+  addcategory;
 
   @ViewChild('lineCanvas') lineCanvas;
+  @ViewChild('popoverContent', { read: ElementRef }) content: ElementRef;
+  @ViewChild('popoverText', { read: ElementRef }) text: ElementRef;
   lineChart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public db: AngularFireDatabase,
-              public manageService: ManageService)
+              public manageService: ManageService, public popoverCtrl: PopoverController)
     {
     this.isAndroid = platform.is('android');
+    this.mydogs = db.list('/userData/'+this.manageService.userKey+'/groups');
     let firebaseData = db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
     let p = new Promise((resolve,reject)=>{
       firebaseData.subscribe((snapshot)=>{
@@ -45,7 +51,12 @@ export class HealthPage {
         else {
           console.log("No 대표개");
         }
-
+        this.walkHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
         this.dogHistory = db.list('/dogData/'+this.myMainDogKey+'/history', {
           query: {
             orderByChild: 'category',
@@ -81,7 +92,8 @@ export class HealthPage {
       });
 
   }
-
+  
+  
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
     this.lineChart = this.getLineChart([], []);
@@ -99,27 +111,6 @@ export class HealthPage {
   //   return this.dogHistory;
   // }
 
-  // Null 을 넘겨야하므로 옵셔널
-
-/*
-loadUsers() {
-	let dbRef = admin.database().ref('/users');
-	let defer = new Promise((resolve, reject) => {
-		dbRef.once('value', (snap) => {
-			let data = snap.val();
-      let users = [];
-      for (var property in data) {
-	      users.push(data[property]);
-      }
-			resolve(users);
-		}, (err) => {
-			reject(err);
-		});
-	});
-	return defer;
-}*/
-
-
 /*
 getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 차이에다가
 
@@ -132,11 +123,40 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 24를 또 나누면 일 단위의 차이가 되는것이다.
 
 */
+
+  changeDog(){
+    console.log(this.myMainDogKey);
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject = new BehaviorSubject(undefined);
+  }
+
   weekBTN(){
     let current = new Date();
     let labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
     let param = new Promise((resolve,reject)=>{
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         let cnt = [0, 0, 0, 0, 0, 0, 0];
         shots.forEach(history=>{
           // 이번주인지확인...
@@ -225,7 +245,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
                 0,0,0,0,0,0,0,
                 0,0,0]
       }
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         shots.forEach(history=>{
           let x = new Date(history.time);
           if(x.getMonth()==month){
@@ -253,7 +273,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 
     let param = new Promise((resolve, reject)=>{
 
-      this.dogHistory.subscribe(shots=>{
+      this.walkHistory.subscribe(shots=>{
         if(Math.floor(current.getDate()/7)==0){
           label =
         [
@@ -365,14 +385,81 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
  }
 
  // 추가 버튼 이벤트
- addFoodHistory(){
+ addFoodHistory(ev){
+   this.addcategory = "food";
+   this.presentPopover(ev);
    console.log("addFoodHistory clicked");
  }
- addWalkHistory(){
+ addWalkHistory(ev){
+   this.addcategory = "walk";
+   this.presentPopover(ev);
    console.log("addWalkHistory clicked");
  }
- addEtcHistory(){
+ addEtcHistory(ev){
+   this.addcategory = "etc";
+   this.presentPopover(ev);
    console.log("addEtcHistory clicked");
  }
+  presentPopover(ev) {
+     let popover = this.popoverCtrl.create(PopoverPage, {
+      category: this.addcategory
+     });
+     popover.present({
+       ev: ev
+     });
+  }
+
+
+}
+
+@Component({
+  templateUrl: './popover.html'
+})
+export class PopoverPage {
+  grouplist: FirebaseListObservable<any[]>;
+  selected;
+  category;
+  walktime;
+  date;
+  what;
+  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+    //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
+    //console.log('dogs: ', this.dogs);
+    let userKey = this.manageService.userKey
+    this.grouplist = db.list('/userData/'+userKey+'/groups');
+  }
+
+  ngOnInit() {
+    if (this.navParams.data) {
+      this.category = this.navParams.data.category;
+    }
+  }
+  
+  dismiss(){
+    this.viewCtrl.dismiss();
+  }
+
+  check(){
+    //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){ 
+    let icon;
+    let name;
+    if(this.category=='food'){
+      icon = 'restaurant';
+      name = '식사';
+      console.log(this.date);
+      console.log(new Date(this.date));
+      //this.manageService.feedDogs(this.selected, this.date);
+    }else{
+      if(this.category=='etc'){
+        icon = '';
+        name = this.what;
+      }
+      if(this.category=='walk'){
+        icon= 'paw';
+        name = '산책';
+      }
+      //this.manageService.addHistory(this.category, icon, name, this.date, this.selected);
+    }
+  }
 
 }
