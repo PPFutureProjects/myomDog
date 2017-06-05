@@ -36,6 +36,15 @@
       <ion-label>시각</ion-label>
       <ion-datetime displayFormat="MM/DD/YYYY HH:mm" [(ngModel)]="editdate"></ion-datetime>
     </ion-item>
+
+    <ion-item *ngIf="editcategory=='food'">
+      <ion-label>식사종류</ion-label>
+      <ion-select [(ngModel)]="editfoodtype" cancelText="cancel" okText="OK">
+        <ion-option value="restaurant">사료</ion-option>
+        <ion-option value="nutrition">간식</ion-option>
+      </ion-select>
+    </ion-item>
+
     <ion-item *ngIf="editcategory=='walk'">
       <ion-label>몇 분 동안?</ion-label>
       <ion-input type="number" [(ngModel)]="editwalktime"></ion-input>

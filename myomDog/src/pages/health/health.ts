@@ -37,6 +37,7 @@ export class HealthPage {
 
   editwalktime: number;
   editwhat: string;
+  editfoodtype: string;
 
   addcategory;
 
@@ -394,6 +395,9 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     editlist.subscribe(snap=>{
       this.edittime = new Date(snap.val().time); //시간time공통적용
       //console.log("t: "+ this.edittime);
+      if(this.kind=='food'){
+        this.editfoodtype = snap.val().icon;
+      }
 
       if(this.kind=='walk'){
         this.editwalktime = snap.val().content; //산책만 content
@@ -411,7 +415,8 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
      category: this.kind,
      time: this.edittime,
      content: this.editwalktime,
-     name: this.editwhat
+     name: this.editwhat,
+     icon: this.editfoodtype
     });
     editpopover.present({
       ev: ev
@@ -587,6 +592,7 @@ export class HistoryEditPage{
   editwalktime: number;
   editdate: Date;
   editwhat;
+  editfoodtype;
   constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
     //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
     // //console.log('dogs: ', this.dogs);
@@ -601,8 +607,11 @@ export class HistoryEditPage{
       this.editdate = this.navParams.data.time;
       this.editwalktime = this.navParams.data.content;
       this.editwhat = this.navParams.data.name;
-      console.log("test123:"+this.editdate);
-      console.log("test123:"+this.editcategory);
+      this.editfoodtype = this.navParams.data.icon;
+
+      console.log("test123:"+this.editfoodtype);
+      //console.log("test123:"+this.editdate);
+      //console.log("test123:"+this.editcategory);
     }
   }
 
