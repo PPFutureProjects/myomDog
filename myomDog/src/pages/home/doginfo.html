@@ -1,9 +1,9 @@
 <ion-header>
   <ion-toolbar>
-      <ion-title></ion-title>
+      <ion-title>상세정보확인</ion-title>
       <ion-buttons start>
         <button ion-button (click)="dismiss()">
-          <span ion-text color="primary" showWhen="ios">Cancel</span>
+          <span ion-text color="main" showWhen="ios">Cancel</span>
           <ion-icon name="md-close" showWhen="android, windows"></ion-icon>
         </button>
       </ion-buttons>
@@ -15,40 +15,40 @@
 
     <ion-card>
       <ion-card-content>
-        <ion-card-title>
-          {{dogname}}
-        </ion-card-title>
+        <ion-item>
+          <h2>{{dogname}}</h2>
+          <ion-icon name = "md-female" item-right large></ion-icon>
+          <ion-icon name = "md-male" item-right large></ion-icon>
+        </ion-item>
         <img src="../../assets/shiba_inu.jpg">
 
-    <ion-item>
-      <ion-icon name = "rose" item-left large></ion-icon>
-      <h2>{{dogname}}의 생일 {{dogbirth}}</h2>
+        <ion-item>
+          <ion-icon name = "rose" item-left large></ion-icon>
+          <h2>{{dogname}}의 생일 {{dogbirth}}</h2>
+        </ion-item>
 
-    </ion-item>
-        <p>
-          이런시바
-        </p>
+        <ion-item>
+          <ion-icon name = "md-alarm" item-left large></ion-icon>
+          <h2>{{dogname}}의 최근식사시간 {{doglastmeal}}</h2>
+        </ion-item>
+
+
       </ion-card-content>
 
       <ion-row no-padding>
         <ion-col>
-          <button ion-button clear small color="danger" icon-left>
+          <button ion-button clear small color="point" icon-left (click) = "doginfofavorite()">
             <ion-icon name='star'></ion-icon>
-            Favorite
-          </button>
-        </ion-col>
-        <ion-col text-center>
-          <button ion-button clear small color="danger" icon-left>
-            <ion-icon name='musical-notes'></ion-icon>
-            Listen
+            즐개찾기
           </button>
         </ion-col>
         <ion-col text-right>
-          <button ion-button clear small color="danger" icon-left>
-            <ion-icon name='share-alt'></ion-icon>
-            Share
+          <button ion-button clear small color="emphasis" icon-left (click) = "doginfogivemeal()">
+            <ion-icon name='nutrition'></ion-icon>
+            밥주기
           </button>
         </ion-col>
+
       </ion-row>
 
     </ion-card>

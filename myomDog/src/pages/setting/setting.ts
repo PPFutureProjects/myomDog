@@ -90,12 +90,14 @@ export class DeleteGroupPage {
      buttons: [
        {
          text: 'Disagree',
+         cssClass: 'buttoncss',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
          text: 'Agree',
+         cssClass: 'buttoncss',
          handler: () => {
            this.manageService.removeGroup(this.selectedGroup);
          }
@@ -140,12 +142,14 @@ export class AddingDogPage {
      buttons: [
        {
          text: 'Disagree',
+         cssClass: 'buttoncss',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
          text: 'Agree',
+         cssClass: 'buttoncss',
          handler: () => {
            console.log('Agree');
            console.log("^^alreadygroup: "+this.alreadygroup);
@@ -279,12 +283,14 @@ export class GoodByePage {
      buttons: [
        {
          text: 'Disagree',
+         cssClass: 'buttoncss',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
          text: 'Agree',
+         cssClass: 'buttoncss',
          handler: () => {
            console.log("del dog"+this.goodbyedog);
            //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
