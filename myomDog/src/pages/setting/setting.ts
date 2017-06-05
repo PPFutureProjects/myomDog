@@ -343,21 +343,7 @@ export class InviteInfoPage {
           text: '수락',
           handler: data => {
             console.log(data);
-            if(data.length>1){
-              let confirm = this.alertCtrl.create({
-              title: '알림',
-              message: '하나의 그룹만 선택하세요',
-              buttons: [
-                {
-                  text: '확인',
-                  handler: () => {
-                  }
-                }
-              ]
-              });
-              confirm.present();
-            }
-            else if(data==""){
+            if(data==""){
               console.log("-")
               let prompt = this.alertCtrl.create({
                 title: '새 그룹에 추가',
@@ -385,7 +371,7 @@ export class InviteInfoPage {
               prompt.present();
             }else{
               console.log("+")
-              this.manageService.receiveInvitation(data[0], item);
+              this.manageService.receiveInvitation(data, item);
             }
           }
         });

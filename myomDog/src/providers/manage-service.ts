@@ -45,15 +45,30 @@ export class ManageService {
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs').push({
         name: dogName,
-        super: this.userKey,
+        super: {
+          id: this.userKey,
+          group: groupKey.key
+        },
         birth: birth,
-        gender: gender
+        gender: gender,
       }).then((newDogKey)=> {
-          firebase.database().ref('dogData/').child(newDogKey.key).set({
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs/'+newDogKey.key+'/users').push({
+            id: this.userKey,
+            group: groupKey.key
+          })
+          firebase.database().ref('dogData/'+newDogKey.key).set({
             name: dogName,
             gender: gender,
             birth: birth,
-            super: this.userKey
+            super: {
+              id: this.userKey,
+              group: groupKey.key
+            }
+          }).then(()=>{
+            firebase.database().ref('dogData/'+newDogKey.key+'/users').push({
+              id: this.userKey,
+              group: groupKey.key
+            });
           });
           firebase.database().ref('userData/'+this.userKey).once('value').then((snap)=>{
             if(snap.val().first===false){
@@ -76,19 +91,34 @@ export class ManageService {
   addDogToGroup(g, dogName, gender, birth){
     firebase.database().ref('dogData/').push({
       name: dogName,
-      super: this.userKey,
+      super: {
+        id: this.userKey,
+        group: g
+      },
       birth: birth,
       gender: gender
     }).then((newDog)=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs').child(newDog.key).set({
+      firebase.database().ref('dogData/'+newDog.key+'/users').push({
+        id: this.userKey,
+        group: g
+      })
+      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs/'+newDog.key).set({
         name: dogName,
         gender: gender,
         birth: birth,
-        super: this.userKey
+        super: {
+          id: this.userKey,
+          group: g
+        }
+      }).then(()=>{
+        firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs/'+newDog.key+'/users').push({
+          id: this.userKey,
+          group: g
+        });
       });
     });
   }
-
+/* 초대하기 */
   invite(receiver, dog){
     let strArr2 = receiver.split('.');
     firebase.database().ref('dogData/'+dog).once('value').then(snap=>{
@@ -98,71 +128,87 @@ export class ManageService {
         dog_name: snap.val().name,
         gender: snap.val().gender,
         birth: snap.val().birth,
-        super: snap.val().super
+        super: snap.val().super,
+        users: snap.val().users
       });
     })
   }
-
+  /* 새로운 그룹에 초대받은 강아지를 추가 */
   receiveInvitation(group, invitation){
-    console.log("만들어라")
-    console.log(group);
-    console.log(invitation);
+    console.log(group); //  
+    console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
     let dogname = invitation.dog_name;
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    firebase.database().ref('/userData/'+this.userKey+'/groups').push({
-      groupName: group
-    }).then((newgroup)=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs').update({
-        dogid: {
+    new Promise(()=>{
+      firebase.database().ref('/userData/'+this.userKey+'/groups').push({
+        groupName: group
+      }).then((newgroup)=>{
+        firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid).update({
           name: dogname,
-          super: superuser,
+          super: {
+            id: superuser.id,
+            group: superuser.group
+          },
           birth: birth,
           gender: gender
-        }
-      })
+        }).then(()=>{
+          firebase.database().ref('dogData/'+dogid+'/users').push({
+            id: this.userKey,
+            group: newgroup.key
+          });
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid+'/users').push({
+            id: this.userKey,
+            group: newgroup.key
+          });
+        });
+      });
+    }).then(()=>{
+      firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
     })
-    firebase.database().ref('/dogData/'+dogid+'/users').push({
-      id: this.userKey
-    })
-    firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
-
   }
-
+/* 이미 존재하는 그룹에 초대받은 강아지를 추가 */
   receiveInvitationOnExists(group, invitation){
-    console.log(group.groupname);
-    console.log(invitation);
-    console.log("만들어라");
+    console.log(group.groupname); //
+    console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
     let dogname = invitation.dog_name;
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs').child(dogid).push({
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid).set({
       birth: birth,
       gender: gender,
       name: dogname,
-      super: superuser
+      super: {
+        id: superuser.id,
+        group: superuser.group
+      }
+    }).then(()=>{
+      firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid+'/users').push({
+        id: this.userKey,
+        group: group.groupname
+      })
+      firebase.database().ref('/dogData/'+dogid+'/users').push({
+        id: this.userKey,
+        group: group.groupname
+      })
     });
-    firebase.database().ref('/dogData/'+dogid+'/users').push({
-      id: this.userKey
-    })
+    
     firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
   }
 
   rejectInvitation(invitation){
-    console.log("만들어라");
     console.log(invitation);
     firebase.database().ref('userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
   }
 
   addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){ // category, icon, name, time(date), content?:any
     console.log("category: "+category+" icon: "+icon+ " date: "+time+" name: "+name+" walked time : "+content+" dogs: "+dogs);
-    console.log("current time : "+firebase.database.ServerValue.TIMESTAMP+"   type: "+typeof firebase.database.ServerValue.TIMESTAMP);
     dogs.forEach((dog)=>{
       console.log("dog: "+dog);
       if(!content){
@@ -187,207 +233,43 @@ export class ManageService {
   }
 
   feedDogs(dogs, time?){
-    let current = new Date()
-    for(let i=0; i<dogs.length; i++){
-      firebase.database().ref('dogData/'+dogs[i]).once('value').then(snap=>{
-        if(time){
-          let inputtime = new Date(time);
-          let origintime = new Date(snap.val().lastmeal);
-          console.log(inputtime.getFullYear());
-          console.log(origintime.getFullYear());
-          console.log(inputtime.getMonth());
-          console.log(origintime.getMonth());
-          console.log(inputtime.getDate());
-          console.log(origintime.getDate());
-          console.log(inputtime.getHours());
-          console.log(origintime.getHours());
-          console.log(inputtime.getMinutes());
-          console.log(origintime.getMinutes());
-          ////
-          if(inputtime.getFullYear()==origintime.getFullYear() && inputtime.getMonth()==origintime.getMonth() && inputtime.getDate()==origintime.getDate()){
-            if(inputtime.getHours()>origintime.getHours()){
-              //lastmeal
-              console.log("need to change");  //
-            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
-              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
-                groups.forEach(group=>{
-                  group.dogs.forEach(eachdog=>{
-                    if(dogs[i]==eachdog.key){
-                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
-                        lastmeal: current.toString()
-                      })
-                    }
-                  })
-                })
-              })
-              dog.users.forEach(user=>{
-                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
-                  groups.forEach(group=>{
-                    group.dogs.forEach(eachdog=>{
-                      if(dogs[i]==eachdog.key){
-                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
-                          lastmeal: current.toString()
-                        })
-                      }
-                    })
-                  })
-                })
-              })
-            });
-            }
-            else if(inputtime.getHours()==origintime.getHours()){
-              if(inputtime.getMinutes()>=origintime.getMinutes()){
-                //lastmeal변경
-                console.log("need to change");  //
-            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
-              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
-                groups.forEach(group=>{
-                  group.dogs.forEach(eachdog=>{
-                    if(dogs[i]==eachdog.key){
-                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
-                        lastmeal: current.toString()
-                      })
-                    }
-                  })
-                })
-              })
-              dog.users.forEach(user=>{
-                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
-                  groups.forEach(group=>{
-                    group.dogs.forEach(eachdog=>{
-                      if(dogs[i]==eachdog.key){
-                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
-                          lastmeal: current.toString()
-                        })
-                      }
-                    })
-                  })
-                })
-              })
-            });
-              }
-            }
-          }
-          else if(inputtime.getFullYear()==origintime.getFullYear()){
-            if(inputtime.getMonth()>origintime.getMonth()){
-              //lastmeal
-              console.log("need to change");  //
-            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
-              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
-                groups.forEach(group=>{
-                  group.dogs.forEach(eachdog=>{
-                    if(dogs[i]==eachdog.key){
-                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
-                        lastmeal: current.toString()
-                      })
-                    }
-                  })
-                })
-              })
-              dog.users.forEach(user=>{
-                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
-                  groups.forEach(group=>{
-                    group.dogs.forEach(eachdog=>{
-                      if(dogs[i]==eachdog.key){
-                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
-                          lastmeal: current.toString()
-                        })
-                      }
-                    })
-                  })
-                })
-              })
-            });
-            }
-          }
-          else if(inputtime.getFullYear()==origintime.getFullYear() && inputtime.getMonth()>origintime.getMonth()){
-            if(inputtime.getDate()>origintime.getDate()){
-              //lastmeal
-              console.log("need to change");  //
-            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
-              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
-                groups.forEach(group=>{
-                  group.dogs.forEach(eachdog=>{
-                    if(dogs[i]==eachdog.key){
-                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
-                        lastmeal: current.toString()
-                      })
-                    }
-                  })
-                })
-              })
-              dog.users.forEach(user=>{
-                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
-                  groups.forEach(group=>{
-                    group.dogs.forEach(eachdog=>{
-                      if(dogs[i]==eachdog.key){
-                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
-                          lastmeal: current.toString()
-                        })
-                      }
-                    })
-                  })
-                })
-              })
-            });
-            }
-          }
-          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
-            category: 'food',
-            icon:'restaurant',
-            name: '식사',
-            time: time.toString(),
-          })
-        }else{
-          console.log("don`t need to change");
-          firebase.database().ref('dogData/'+dogs[i]).update({
-            lastmeal: current
-          });
-          firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
-            firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
-              groups.forEach(group=>{
-                group.dogs.forEach(eachdog=>{
-                  if(dogs[i]==eachdog.key){
-                    firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
-                      lastmeal: current.toString()
-                    })
-                  }
-                })
-              })
-            })
-            dog.users.forEach(user=>{
-              firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
-                groups.forEach(group=>{
-                  group.dogs.forEach(eachdog=>{
-                    if(dogs[i]==eachdog.key){
-                      firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
-                        lastmeal: current.toString()
-                      })
-                    }
-                  })
-                })
-              })
-            })
-          });
-          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
-            category: 'food',
-            icon:'restaurant',
-            name: '식사',
-            time: current.toString(),
-          })
-        }
-      });
-    }
+    
   }
 
   changeMainDog(newMainDog) {
     firebase.database().ref('userData/'+this.userKey+'/').update({
-      mainDog: newMainDog
+      mainDog: newMainDog,
+      first: true
     });
     console.log("mainDog changed to "+newMainDog);
   }
 
   goodbyeDog(key){
+    firebase.database().ref('dogData/'+key+'/users').once('value').then((snapshots)=>{
+      snapshots.forEach((snapshot)=>{
+        if(snapshot.val().id==this.userKey){
+          let groupKey = snapshot.val().group;
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey+'/dogs/'+key).set(null).then(()=>{
+            firebase.database().ref('userData/'+this.userKey).once('value').then((userdata)=>{
+              if(userdata.val().mainDog==key){
+                firebase.database().ref('/userData/'+this.userKey).update({
+                  first: false,
+                  mainDog: null
+                });
+              }
+            })
+          });
+          firebase.database().ref('/dogData/'+key+'/users/'+snapshot.key).set(null).then(()=>{
+            firebase.database().ref('dogData/'+key+'/users').once('value').then((snaps)=>{
+              if(snaps.numChildren()==0){
+                firebase.database().ref('dogData/'+key).set(null);
+              }
+            })
+          });
+        }
+      })
+    });
+    /*
     firebase.database().ref('userData/'+this.userKey+'/groups').once('value').then((snap)=>{
       snap.forEach((group)=>{
         console.log(group.val().dogs);
@@ -400,16 +282,56 @@ export class ManageService {
         });
       });
     });
-    firebase.database().ref('dogData/').child(key).set(null);
-    firebase.database().ref('userData/'+this.userKey).update({
-      mainDog: null,
-      first: false
+    firebase.database().ref('userData/'+this.userKey).once('value').then((snap)=>{
+      if(snap.val().mainDog==key){
+        firebase.database().ref('userData/'+this.userKey).update({
+          mainDog: null,
+          first: false
+        });
+      }
+
+    })
+    new Promise(()=>{
+      firebase.database().ref('dogData/'+key+'users/').once('value').then(snap=>{
+        snap.forEach(user=>{
+          firebase.database().ref('/userData/'+user.id+'/groups/'+user.group+'/dogs/').child(key).set(null);
+          firebase.database().ref('/userData/'+user.id).once('value').then((userinfo)=>{
+            if(userinfo.val().mainDog==key){
+              firebase.database().ref('userData/'+this.userKey).update({
+                mainDog: null,
+                first: false
+              });
+            }
+          });
+        });
+      });
+    }).then(()=>{
+      firebase.database().ref('dogData/').child(key).set(null);
+    });
+    */
+  }
+
+  editGroupName(key, name){
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key).update({
+      groupName: name
     });
   }
 
   removeGroup(key){
-    console.log("key: "+key);
-    firebase.database().ref('userData/'+this.userKey+'/groups').child(key).set(null);
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key).set(null);
+  }
+
+  removeCheck(key):boolean{
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key+'/dogs').once('value').then((snapshot)=>{
+      console.log(snapshot);
+      console.log(snapshot.numChildren())
+      if(snapshot.numChildren()==0){
+        return true;
+      }else{
+        return false;
+      }
+    })
+    return true;
   }
 
   removeHistory(key, dog){
