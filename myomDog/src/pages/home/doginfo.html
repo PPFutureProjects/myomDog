@@ -15,9 +15,11 @@
 
     <ion-card>
       <ion-card-content>
-        <ion-item>
-          <h2>{{dogname}}</h2>
+        <h2>{{dogname}}</h2>
+        <ion-item *ngIf="gendernum==0">
           <ion-icon name = "md-female" item-right large></ion-icon>
+          </ion-item>
+          <ion-item *ngIf="gendernum==1">
           <ion-icon name = "md-male" item-right large></ion-icon>
         </ion-item>
         <img src="assets/img/shiba_inu.jpg">
@@ -39,12 +41,20 @@
         <ion-col>
           <button ion-button clear small color="point" icon-left (click) = "doginfofavorite()">
             <ion-icon name='star'></ion-icon>
-            즐개찾기
+            즐겨찾기
           </button>
         </ion-col>
-        <ion-col text-right>
-          <button ion-button clear small color="emphasis" icon-left (click) = "doginfogivemeal()">
+
+        <ion-col text-center>
+          <button ion-button clear small color="point" icon-left (click) = "doginfogivesnack()">
             <ion-icon name='nutrition'></ion-icon>
+            간식주기
+          </button>
+        </ion-col>
+
+        <ion-col text-right>
+          <button ion-button clear small color="point" icon-left (click) = "doginfogivemeal()">
+            <ion-icon name='restaurant'></ion-icon>
             밥주기
           </button>
         </ion-col>

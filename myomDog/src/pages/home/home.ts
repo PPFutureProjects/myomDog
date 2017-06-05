@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { NavParams, ViewController, NavController, AlertController, ModalController } from 'ionic-angular';
+import { ToastController, NavParams, ViewController, NavController, AlertController, ModalController } from 'ionic-angular';
 import { ManageService } from '../../providers/manage-service';
 import { AngularFireDatabase, FirebaseListObservable } from 'angularfire2/database';
 import { AuthService } from '../../providers/auth-service';
@@ -148,13 +148,18 @@ export class MoreInfoPage {
   dogbirth: string;
   doggender: string;
   doglastmeal: string;
+  gendernum: number = 0;
   dogKey;
 
-  constructor(public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService){
+  constructor(private navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService){
     this.dogname = params.get('val').value.name;
     this.dogbirth = params.get('val').value.birth;
     this.doggender = params.get('val').value.gender;
     this.doglastmeal = params.get('val').value.lastmeal;
+    if(this.doggender=='maledog'){
+      this.gendernum = 1;
+      console.log("test:"+this.dogname);
+    }
 
     if(params){
       this.dogKey = params.data.val.key;
@@ -166,18 +171,40 @@ export class MoreInfoPage {
   doginfofavorite(){
     let confirm = this.alertCtrl.create({
      title: '확인창',
-     message: this.dogname+'을 즐겨찾기?',
+     message: this.dogname+'을 즐겨찾기하시겠습니까?',
      buttons: [
        {
-         text: 'Disagree',
+         text: '취소',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
-         text: 'Agree',
+         text: '등록',
          handler: () => {
           this.manageService.changeMainDog(this.dogKey);
+        }
+       }
+     ]
+   });
+   confirm.present()
+  }
+
+  doginfogivesnack(){
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: this.dogname+'에게 간식을 주시겠습니까?',
+     buttons: [
+       {
+         text: '취소',
+         handler: () => {
+           //console.log('Disagree');
+         }
+       },
+       {
+         text: '간식주기',
+         handler: () => {
+           //간식주세요
          }
        }
      ]
@@ -188,16 +215,16 @@ export class MoreInfoPage {
   doginfogivemeal(){
     let confirm = this.alertCtrl.create({
      title: '확인창',
-     message: this.dogname+'에게 밥주기?',
+     message: this.dogname+'에게 밥주셨나요?',
      buttons: [
        {
-         text: 'Disagree',
+         text: '취소',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
-         text: 'Agree',
+         text: '밥주기',
          handler: () => {
           this.manageService.feedDogs([this.dogKey]);
          }
@@ -206,7 +233,6 @@ export class MoreInfoPage {
     });
     confirm.present()
     }
-
 
   dismiss(){
     this._viewCtrl.dismiss();

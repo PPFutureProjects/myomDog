@@ -1,6 +1,7 @@
+
 <ion-header>
   <ion-toolbar>
-      <ion-title>기록 추가</ion-title>
+      <ion-title>기록 편집</ion-title>
       <ion-buttons start>
         <button ion-button (click)="dismiss()">
           <span ion-text color="primary" showWhen="ios">Cancel</span>
@@ -9,12 +10,13 @@
       </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content #popoverContent padding class="popover-page">
+
   <ion-list>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label stacked>테스트</ion-label>
-      <!-- <ion-input type = "text" value="" [(ngModel)]="edittime"></ion-input> -->
-    </ion-item>
+    </ion-item> -->
 
     <!-- <ion-item>  //ngFor문
       <ion-label>강아지 선택</ion-label>
@@ -36,6 +38,15 @@
       <ion-label>시각</ion-label>
       <ion-datetime displayFormat="MM/DD/YYYY HH:mm" [(ngModel)]="editdate"></ion-datetime>
     </ion-item>
+
+    <ion-item *ngIf="editcategory=='food'">
+      <ion-label>식사종류</ion-label>
+      <ion-select [(ngModel)]="editfoodtype" cancelText="cancel" okText="OK">
+        <ion-option value="restaurant">사료</ion-option>
+        <ion-option value="nutrition">간식</ion-option>
+      </ion-select>
+    </ion-item>
+
     <ion-item *ngIf="editcategory=='walk'">
       <ion-label>몇 분 동안?</ion-label>
       <ion-input type="number" [(ngModel)]="editwalktime"></ion-input>
