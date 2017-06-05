@@ -52,11 +52,11 @@ export class ManageService {
         birth: birth,
         gender: gender,
       }).then((newDogKey)=> {
-          firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs/'+newDogKey+'/users').push({
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs/'+newDogKey.key+'/users').push({
             id: this.userKey,
             group: groupKey.key
           })
-          firebase.database().ref('dogData/').child(newDogKey.key).set({
+          firebase.database().ref('dogData/'+newDogKey.key).set({
             name: dogName,
             gender: gender,
             birth: birth,
@@ -102,7 +102,7 @@ export class ManageService {
         id: this.userKey,
         group: g
       })
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs').child(newDog.key).set({
+      firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs/'+newDog.key).set({
         name: dogName,
         gender: gender,
         birth: birth,
@@ -111,7 +111,7 @@ export class ManageService {
           group: g
         }
       }).then(()=>{
-        firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'dogs'+newDog.key+'/users').push({
+        firebase.database().ref('userData/'+this.userKey+'/groups/'+g+'/dogs/'+newDog.key+'/users').push({
           id: this.userKey,
           group: g
         });
@@ -143,24 +143,28 @@ export class ManageService {
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    new Promise((resolve,reject)=>{
+    new Promise(()=>{
       firebase.database().ref('/userData/'+this.userKey+'/groups').push({
         groupName: group
       }).then((newgroup)=>{
-        firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs').update({
-          dogid: {
-            name: dogname,
-            super: superuser,
-            birth: birth,
-            gender: gender
-          }
+        firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid).update({
+          name: dogname,
+          super: {
+            id: superuser.id,
+            group: superuser.group
+          },
+          birth: birth,
+          gender: gender
         }).then(()=>{
           firebase.database().ref('dogData/'+dogid+'/users').push({
             id: this.userKey,
             group: newgroup.key
           });
-        })
-        resolve();
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid+'/users').push({
+            id: this.userKey,
+            group: newgroup.key
+          });
+        });
       });
     }).then(()=>{
       firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
@@ -176,7 +180,7 @@ export class ManageService {
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid).child(dogid).push({
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid).set({
       birth: birth,
       gender: gender,
       name: dogname,
@@ -184,7 +188,7 @@ export class ManageService {
         id: superuser.id,
         group: superuser.group
       }
-    }).then((k)=>{
+    }).then(()=>{
       firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid+'/users').push({
         id: this.userKey,
         group: group.groupname
@@ -241,25 +245,28 @@ export class ManageService {
   }
 
   goodbyeDog(key){
-    firebase.database().ref('dogData/'+key+'/users').once('value').then(snapshots=>{
-      snapshots.forEach(snapshot=>{
-      new Promise(()=>{
-        firebase.database().ref('userData/'+snapshot.id+'/groups/'+snapshot.group+'/dogs/'+key+'/users').once('value').then(users=>{
-          users.forEach(user=>{
-            if(user.id==this.userKey){
-              firebase.database().ref('userData/'+snapshot.id+'/groups/'+snapshot.group+'/dogs/'+key+'/users/'+user.key).set(null);
-            }
-          })
-        })
-      }).then(()=>{
-        firebase.database().ref('/dogData/'+key+'/users').once('value').then((shots=>{
-          if(shots.numChildren()==0){
-            firebase.database().ref('/dogData/'+key).set(null);
-          }
-        }))
-      })
-        
-
+    firebase.database().ref('dogData/'+key+'/users').once('value').then((snapshots)=>{
+      snapshots.forEach((snapshot)=>{
+        if(snapshot.val().id==this.userKey){
+          let groupKey = snapshot.val().group;
+          firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey+'/dogs/'+key).set(null).then(()=>{
+            firebase.database().ref('userData/'+this.userKey).once('value').then((userdata)=>{
+              if(userdata.val().mainDog==key){
+                firebase.database().ref('/userData/'+this.userKey).update({
+                  first: false,
+                  mainDog: null
+                });
+              }
+            })
+          });
+          firebase.database().ref('/dogData/'+key+'/users/'+snapshot.key).set(null).then(()=>{
+            firebase.database().ref('dogData/'+key+'/users').once('value').then((snaps)=>{
+              if(snaps.numChildren()==0){
+                firebase.database().ref('dogData/'+key).set(null);
+              }
+            })
+          });
+        }
       })
     });
     /*
@@ -304,31 +311,27 @@ export class ManageService {
     */
   }
 
+  editGroupName(key, name){
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key).update({
+      groupName: name
+    });
+  }
+
   removeGroup(key){
-    console.log("key: "+key);
-    new Promise(()=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups/'+key+'/dogs').once('value').then((dogs)=>{
-        dogs.forEach(dog=>{
-          new Promise(()=>{
-            firebase.database().ref('dogData/'+dog.key+'/users/').once('value').then((users)=>{
-              users.forEach(user=>{
-                if(user.id==this.userKey){
-                  firebase.database().ref('dogData/'+dog.key+'/users/'+user.key).set(null);
-                }
-              })
-            })
-          }).then(()=>{
-            firebase.database().ref('dogData/'+dog.key+'/users').once('value').then((snap)=>{
-              if(snap.numChildren()==0){
-                firebase.database().ref('/dogData/'+dog.key).set(null);
-              }
-            })
-          })
-        })
-      })
-    }).then(()=>{
-      firebase.database().ref('userData/'+this.userKey+'/groups').child(key).set(null);
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key).set(null);
+  }
+
+  removeCheck(key):boolean{
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key+'/dogs').once('value').then((snapshot)=>{
+      console.log(snapshot);
+      console.log(snapshot.numChildren())
+      if(snapshot.numChildren()==0){
+        return true;
+      }else{
+        return false;
+      }
     })
+    return true;
   }
 
   removeHistory(key, dog){
