@@ -516,7 +516,7 @@ export class PopoverPage {
       this.manageService.feedDogs(this.selected, this.date);
     }else{
       if(this.category=='etc'){
-        icon = '';
+        icon = 'medkit';
         name = this.what;
       }
       if(this.category=='walk'){
@@ -524,6 +524,7 @@ export class PopoverPage {
         name = '산책';
       }
       this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
+      this.viewCtrl.dismiss();
     }
   }
 
