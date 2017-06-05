@@ -18,7 +18,7 @@
     <ion-item *ngIf="groupname==null || groupname==''">
       <ion-label>기존 그룹에 추가</ion-label>
       <ion-select interface="action-sheet" [(ngModel)]="alreadygroup">
-        <ion-option value="moo">
+        <ion-option value="moo_exception">
           없음
         </ion-option>
         <div *ngFor="let group of grouplist | async">
