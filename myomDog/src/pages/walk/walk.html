@@ -17,15 +17,7 @@
   <ion-card>
     <timer (outputProperty)="outputEvent($event)"></timer>
   </ion-card>
-  <ion-item>
-  <ion-label>산책시작시간</ion-label>
-  <ion-datetime displayFormat="DD-MM HH:mm" [(ngModel)]="picnic_start"></ion-datetime>
-  </ion-item>
-  <ion-item>
-  <ion-label>산책종료시간</ion-label>
-  <ion-datetime displayFormat="DD-MM HH:mm" [(ngModel)]="picnic_finish"></ion-datetime>
-  </ion-item>
-  
+
   <ion-item>  //ngFor문
       <ion-label>누구와함께~?</ion-label>
       <ion-select [(ngModel)]="selectedDogs" multiple="true" cancelText="cancel" okText="OK">
