@@ -165,38 +165,218 @@ export class ManageService {
     console.log("current time : "+firebase.database.ServerValue.TIMESTAMP+"   type: "+typeof firebase.database.ServerValue.TIMESTAMP);
     dogs.forEach((dog)=>{
       console.log("dog: "+dog);
-      firebase.database().ref('/dogData/'+dog+'/history').push({
-        category: 'walk',
-        icon: 'paw',
-        name: '산책',
-        time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
-        content: content
-      })
+      if(!content){
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+        })
+      }else{
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          content: content
+        })
+      }
+      
     })
 
   }
 
   feedDogs(dogs, time?){
-    let current = new Date();
+    let current = new Date()
     for(let i=0; i<dogs.length; i++){
       firebase.database().ref('dogData/'+dogs[i]).once('value').then(snap=>{
-        if(time && snap.val().lastmeal < time){
-          //firebase.database().ref('dogData/'+dogs[i]).update({
-           // lastmeal: time.toString()
-          //});
+        if(time){
+          let inputtime = new Date(time);
+          let origintime = new Date(snap.val().lastmeal);
+          console.log(inputtime.getFullYear());
+          console.log(origintime.getFullYear());
+          console.log(inputtime.getMonth());
+          console.log(origintime.getMonth());
+          console.log(inputtime.getDate());
+          console.log(origintime.getDate());
+          console.log(inputtime.getHours());
+          console.log(origintime.getHours());
+          console.log(inputtime.getMinutes());
+          console.log(origintime.getMinutes());
+          ////
+          if(inputtime.getFullYear()==origintime.getFullYear() && inputtime.getMonth()==origintime.getMonth() && inputtime.getDate()==origintime.getDate()){
+            if(inputtime.getHours()>origintime.getHours()){
+              //lastmeal
+              console.log("need to change");  //
+            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
+              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
+                groups.forEach(group=>{
+                  group.dogs.forEach(eachdog=>{
+                    if(dogs[i]==eachdog.key){
+                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
+                        lastmeal: current.toString()
+                      })
+                    }
+                  })
+                })
+              })
+              dog.users.forEach(user=>{
+                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
+                  groups.forEach(group=>{
+                    group.dogs.forEach(eachdog=>{
+                      if(dogs[i]==eachdog.key){
+                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
+                          lastmeal: current.toString()
+                        })
+                      }
+                    })
+                  })
+                })
+              })
+            });
+            }
+            else if(inputtime.getHours()==origintime.getHours()){
+              if(inputtime.getMinutes()>=origintime.getMinutes()){
+                //lastmeal변경
+                console.log("need to change");  //
+            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
+              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
+                groups.forEach(group=>{
+                  group.dogs.forEach(eachdog=>{
+                    if(dogs[i]==eachdog.key){
+                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
+                        lastmeal: current.toString()
+                      })
+                    }
+                  })
+                })
+              })
+              dog.users.forEach(user=>{
+                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
+                  groups.forEach(group=>{
+                    group.dogs.forEach(eachdog=>{
+                      if(dogs[i]==eachdog.key){
+                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
+                          lastmeal: current.toString()
+                        })
+                      }
+                    })
+                  })
+                })
+              })
+            });
+              }
+            }
+          }
+          else if(inputtime.getFullYear()==origintime.getFullYear()){
+            if(inputtime.getMonth()>origintime.getMonth()){
+              //lastmeal
+              console.log("need to change");  //
+            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
+              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
+                groups.forEach(group=>{
+                  group.dogs.forEach(eachdog=>{
+                    if(dogs[i]==eachdog.key){
+                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
+                        lastmeal: current.toString()
+                      })
+                    }
+                  })
+                })
+              })
+              dog.users.forEach(user=>{
+                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
+                  groups.forEach(group=>{
+                    group.dogs.forEach(eachdog=>{
+                      if(dogs[i]==eachdog.key){
+                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
+                          lastmeal: current.toString()
+                        })
+                      }
+                    })
+                  })
+                })
+              })
+            });
+            }
+          }
+          else if(inputtime.getFullYear()==origintime.getFullYear() && inputtime.getMonth()>origintime.getMonth()){
+            if(inputtime.getDate()>origintime.getDate()){
+              //lastmeal
+              console.log("need to change");  //
+            firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
+              firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
+                groups.forEach(group=>{
+                  group.dogs.forEach(eachdog=>{
+                    if(dogs[i]==eachdog.key){
+                      firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
+                        lastmeal: current.toString()
+                      })
+                    }
+                  })
+                })
+              })
+              dog.users.forEach(user=>{
+                firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
+                  groups.forEach(group=>{
+                    group.dogs.forEach(eachdog=>{
+                      if(dogs[i]==eachdog.key){
+                        firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
+                          lastmeal: current.toString()
+                        })
+                      }
+                    })
+                  })
+                })
+              })
+            });
+            }
+          }
+          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+            category: 'food',
+            icon:'restaurant',
+            name: '식사',
+            time: time.toString(),
+          })
         }else{
+          console.log("don`t need to change");
           firebase.database().ref('dogData/'+dogs[i]).update({
             lastmeal: current
           });
+          firebase.database().ref('dogData/'+dogs[i]).once('value').then(dog=>{
+            firebase.database().ref('userData/'+dog.val().super+'/groups/').once('value').then(groups=>{
+              groups.forEach(group=>{
+                group.dogs.forEach(eachdog=>{
+                  if(dogs[i]==eachdog.key){
+                    firebase.database().ref('userData/'+dog.val().super+'/groups/'+group.key+'/dogs/'+dogs[i]).update({
+                      lastmeal: current.toString()
+                    })
+                  }
+                })
+              })
+            })
+            dog.users.forEach(user=>{
+              firebase.database().ref('userData/'+user.id+'/groups/').once('value').then(groups=>{
+                groups.forEach(group=>{
+                  group.dogs.forEach(eachdog=>{
+                    if(dogs[i]==eachdog.key){
+                      firebase.database().ref('userData/'+user.id+'/grups/'+group.key+'/dogs/'+dogs[i]).update({
+                        lastmeal: current.toString()
+                      })
+                    }
+                  })
+                })
+              })
+            })
+          });
+          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+            category: 'food',
+            icon:'restaurant',
+            name: '식사',
+            time: current.toString(),
+          })
         }
       });
-
-      firebase.database().ref('dogData/'+dogs[i]+'/history').push({
-        category: 'food',
-        icon:'restaurant',
-        name: '식사',
-        time: current.toString(),
-      })
     }
   }
 
