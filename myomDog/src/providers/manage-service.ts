@@ -173,7 +173,7 @@ export class ManageService {
         content: content
       })
     })
-    
+
   }
 
   feedDogs(dogs, time?){
@@ -190,7 +190,7 @@ export class ManageService {
           });
         }
       });
-      
+
       firebase.database().ref('dogData/'+dogs[i]+'/history').push({
         category: 'food',
         icon:'restaurant',

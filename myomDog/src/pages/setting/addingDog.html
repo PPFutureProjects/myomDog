@@ -15,9 +15,12 @@
 <ion-content>
 
   <ion-list>
-    <ion-item *ngIf="groupname==null">
+    <ion-item *ngIf="groupname==null || groupname==''">
       <ion-label>기존 그룹에 추가</ion-label>
       <ion-select interface="action-sheet" [(ngModel)]="alreadygroup">
+        <ion-option value="moo">
+          없음
+        </ion-option>
         <div *ngFor="let group of grouplist | async">
           <ion-option value="{{group.$key}}">
             {{group.groupName}}
@@ -26,7 +29,7 @@
     </ion-select>
   </ion-item>
 
-    <ion-item *ngIf="alreadygroup==null">
+    <ion-item *ngIf= "alreadygroup==null || alreadygroup=='moo'">
       <ion-label stacked>새 그룹 생성</ion-label>
       <ion-input type = "text" value="" [(ngModel)]="groupname"></ion-input>
     </ion-item>

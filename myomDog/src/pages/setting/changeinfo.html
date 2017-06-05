@@ -11,7 +11,7 @@
 </ion-header>
 
 <ion-content>
-  <ul>
+  <!-- <ul>
     <h4>List</h4>
     <li *ngFor="let group of grouplist | async">
       ID : {{ group.$key }} <br>
@@ -24,7 +24,7 @@
           </li>
         </ul>
     </li>
-  </ul>
+  </ul> -->
   <ion-list>
     <ion-item>
       <ion-label>수정할 강아지 이름</ion-label>
@@ -40,8 +40,22 @@
       </ion-item>
 
       <ion-list>
-        <ion-item>
-          <ion-label stacked>그룹명 변경</ion-label>
+        <ion-item *ngIf="editdoggroup==null || editdoggroup==''">
+          <ion-label>다른 그룹으로 이동</ion-label>
+          <ion-select interface="action-sheet" [(ngModel)]="moveanothergroup">
+            <ion-option value="moo">
+              없음
+            </ion-option>
+            <div *ngFor="let group of grouplist | async">
+              <ion-option value="{{group.$key}}">
+                {{group.groupName}}
+              </ion-option>
+            </div>
+        </ion-select>
+      </ion-item>
+
+        <ion-item *ngIf="moveanothergroup==null || moveanothergroup=='moo'">
+          <ion-label stacked>새 그룹으로 이동</ion-label>
           <ion-input type = "text" value="" [(ngModel)]="editdoggroup"></ion-input>
         </ion-item>
 
@@ -60,7 +74,7 @@
 
         <ion-item>
           <ion-label stacked>생년월일</ion-label>
-          <ion-datetime displayFormat="YYYY-MM-DD" [(ngModel)]="editdogbirth"></ion-datetime>
+          <ion-datetime displayFormat="YYYY-MM-DD" type = "text" [(ngModel)]="editdogbirth"></ion-datetime>
         </ion-item>
 
         <ion-item>

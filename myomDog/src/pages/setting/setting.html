@@ -19,8 +19,8 @@
     <button ion-item (click) = "invitingModal()">사용자 초대</button>
     <button ion-item (click) = "inviteinfoModal()">초대 목록</button>
     <button ion-item (click) = "deleteModal()">강아지와 작별하기</button>
-    <button ion-item (click) = "deleteGroupModal()">그룹 삭제</button>
-
+    <button ion-item (click) = "deleteGroupModal()">그룹 삭제 및 수정</button>
+    
     <ion-item>
     <ion-label>즐개찾기</ion-label>
     <ion-select [(ngModel)]="favorite" cancelText = "취소" okText = "등록" (ngModelChange)="savefavorite(favorite)">
