@@ -25,6 +25,7 @@ export class HealthPage {
   history: string = "total"; //탭에 처음 들어왔을 때 default 세그먼트 탭
   isAndroid: boolean = false;
   myMainDogKey: any;
+  original;
   mydogs: FirebaseListObservable<any[]>;
   dogHistory: FirebaseListObservable<any[]>;
   walkHistory: FirebaseListObservable<any[]>;
@@ -46,6 +47,7 @@ export class HealthPage {
       firebaseData.subscribe((snapshot)=>{
         if(snapshot.val().mainDog) {
           this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
           console.log("대표개: "+ this.myMainDogKey);
         }
         else {
@@ -93,7 +95,41 @@ export class HealthPage {
 
   }
   
-  
+  ionViewDidEnter(){
+this.isAndroid = this.platform.is('android');
+    this.mydogs = this.db.list('/userData/'+this.manageService.userKey+'/groups');
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        if(snapshot.val().mainDog) {
+          this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
+          console.log("대표개: "+ this.myMainDogKey);
+        }
+        else {
+          console.log("No 대표개");
+        }
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject.next(undefined);
+  }
   ionViewDidLoad() {
     console.log('ionViewDidLoad Health');
     this.lineChart = this.getLineChart([], []);
@@ -105,6 +141,8 @@ export class HealthPage {
     this.graph = "week";
     this.segSubject.next(undefined);
     this.history = "total";
+    this.myMainDogKey = this.original;
+    this.original = null;
   }
 
   // public get getHealthItems(){
@@ -149,7 +187,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     }).then(()=>{
       this.weekBTN();
     })
-    this.segSubject = new BehaviorSubject(undefined);
+    this.segSubject.next(undefined);
   }
 
   weekBTN(){
@@ -448,7 +486,7 @@ export class PopoverPage {
       name = '식사';
       console.log(this.date);
       console.log(new Date(this.date));
-      //this.manageService.feedDogs(this.selected, this.date);
+      this.manageService.feedDogs(this.selected, this.date);
     }else{
       if(this.category=='etc'){
         icon = '';
@@ -458,7 +496,7 @@ export class PopoverPage {
         icon= 'paw';
         name = '산책';
       }
-      //this.manageService.addHistory(this.category, icon, name, this.date, this.selected);
+      this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
     }
   }
 
