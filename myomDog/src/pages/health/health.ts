@@ -406,6 +406,39 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   deleteItem(history){
     console.log('delete item : ' + JSON.stringify(history));
     this.manageService.removeHistory(JSON.stringify(history), this.myMainDogKey);
+    this.mydogs = this.db.list('/userData/'+this.manageService.userKey+'/groups');
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        if(snapshot.val().mainDog) {
+          this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
+          console.log("대표개: "+ this.myMainDogKey);
+        }
+        else {
+          console.log("No 대표개");
+        }
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject.next(undefined);
+    this.history = "total";
   }
 
   getChart(context, chartType, data, options?) {
