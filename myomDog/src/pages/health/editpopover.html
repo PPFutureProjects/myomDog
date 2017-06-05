@@ -12,13 +12,8 @@
 <ion-content>
   <ion-list>
     <ion-item>
-      <ion-label stacked></ion-label>
-      <ion-input type = "text"></ion-input>
-    </ion-item>
-
-    <ion-item>
       <ion-label stacked>테스트</ion-label>
-      <ion-input type = "text" value="" [(ngModel)]="edittime"></ion-input>
+      <!-- <ion-input type = "text" value="" [(ngModel)]="edittime"></ion-input> -->
     </ion-item>
 
     <!-- <ion-item>  //ngFor문
@@ -36,17 +31,24 @@
     <ion-item>
         <ion-label>시간</ion-label>
         <ion-datetime displayFormat="MM/DD/YYYY/HH:mm" [(ngModel)]="date"></ion-datetime>
+    </ion-item> -->
+    <ion-item>
+      <ion-label>시각</ion-label>
+      <ion-datetime displayFormat="MM/DD/YYYY HH:mm" [(ngModel)]="editdate"></ion-datetime>
     </ion-item>
-    <ion-item *ngIf="category=='walk'">
-      <ion-label>산책시간</ion-label>
-      <ion-input [(ngModel)]="walktime"></ion-input>
+    <ion-item *ngIf="editcategory=='walk'">
+      <ion-label>몇 분 동안?</ion-label>
+      <ion-input type="number" [(ngModel)]="editwalktime"></ion-input>
+      <!-- <ion-input [(ngModel)]=""></ion-input> -->
     </ion-item>
-    <ion-item *ngIf="category=='etc'">
-      <ion-label>무슨일?</ion-label>
-      <ion-input [(ngModel)]="what"></ion-input>
+    <ion-item *ngIf="editcategory=='etc'">
+      <ion-label>어떤 일</ion-label>
+      <ion-input type="string" [(ngModel)]="editwhat"></ion-input>
+      <!-- <ion-input [(ngModel)]=""></ion-input> -->
     </ion-item>
   </ion-list>
- -->
+
+
   <div padding>
     <button ion-button color = "primary" block (click) = "check()">추가</button>
   </div>

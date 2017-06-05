@@ -32,7 +32,11 @@ export class HealthPage {
   walkHistory: FirebaseListObservable<any[]>;
   segSubject: BehaviorSubject<any>;
 
-  edittime: string;
+  edittime: Date;
+  kind: string;
+
+  editwalktime: number;
+  editwhat: string;
 
   addcategory;
 
@@ -382,21 +386,34 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     this.segSubject.next(segVal);
   }
 
-  editItem(history, ev){
-    console.log('edit item : ' + JSON.stringify(history));
-    console.log('edit item : ' + this.myMainDogKey);
-
-    let editlist = this.db.object('/dogData/'+this.myMainDogKey+'/history/'+JSON.stringify(history), {preserveSnapshot: true});
-    console.log("obj" + editlist);
+  editItem(history, kind, ev){
+    this.kind = kind;
+    //console.log("test1234 : " + this.kind);
+    let curDogKey = this.myMainDogKey;
+    let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
     editlist.subscribe(snap=>{
-      this.edittime = snap.val().time;
+      this.edittime = new Date(snap.val().time); //시간time공통적용
+      //console.log("t: "+ this.edittime);
+
+      if(this.kind=='walk'){
+        this.editwalktime = snap.val().content; //산책만 content
+        //console.log("tstetst: "+ this.editwalktime);
+      }
+      if(this.kind=='etc'){
+        this.editwhat = snap.val().name; //etc만 뭐했는지
+      }
+
+      console.log("time : " + this.edittime);
       //console.log("name==>"+time);
     })
 
-    let popover = this.popoverCtrl.create(PopoverPage, {
-     category: this.addcategory
+    let editpopover = this.popoverCtrl.create(HistoryEditPage, {
+     category: this.kind,
+     time: this.edittime,
+     content: this.editwalktime,
+     name: this.editwhat
     });
-    popover.present({
+    editpopover.present({
       ev: ev
     });
   }
@@ -404,6 +421,39 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   deleteItem(history){
     console.log('delete item : ' + JSON.stringify(history));
     this.manageService.removeHistory(JSON.stringify(history), this.myMainDogKey);
+    this.mydogs = this.db.list('/userData/'+this.manageService.userKey+'/groups');
+    let firebaseData = this.db.object('userData/'+this.manageService.userKey, {preserveSnapshot: true});
+    let p = new Promise((resolve,reject)=>{
+      firebaseData.subscribe((snapshot)=>{
+        if(snapshot.val().mainDog) {
+          this.myMainDogKey = snapshot.val().mainDog;
+          this.original = this.myMainDogKey;
+          console.log("대표개: "+ this.myMainDogKey);
+        }
+        else {
+          console.log("No 대표개");
+        }
+        this.walkHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: 'walk'
+          }
+        })
+        this.dogHistory = this.db.list('/dogData/'+this.myMainDogKey+'/history', {
+          query: {
+            orderByChild: 'category',
+            equalTo: this.segSubject
+          }
+        });
+        resolve(this.dogHistory);
+      }), err=>{
+
+      }
+    }).then(()=>{
+      this.weekBTN();
+    })
+    this.segSubject.next(undefined);
+    this.history = "total";
   }
 
   getChart(context, chartType, data, options?) {
@@ -529,13 +579,34 @@ export class PopoverPage {
 }
 
 @Component({
-  templateUrl : 'historyedit.html'
+  templateUrl : 'editpopover.html'
 })
 export class HistoryEditPage{
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
-
+  selected;
+  editcategory;
+  editwalktime: number;
+  editdate: Date;
+  editwhat;
+  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+    //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
+    // //console.log('dogs: ', this.dogs);
+    // let userKey = this.manageService.userKey
+    // this.grouplist = db.list('/userData/'+userKey+'/groups');
   }
+
+  ngOnInit() {
+    if (this.navParams.data) {
+      console.log(JSON.stringify(this.navParams.data));
+      this.editcategory = this.navParams.data.category;
+      this.editdate = this.navParams.data.time;
+      this.editwalktime = this.navParams.data.content;
+      this.editwhat = this.navParams.data.name;
+      console.log("test123:"+this.editdate);
+      console.log("test123:"+this.editcategory);
+    }
+  }
+
   dismiss(){
-    this._viewCtrl.dismiss();
+    this.viewCtrl.dismiss();
   }
 }

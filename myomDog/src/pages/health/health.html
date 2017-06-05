@@ -56,6 +56,16 @@
             </div>
         </ion-select>
   </ion-item>
+  <div> <!-- Chart -->
+  <ion-card>
+   <ion-card-header>
+     Line Chart
+   </ion-card-header>
+   <ion-card-content>
+     <canvas #lineCanvas></canvas>
+   </ion-card-content>
+  </ion-card>
+</div>
 <ion-toolbar no-border-top>
   <ion-segment [(ngModel)]="history" color="emphasis">
     <ion-segment-button value="total" (click)="filterBy()">
@@ -72,16 +82,7 @@
     </ion-segment-button>
   </ion-segment>
 </ion-toolbar>
-<div> <!-- Chart -->
-  <ion-card>
-   <ion-card-header>
-     Line Chart
-   </ion-card-header>
-   <ion-card-content>
-     <canvas #lineCanvas></canvas>
-   </ion-card-content>
-  </ion-card>
-</div>
+
 <div [ngSwitch]="history">
   <ion-list>
     <ion-item-sliding *ngFor="let history of dogHistory | async">
@@ -94,7 +95,7 @@
         <ion-note item-right class="historyTime">{{history.time | date:'MM/dd HH:mm'}}</ion-note>
       </ion-item>
       <ion-item-options>
-        <button ion-button color="emphasis" icon-left (click)="editItem(history.$key, $event)">
+        <button ion-button color="emphasis" icon-left (click)="editItem(history.$key, history.category, $event)">
             <ion-icon name="create"></ion-icon>
             편집
           </button>
