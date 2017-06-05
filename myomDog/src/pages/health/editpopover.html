@@ -1,6 +1,7 @@
+
 <ion-header>
   <ion-toolbar>
-      <ion-title>기록 추가</ion-title>
+      <ion-title>기록 편집</ion-title>
       <ion-buttons start>
         <button ion-button (click)="dismiss()">
           <span ion-text color="primary" showWhen="ios">Cancel</span>
@@ -9,12 +10,13 @@
       </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content #popoverContent padding class="popover-page">
+
   <ion-list>
-    <ion-item>
+    <!-- <ion-item>
       <ion-label stacked>테스트</ion-label>
-      <!-- <ion-input type = "text" value="" [(ngModel)]="edittime"></ion-input> -->
-    </ion-item>
+    </ion-item> -->
 
     <!-- <ion-item>  //ngFor문
       <ion-label>강아지 선택</ion-label>
