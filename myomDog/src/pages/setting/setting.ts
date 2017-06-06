@@ -257,7 +257,7 @@ export class InvitingPage {
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog.toString(), this.grouplist.key);
+    this.manageService.invite(this.inviteduser, this.inviteddog.toString());
   }
 
   dismiss(){
