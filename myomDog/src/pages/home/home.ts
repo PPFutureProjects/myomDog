@@ -129,7 +129,7 @@ export class HomePage {
 
             this.testCheckboxOpen = false;
             this.testCheckboxResult = data;
-            this.manageService.feedDogs(data); ///간식제외 홈에서 직접 버튼으로 사료 주는 경우
+            this.manageService.feedDogs(data, this.myDate, this.myDateSec, "restaurant" ); ///간식제외 홈에서 직접 버튼으로 사료 주는 경우
           }
       });
     alert.present().then(() => {
@@ -261,7 +261,7 @@ export class MoreInfoPage {
            this.myDate= new Date().toISOString();
            this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
-           this.manageService.feedDogs([this.dogKey]);
+           //this.manageService.feedDogs([this.dogKey]);
          }
        }
      ]
