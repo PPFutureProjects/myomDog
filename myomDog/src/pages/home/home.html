@@ -4,21 +4,24 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding *ngIf="!isNull()">
+<ion-content padding *ngIf="!isNull()" class="home-content">
   <ion-list *ngFor="let group of mygroups | async">
-    <ion-list-header>
+    <ion-list-header class="group-name">
       {{group.groupName}}
     </ion-list-header>
       <div *ngFor="let dog of group.dogs | keys">
         <button ion-item (click)="selectDog(dog)">
         <!--<ion-input type="text" hidden [(ngModel)]="selectedDog" >{{dog.key}}</ion-input>-->
-        <ion-avatar item-start>
-          <img src="../../assets/img/myom_logo.png">
-        </ion-avatar>
-        <h2>{{dog.value.name}}</h2>
-        <h3>{{dog.value.birth}}</h3>
+          <ion-avatar item-start>
+            <img src="../../assets/img/myom_logo.png">
+          </ion-avatar>
+          <h2 class="dog-name">{{dog.value.name}}</h2>
+          <h3 class="dog-birth">{{dog.value.birth}}</h3>
+          <p>오늘 밥 먹은 횟수 <ion-badge color="dark" item-end>2/3</ion-badge></p>
+          <ion-icon *ngIf="{{dog.value.gender}}==='maledog'" name='male' item-end color="gray"></ion-icon>
+          <ion-icon *ngIf="{{dog.value.gender}}==='femaledog'" name='female' item-end color="gray"></ion-icon>
         <!-- other information -->
-      </button>
+        </button>
 
       </div>
   </ion-list>
