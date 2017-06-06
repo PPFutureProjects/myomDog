@@ -429,6 +429,7 @@ export class ChangeInfoPage {
       confirm.present()
     }else{
       this.manageService.changeInfo(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth)//name, gender, birth, meal?
+      this._viewCtrl.dismiss();
     }
   }
   editdog(SelectedDog){
@@ -495,7 +496,7 @@ export class GoodByePage {
             subTitle: '이별하였습니다.',
             buttons: ['확인']
           });
-    alertOK.present();
+          alertOK.present();
          }
        }
      ]
