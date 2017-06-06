@@ -390,35 +390,35 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   }
 
   editItem(history, kind, ev){
-    this.kind = kind;
-    //console.log("test1234 : " + this.kind);
-    let curDogKey = this.myMainDogKey;
-    let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
-    editlist.subscribe(snap=>{
-      this.edittime = new Date(snap.val().time); //시간time공통적용
-      //console.log("t: "+ this.edittime);
-      if(this.kind=='food'){
-        this.editfoodtype = snap.val().icon;
-      }
-
-      if(this.kind=='walk'){
-        this.editwalktime = snap.val().content; //산책만 content
-        //console.log("tstetst: "+ this.editwalktime);
-      }
-      if(this.kind=='etc'){
-        this.editwhat = snap.val().name; //etc만 뭐했는지
-      }
-
-      console.log("time : " + this.edittime);
-      //console.log("name==>"+time);
-    })
-
+  //   this.kind = kind;
+  //   //console.log("test1234 : " + this.kind);
+  //   let curDogKey = this.myMainDogKey;
+  //   let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
+  //   editlist.subscribe(snap=>{
+  //     //this.edittime = new Date(snap.val().time); //시간time공통적용
+  //     //console.log("t: "+ this.edittime);
+  //     if(this.kind=='food'){
+  //       this.editfoodtype = snap.val().icon;
+  //     }
+  //
+  //     if(this.kind=='walk'){
+  //       this.editwalktime = snap.val().content; //산책만 content
+  //       //console.log("tstetst: "+ this.editwalktime);
+  //     }
+  //     if(this.kind=='etc'){
+  //       this.editwhat = snap.val().name; //etc만 뭐했는지
+  //     }
+  //
+  //     //console.log("time : " + this.edittime);
+  //     //console.log("name==>"+time);
+  //   })
+  //
     let editpopover = this.popoverCtrl.create(HistoryEditPage, {
-     category: this.kind,
-     time: this.edittime,
-     content: this.editwalktime,
-     name: this.editwhat,
-     icon: this.editfoodtype
+    //  category: this.kind,
+    //  time: this.edittime,
+    //  content: this.editwalktime,
+    //  name: this.editwhat,
+    //  icon: this.editfoodtype
     });
     editpopover.present({
       ev: ev
