@@ -376,8 +376,22 @@ export class ManageService {
     console.log("mainDog changed to "+newMainDog);
   }
 
-  changeInfo(name, gender, birth, meal?){
-
+  changeInfo(key, name, gender, birth, meal?){
+    firebase.database().ref('/dogData/'+key).update({
+      name: name,
+      gender: gender,
+      birth: birth
+    }).then(()=>{
+      firebase.database().ref('/dogData/'+key+'/users').once('value').then((snap)=>{
+        snap.forEach((user)=>{
+          firebase.database().ref('/userData/'+user.val().id+'/groups/'+user.val().group+'/dogs/').child(key).update({
+            name: name,
+            gender: gender,
+            birth: birth
+          });
+        });
+      });
+    });
   }
 
   goodbyeDog(key){
