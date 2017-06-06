@@ -1,7 +1,9 @@
 import { Component, ViewChild } from '@angular/core';
+import { DatePipe } from '@angular/common';
 import { IonicPage, NavController, NavParams, AlertController, Select, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
+import firebase from 'firebase';
 
 // import { TimerComponent } from '../../component/timer/timer'
 
@@ -15,6 +17,7 @@ import { ManageService } from '../../providers/manage-service';
 @Component({
   selector: 'page-walk',
   templateUrl: 'walk.html',
+  providers: [DatePipe]
 })
 export class WalkPage {
   @ViewChild('walkDogSelect') walkDogSelect: Select;
@@ -27,7 +30,7 @@ export class WalkPage {
   selectedDogsName: any;
   walkingDog :FirebaseListObservable<any[]>;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-            public db: AngularFireDatabase, public manageService: ManageService, private toastCtrl: ToastController) {
+            public db: AngularFireDatabase, public manageService: ManageService, private toastCtrl: ToastController, public datePipe: DatePipe) {
               this.dogSel = false;
 
   }
@@ -47,12 +50,11 @@ export class WalkPage {
   }
 
  outputEvent(time: number){
-   let current = new Date();
    this.walkedTime = time;
    console.log("time : "+this.walkedTime);
    console.log("dogs waking with me : "+this.selectedDogs+"type: "+typeof this.selectedDogs);
    console.log("!!!!!!!"+typeof this.selectedDogs+"!!!!!!!!"+this.selectedDogs);
-   this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
+   this.manageService.addWalk("walk", "paw", "산책", this.selectedDogs , this.walkedTime);
    this.presentToast("Walk successfully added!");
    //this.dogChecked = false;
    this.selectedDogs = null;
