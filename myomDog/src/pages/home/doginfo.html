@@ -73,6 +73,11 @@
       </ion-row>
       <ion-row padding>
         <h2>함께 기르는 사람들</h2>
+        <ion-list *ngFor="let user of users | async">
+          <ion-item>
+            <ion-icon name="body" item-start> {{user.id}}</ion-icon>
+          </ion-item>
+        </ion-list>
       </ion-row>
 
     </ion-card>

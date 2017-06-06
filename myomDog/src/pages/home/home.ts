@@ -166,24 +166,29 @@ export class MoreInfoPage {
   doglastmealdate: string;
   gendernum: number = 0;
   dogKey;
+  users: FirebaseListObservable<any[]>;
+  names;
 
   myDate: String = new Date().toISOString();
   myDateSec: Number = Date.now();
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService,
-              public datePipe: DatePipe){
-    this.dogname = params.get('val').value.name;
-    this.dogbirth = params.get('val').value.birth;
-    this.doggender = params.get('val').value.gender;
-    this.doglastmealdate = params.get('val').value.lastmealdate;
-    if(this.doggender=='maledog'){
-      this.gendernum = 1;
-      console.log("test:"+this.dogname);
-    }
-
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, 
+              public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService,
+              public datePipe: DatePipe, public db: AngularFireDatabase)
+  {
     if(params){
       this.dogKey = params.data.val.key;
+      this.dogname = params.get('val').value.name;
+      this.dogbirth = params.get('val').value.birth;
+      this.doggender = params.get('val').value.gender;
+      this.doglastmealdate = params.get('val').value.lastmealdate;
       console.log("dogkey: "+this.dogKey);
+      if(this.doggender=='maledog'){
+        this.gendernum = 1;
+        console.log("test:"+this.dogname);
+      }
+
+      this.users = db.list('/dogData/'+this.dogKey+'/users');
     }
 
   }
