@@ -155,6 +155,7 @@ export class MoreInfoPage {
   dogKey;
 
   myDate: String = new Date().toISOString();
+  myDateSec: Number = Date.now();
 
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService,
               public datePipe: DatePipe){
@@ -197,7 +198,8 @@ export class MoreInfoPage {
   }
 
   transformDate(date) {
-    return this.datePipe.transform(date, 'yy-MM-dd HH:mm');
+    return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm');
+    //return this.datePipe.transform(date, 'number');
   }
 
 
@@ -216,9 +218,10 @@ export class MoreInfoPage {
          text: '간식주기',
          handler: () => {
            this.myDate= new Date().toISOString();
+           this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
           //this.datePipe.transform(this.myDate, 'YYYY/MM/DD HH:mm');
-           console.log("test time: "+ this.myDate);
+          // console.log("test time: "+ this.myDate + "sec+" + this.myDateSec);
            //간식주세요
          }
        }
@@ -244,8 +247,9 @@ export class MoreInfoPage {
          text: '밥주기',
          handler: () => {
            this.myDate= new Date().toISOString();
+           this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
-          this.manageService.feedDogs([this.dogKey]);
+           this.manageService.feedDogs([this.dogKey]);
          }
        }
      ]
