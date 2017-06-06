@@ -9,7 +9,8 @@
       </ion-buttons>
     </ion-toolbar>
 </ion-header>
-<ion-content>
+
+<ion-content #popoverContent padding class="popover-page">
   <ion-list>
     <ion-item>
       <ion-label stacked></ion-label>
@@ -31,6 +32,13 @@
     <ion-item>
         <ion-label>시간</ion-label>
         <ion-datetime displayFormat="MM/DD/YYYY/HH:mm" [(ngModel)]="date"></ion-datetime>
+    </ion-item>
+    <ion-item *ngIf="category=='food'">
+      <ion-label>식사종류</ion-label>
+      <ion-select [(ngModel)]="foodtype" cancelText="cancel" okText="OK">
+        <ion-option value="restaurant">사료</ion-option>
+        <ion-option value="nutrition">간식</ion-option>
+      </ion-select>
     </ion-item>
     <ion-item *ngIf="category=='walk'">
       <ion-label>산책시간</ion-label>

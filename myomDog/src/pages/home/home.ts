@@ -205,11 +205,6 @@ export class MoreInfoPage {
          text: '간식주기',
          handler: () => {
            //간식주세요
-           let alertOK = this.alertCtrl.create({
-            title: '성공',
-            subTitle: '간식주기 완료',
-            buttons: ['확인']
-           });
          }
        }
      ]
@@ -232,11 +227,6 @@ export class MoreInfoPage {
          text: '밥주기',
          handler: () => {
           this.manageService.feedDogs([this.dogKey]);
-          let alertOK = this.alertCtrl.create({
-           title: '성공',
-           subTitle: '밥주기 완료',
-           buttons: ['확인']
-          });
          }
        }
      ]

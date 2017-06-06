@@ -92,32 +92,41 @@ export class DeleteGroupPage {
   }
 
   deleteButton(){
-    let confirm = this.alertCtrl.create({
-     title: '확인창',
-     message: '해당 그룹을 정말로 삭제할까요?',
-     buttons: [
-       {
-         text: 'Disagree',
-         cssClass: 'buttoncss',
-         handler: () => {
-           console.log('Disagree');
+    if(!this.manageService.removeCheck(this.selectedGroup)){ //삭제할 수 없음, 그룹에 개가 있음
+      let alertOK = this.alertCtrl.create({
+       title: '삭제실패',
+       subTitle: '해당 그룹에 반려견이 존재합니다.',
+       buttons: ['확인']
+     });
+     alertOK.present();
+    }
+    else{ //삭제할 수 있음
+      let confirm = this.alertCtrl.create({
+       title: '확인창',
+       message: '해당 그룹을 정말로 삭제할까요?',
+       buttons: [
+         {
+           text: '취소',
+           cssClass: 'buttoncss',
+           handler: () => {
+           }
+         },
+         {
+           text: 'Agree',
+           cssClass: 'buttoncss',
+           handler: () => {
+             this.manageService.removeGroup(this.selectedGroup);
+             let alertOK = this.alertCtrl.create({
+              title: '삭제완료',
+              subTitle: '해당 그룹을 삭제했습니다.',
+              buttons: ['확인']
+            });
+           }
          }
-       },
-       {
-         text: 'Agree',
-         cssClass: 'buttoncss',
-         handler: () => {
-           this.manageService.removeGroup(this.selectedGroup);
-           let alertOK = this.alertCtrl.create({
-            title: '삭제완료',
-            subTitle: '해당 그룹을 삭제했습니다.',
-            buttons: ['확인']
-          });
-         }
-       }
-     ]
-   });
-   confirm.present()
+       ]
+     });
+     confirm.present()
+    }
   }
 
   editButton(){
@@ -126,22 +135,16 @@ export class DeleteGroupPage {
       message: '해당 그룹을 수정할까요?',
       buttons: [
         {
-          text: 'Disagree',
+          text: '취소',
           cssClass: 'buttoncss',
           handler: () => {
-            console.log('Disagree');
           }
         },
         {
-          text: 'Agree',
+          text: '수정',
           cssClass: 'buttoncss',
           handler: () => {
-            //editGroup->changegroupname
-            let alertOK = this.alertCtrl.create({
-             title: '수정완료',
-             subTitle: '수정되었습니다.',
-             buttons: ['확인']
-           });
+            this.manageService.editGroupName(this.editGroup, this.changegroupname);
           }
         }
       ]
@@ -198,7 +201,7 @@ export class AddingDogPage {
            console.log("birth :" + this.birth);
            console.log("sex : "+ this.gender);
            console.log("mealtime: "+ this.mealtime);
-           if(this.alreadygroup){
+           if(this.alreadygroup && this.alreadygroup!='moo_exception'){
              console.log("alreadygroup: "+this.alreadygroup);
             this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth);
            }  else {
@@ -254,7 +257,7 @@ export class InvitingPage {
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog.toString());
+    this.manageService.invite(this.inviteduser, this.inviteddog.toString(), this.grouplist.key);
   }
 
   dismiss(){
@@ -340,22 +343,8 @@ export class InviteInfoPage {
         alert.addButton({
           text: '수락',
           handler: data => {
-            console.log(data);
-            if(data.length>1){
-              let confirm = this.alertCtrl.create({
-              title: '알림',
-              message: '하나의 그룹만 선택하세요',
-              buttons: [
-                {
-                  text: '확인',
-                  handler: () => {
-                  }
-                }
-              ]
-              });
-              confirm.present();
-            }
-            else if(data==""){
+            console.log("z:"+JSON.stringify(data));
+            if(data==""){
               console.log("-")
               let prompt = this.alertCtrl.create({
                 title: '새 그룹에 추가',
@@ -383,7 +372,7 @@ export class InviteInfoPage {
               prompt.present();
             }else{
               console.log("+")
-              this.manageService.receiveInvitation(data[0], item);
+              this.manageService.receiveInvitation(data, item);
             }
           }
         });
@@ -421,7 +410,7 @@ export class ChangeInfoPage {
     this.groupobject = db.object('/userData/'+this.userKey+'/groups');
     console.log(this.grouplist);
   }
-  changeinfobutton(){
+  changeinfobutton(){ //해야해
     console.log("changed dog :"+ this.changeddog );
   }
   editdog(SelectedDog){
