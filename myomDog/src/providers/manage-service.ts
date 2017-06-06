@@ -135,7 +135,7 @@ export class ManageService {
   }
   /* 새로운 그룹에 초대받은 강아지를 추가 */
   receiveInvitation(group, invitation){
-    console.log(group); //  
+    console.log(group); //
     console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
@@ -198,7 +198,7 @@ export class ManageService {
         group: group.groupname
       })
     });
-    
+
     firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
   }
 
@@ -227,13 +227,13 @@ export class ManageService {
           content: content
         })
       }
-      
+
     })
 
   }
 
   feedDogs(dogs, time?){
-    
+
   }
 
   changeMainDog(newMainDog) {

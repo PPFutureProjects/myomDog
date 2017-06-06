@@ -98,6 +98,7 @@ export class DeleteGroupPage {
        subTitle: '해당 그룹에 반려견이 존재합니다.',
        buttons: ['확인']
      });
+     alertOK.present();
     }
     else{ //삭제할 수 있음
       let confirm = this.alertCtrl.create({
@@ -256,7 +257,7 @@ export class InvitingPage {
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog.toString());
+    this.manageService.invite(this.inviteduser, this.inviteddog.toString(), this.grouplist.key);
   }
 
   dismiss(){
@@ -342,7 +343,7 @@ export class InviteInfoPage {
         alert.addButton({
           text: '수락',
           handler: data => {
-            console.log(data);
+            console.log("z:"+JSON.stringify(data));
             if(data==""){
               console.log("-")
               let prompt = this.alertCtrl.create({
