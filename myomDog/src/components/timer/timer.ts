@@ -35,7 +35,7 @@ export class TimerComponent {
       console.log("timer: time emit!");
       let confirm = this.alertCtrl.create({
        title: '확인창',
-       message: '산책 타이머를 초기화 하시겠습니까?',
+       message: '산책 데이터를 입력 하시겠습니까?',
        buttons: [
          {
            text: '아니오',
@@ -44,17 +44,17 @@ export class TimerComponent {
            }
          },
          {
-           text: '예',
-           cssClass: 'buttoncss',
-           handler: () => {
-             this.outputProperty.emit(this.timer.timePassed);
-             this.timeInSeconds = null;
-             this.initTimer();
-           }
-         }
-       ]
-     });
-     confirm.present();
+            text: '예',
+            cssClass: 'buttoncss',
+            handler: () => {
+              this.outputProperty.emit(this.timer.timePassed);
+              this.timeInSeconds = null;
+              this.initTimer();
+            }
+          }
+        ]
+      });
+      confirm.present();
     }
   }
   hasFinished() {
@@ -66,7 +66,7 @@ export class TimerComponent {
   resumeTimer() {
     this.startTimer();
   }
-  initTimer() {
+  refresh() {
     let confirm = this.alertCtrl.create({
      title: '확인창',
      message: '산책 타이머를 초기화 하시겠습니까?',
@@ -81,21 +81,24 @@ export class TimerComponent {
          text: '예',
          cssClass: 'buttoncss',
          handler: () => {
-           if (!this.timeInSeconds) { this.timeInSeconds = 0; }
-
-           this.timer = <PTimer>{
-             time: this.timeInSeconds,
-             runTimer: false,
-             hasStarted: false,
-             hasFinished: false,
-             timePassed: this.timeInSeconds
-           };
-           this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
+           this.initTimer();
          }
        }
      ]
    });
    confirm.present();
+  }
+  initTimer() {
+     if (!this.timeInSeconds) { this.timeInSeconds = 0; }
+
+     this.timer = <PTimer>{
+       time: this.timeInSeconds,
+       runTimer: false,
+       hasStarted: false,
+       hasFinished: false,
+       timePassed: this.timeInSeconds
+     };
+     this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
   }
 
   getSecondsAsDigitalClock(inputSeconds: number) {
