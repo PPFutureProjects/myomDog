@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController,ModalController } from 'ionic-angular';
+import { IonicPage, NavController, ViewController, NavParams, Platform, PopoverController, ModalController, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseListObservable,FirebaseObjectObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 // import { Subject } from 'rxjs/Subject';
@@ -47,7 +47,7 @@ export class HealthPage {
   lineChart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public db: AngularFireDatabase,
-              public manageService: ManageService, public popoverCtrl: PopoverController, public modalCtrl: ModalController)
+              public manageService: ManageService, public popoverCtrl: PopoverController, public modalCtrl: ModalController, private toastCtrl: ToastController)
     {
     this.isAndroid = platform.is('android');
     this.mydogs = db.list('/userData/'+this.manageService.userKey+'/groups');
@@ -393,7 +393,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
     let curDogKey = this.myMainDogKey;
     let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
     editlist.subscribe(snap=>{
-      this.edit = new Date(snap.val().time); //시간time공통적용
+      this.edittime = new Date(snap.val().time); //시간time공통적용
       //console.log("t: "+ this.edittime);
       if(this.kind=='food'){
         this.editfoodtype = snap.val().icon;
@@ -520,11 +520,28 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
  }
   presentPopover(ev) {
      let popover = this.popoverCtrl.create(PopoverPage, {
-      category: this.addcategory
+      category: this.addcategory,
+      showConfirm: function() {
+        this.presentToast("History added!");
+      }
      });
      popover.present({
        ev: ev
      });
+  }
+
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle',
+      dismissOnPageChange: true
+    });
+
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
   }
 
 
@@ -542,11 +559,27 @@ export class PopoverPage {
   //date: String = new Date().toISOString();
 
   what;
-  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+  constructor( private toastCtrl: ToastController, private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
     //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
     //console.log('dogs: ', this.dogs);
     let userKey = this.manageService.userKey
     this.grouplist = db.list('/userData/'+userKey+'/groups');
+  }
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle',
+      dismissOnPageChange: true
+    });
+
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
+  }
+  showConfirm() {
+    this.navParams.get('showConfirm')();
   }
 
   ngOnInit() {
@@ -556,7 +589,6 @@ export class PopoverPage {
   }
 
   check(){
-    //addHistory(category: string, icon: string, name: string, time: Date, dogs: any, content?:any){
     let icon;
     let name;
     if(this.category=='food'){
@@ -577,8 +609,13 @@ export class PopoverPage {
         icon= 'paw';
         name = '산책';
       }
-      this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
+      //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
+
+      this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
+
     }
+    // this.showConfirm();
+    this.presentToast("History added!");
     this.viewCtrl.dismiss();
 
   }
