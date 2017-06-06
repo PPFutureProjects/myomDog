@@ -125,7 +125,7 @@ export class DeleteGroupPage {
          }
        ]
      });
-     confirm.present()
+     confirm.present();
     }
   }
 
