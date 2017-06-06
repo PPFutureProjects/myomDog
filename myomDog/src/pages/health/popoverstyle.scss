@@ -1,98 +1,138 @@
 .popover-page {
-  .text-to-change div {
-    margin: 10px auto;
+  
+  ion-item{
+    font-size : 1em;
+  }
+  //ios
+  // iOS Popover
+  // --------------------------------------------------
+
+  /// @prop - Width of the popover content
+  $popover-ios-width:                     200px !default;
+
+  /// @prop - Min width of the popover content
+  $popover-ios-min-width:                 0 !default;
+
+  /// @prop - Minimum height of the popover content
+  $popover-ios-min-height:                0 !default;
+
+  /// @prop - Maximum height of the popover content
+  $popover-ios-max-height:                90% !default;
+
+  /// @prop - Border radius of the popover content
+  $popover-ios-border-radius:             10px !default;
+
+  /// @prop - Text color of the popover content
+  $popover-ios-text-color:                $text-ios-color !default;
+
+  /// @prop - Background of the popover content
+  $popover-ios-background:                $background-ios-color !default;
+
+  /// @prop - Background of the popover arrow
+  $popover-ios-arrow-background:          $popover-ios-background !default;
+
+
+  .popover-ios .popover-content {
+    @include border-radius($popover-ios-border-radius);
+
+    width: $popover-ios-width;
+    min-width: $popover-ios-min-width;
+    min-height: $popover-ios-min-height;
+    max-height: $popover-ios-max-height;
+
+    color: $popover-ios-text-color;
+    background: $popover-ios-background;
   }
 
-  ion-row,
-  ion-col {
-    padding: 0;
+
+  // Popover Arrow
+  // -----------------------------------------
+
+  .popover-ios .popover-arrow {
+    position: absolute;
+    display: block;
+
+    overflow: hidden;
+
+    width: 20px;
+    height: 10px;
   }
 
-  .text-button {
-    padding-left: 0;
-    text-align: center;
-    min-height: 20px;
-    line-height: 18px;
+  .popover-ios .popover-arrow::after {
+    @include position(3px, null, null, 3px);
+    @include border-radius(3px);
+
+    position: absolute;
+
+    z-index: $z-index-overlay-wrapper;
+
+    width: 14px;
+    height: 14px;
+
+    background-color: $popover-ios-arrow-background;
+    content: "";
+    transform: rotate(45deg);
   }
 
-  .text-button .item-inner {
-    padding-right: 0;
+  .popover-ios.popover-bottom .popover-arrow {
+    top: auto;
+    bottom: -10px;
   }
 
-  .text-smaller {
-    font-size: 12px;
+  .popover-ios.popover-bottom .popover-arrow::after {
+    top: -6px;
   }
 
-  .text-larger {
-    font-size: 16px;
+  //MD
+
+  // Material Design Popover
+  // --------------------------------------------------
+
+  /// @prop - Width of the popover content
+  $popover-md-width:                     200px !default;
+
+  /// @prop - Min width of the popover content
+  $popover-md-min-width:                 0 !default;
+
+  /// @prop - Minimum height of the popover content
+  $popover-md-min-height:                0 !default;
+
+  /// @prop - Maximum height of the popover content
+  $popover-md-max-height:                90% !default;
+
+  /// @prop - Border radius of the popover content
+  $popover-md-border-radius:             2px !default;
+
+  /// @prop - Text color of the popover content
+  $popover-md-text-color:                $text-md-color !default;
+
+  /// @prop - Background of the popover content
+  $popover-md-background:                $background-md-color !default;
+
+  /// @prop - Box shadow color of the popover content
+  $popover-md-box-shadow-color:          rgba(0, 0, 0, .3) !default;
+
+  /// @prop - Box shadow of the popover content
+  $popover-md-box-shadow:                0 3px 12px 2px $popover-md-box-shadow-color !default;
+
+
+  .popover-md .popover-content {
+    @include border-radius($popover-md-border-radius);
+
+    width: $popover-md-width;
+    min-width: $popover-md-min-width;
+    min-height: $popover-md-min-height;
+    max-height: $popover-md-max-height;
+
+    color: $popover-md-text-color;
+    background: $popover-md-background;
+    box-shadow: $popover-md-box-shadow;
+
+    transform-origin: top left;
   }
 
-  .row-dots {
-    text-align: center;
-
-    .dot {
-      height: 30px;
-      width: 30px;
-      border-radius: 50%;
-      margin: 10px auto;
-      position: relative;
-    }
-  }
-
-  .dot-white {
-    background-color: rgb(255,255,255);
-  }
-
-  .dot-tan {
-    background-color: rgb(249,241,228);
-  }
-
-  .dot-grey {
-    background-color: rgb(76,75,80);
-  }
-
-  .dot-black {
-    background-color: rgb(0,0,0);
-  }
-
-  .dot.selected {
-    border-width: 2px;
-    border-color: #327eff;
-  }
-
-  .text-athelas {
-    font-family: "Athelas";
-  }
-
-  .text-charter {
-    font-family: "Charter";
-  }
-
-  .text-iowan {
-    font-family: "Iowan";
-  }
-
-  .text-palatino {
-    font-family: "Palatino";
-  }
-
-  .text-san-francisco {
-    font-family: "San Francisco";
-  }
-
-  .text-seravek {
-    font-family: "Seravek";
-  }
-
-  .text-times-new-roman {
-    font-family: "Times New Roman";
-  }
-}
-
-.popover-page {
-  .text-smaller,
-  .row-dots,
-  .dot {
-    border-width: $hairlines-width;
+  .popover-md .popover-viewport {
+    opacity: 0;
+    transition-delay: 100ms;
   }
 }
