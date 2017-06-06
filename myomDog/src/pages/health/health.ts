@@ -232,11 +232,15 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         let cnt = [0, 0, 0, 0, 0, 0, 0];
         shots.forEach(history=>{
           // 이번주인지확인...
-          for(let i=0; i<7; i++){
-            if(this.days[new Date(history.time).getDay()]==labels[i]){
-              cnt[i] += history.content;
+          if(Math.floor( (current.getTime()-(new Date(history.time)).getTime())/1000/60/60/24 ) <= 7 ){
+            for(let i=0; i<7; i++){
+              console.log(new Date(history.time).getDay());
+              if(this.days[new Date(history.time).getDay()]==labels[i]){
+                cnt[i] += history.content;
+              }
             }
           }
+          
         })
         resolve(cnt);
       }, err=>{
@@ -349,27 +353,27 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         if(Math.floor(current.getDate()/7)==0){
           label =
         [
-            month-2+'_1', '', '', '',
-            month-1+'_1', '', '', '',
-            month+'_1', '', '', '',''
+            month-2+'월', '', '', '',
+            month-1+'월', '', '', '',
+            month+'월', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==1){
           label =
         [
-            month-2+'_1', '', '', '','',
-            month-1+'_1', '', '', '','',
-            month+'_1', '', '', '','',
-            month+1+'_1',month+1+'_2'
+            month-2+'월', '', '', '','',
+            month-1+'월', '', '', '','',
+            month+'월', '', '', '','',
+            month+1+'월',month+1+'_2'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==2){
           label =
         [
-            month-2+'_1', '', '', '','',
-            month-1+'_1', '', '', '','',
-            month+'_1', '', '', '','',
-            month+1+'_1', '', '', '',''
+            month-2+'월', '', '', '','',
+            month-1+'월', '', '', '','',
+            month+'월', '', '', '','',
+            month+1+'월', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==3){
