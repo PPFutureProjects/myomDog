@@ -8,9 +8,9 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:835408454244:android:a6f8977b8deb9f47",
+        "mobilesdk_app_id": "1:835408454244:android:24eed4887f18b09d",
         "android_client_info": {
-          "package_name": "com.myom.myomDog"
+          "package_name": "com.myom.myomdog"
         }
       },
       "oauth_client": [
