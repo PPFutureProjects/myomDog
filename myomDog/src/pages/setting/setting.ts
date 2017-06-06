@@ -256,6 +256,7 @@ export class InvitingPage {
 
   }
   invitebutton(){
+
     console.log("invited dog :" + this.inviteddog );
     this.manageService.invite(this.inviteduser, this.inviteddog);
   }

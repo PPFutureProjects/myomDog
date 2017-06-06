@@ -152,7 +152,7 @@ export class ManageService {
     let superuser = invitation.super;
     new Promise(()=>{
       firebase.database().ref('/userData/'+this.userKey+'/groups').push({
-        
+
       }).then((newgroup)=>{
         firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid).update({
           name: dogname,
@@ -226,12 +226,14 @@ export class ManageService {
     console.log("category: "+category+" icon: "+icon+ " date: "+time+" name: "+name+" walked time : "+content+" dogs: "+dogs);
     dogs.forEach((dog)=>{
       console.log("dog: "+dog);
+      console.log("whattime: "+time);
+
       if(!content){
         firebase.database().ref('/dogData/'+dog+'/history').push({
           category: category,
           icon: icon,
           name: name,
-          time: time, // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          time: time // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
         })
       }else{
         firebase.database().ref('/dogData/'+dog+'/history').push({
@@ -288,7 +290,7 @@ export class ManageService {
                 console.log('user: ', user.val().id)
                 firebase.database().ref('/userData/'+user.val().id+'/groups/'+user.val().group+'/dogs').child(dogs).update({
                   lastmeal: sec,
-                  lastmealdate: time 
+                  lastmealdate: time
                 })
               })
             })
@@ -339,11 +341,11 @@ export class ManageService {
                       console.log('user: ', user.id)
                       firebase.database().ref('/userData/'+user.val().id+'/groups/'+user.val().group+'/dogs').child(dogs[i]).update({
                         lastmeal: sec,
-                        lastmealdate: time 
+                        lastmealdate: time
                       })
                     })
                   })
-               
+
               })
             }
           })
