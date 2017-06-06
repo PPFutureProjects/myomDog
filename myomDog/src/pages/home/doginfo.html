@@ -10,61 +10,71 @@
     </ion-toolbar>
 </ion-header>
 
-<ion-content class="cards-bg">
+<ion-content class="cards-bg dog-info">
   <div style="position: relative">
 
     <ion-card>
       <ion-card-content>
         <ion-item *ngIf="gendernum==0">
+          <ion-avatar item-start>
+            <img src="../../assets/img/myom_logo-{{doggender}}.png">
+          </ion-avatar>
           <h2>{{dogname}}</h2>
           <ion-icon name = "md-female" item-right large></ion-icon>
-          </ion-item>
-          <ion-item *ngIf="gendernum==1">
+        </ion-item>
+        <ion-item *ngIf="gendernum==1">
+          <ion-avatar item-start>
+            <img src="../../assets/img/myom_logo-{{doggender}}.png">
+          </ion-avatar>
           <h2>{{dogname}}</h2>
           <ion-icon name = "md-male" item-right large></ion-icon>
         </ion-item>
-        <img src="assets/img/shiba_inu.jpg">
+        <!-- <img src="assets/img/shiba_inu.jpg"> -->
 
         <ion-item>
-          <ion-icon name = "rose" item-left large></ion-icon>
-          <h2>{{dogname}}의 생일 {{dogbirth}}</h2>
+          <ion-icon name = "ribbon" item-left medium></ion-icon>
+          <h2 class="dog-info-birth">{{dogname}}의 생일 {{dogbirth}}</h2>
         </ion-item>
 
         <ion-item>
-          <ion-icon name = "md-alarm" item-left large></ion-icon>
-          <h2>{{dogname}}의 최근식사시간 {{doglastmeal}}</h2>
+          <ion-icon name = "alarm" item-left medium></ion-icon>
+          <h2 class="dog-info-recent">{{dogname}}의 최근식사시간 {{doglastmeal}}</h2>
         </ion-item>
 
 
       </ion-card-content>
 
       <ion-row no-padding>
-        <ion-col>
-          <button ion-button clear small color="point" icon-left (click) = "doginfofavorite()">
-            <ion-icon name='star'></ion-icon>
-            즐겨찾기
-          </button>
-        </ion-col>
-
-        <ion-col text-center>
-          <button ion-button clear small color="point" icon-left (click) = "doginfogivesnack()">
-            <ion-icon name='nutrition'></ion-icon>
-            간식주기
-          </button>
-        <!-- <ion-datetime displayFormat="YYYY/MM/DD HH:mm" [(ngModel)]="myDate"></ion-datetime> --> -->
-        </ion-col>
 
         <ion-col text-right>
-          <button ion-button clear small color="point" icon-left (click) = "doginfogivemeal()">
+          <button ion-button clear small color="emphasis" icon-left (click) = "doginfogivemeal()">
             <ion-icon name='restaurant'></ion-icon>
             밥주기
           </button>
           <!-- <ion-datetime displayFormat="YYYY/MM/DD HH:mm"  [(ngModel)]="myDate"></ion-datetime> -->
         </ion-col>
 
+        <ion-col text-center>
+          <button ion-button clear small color="main" icon-left (click) = "doginfogivesnack()">
+            <ion-icon name='nutrition'></ion-icon>
+            간식주기
+          </button>
+        <!-- <ion-datetime displayFormat="YYYY/MM/DD HH:mm" [(ngModel)]="myDate"></ion-datetime> -->
+        </ion-col>
+
+
+        <ion-col>
+          <button ion-button clear small color="point" icon-left (click) = "doginfofavorite()">
+            <ion-icon name='star'></ion-icon>
+            즐겨찾기
+          </button>
+        </ion-col>
+      </ion-row>
+      <ion-row padding>
+        <h2>함께 기르는 사람들</h2>
       </ion-row>
 
     </ion-card>
-</div>
+  </div>
 
 </ion-content>
