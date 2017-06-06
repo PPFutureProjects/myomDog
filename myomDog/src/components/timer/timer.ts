@@ -1,4 +1,5 @@
 import { Component, EventEmitter,Input, Output } from '@angular/core';
+import { AlertController } from 'ionic-angular';
 import { PTimer } from './PTimer';
 
 /**
@@ -18,7 +19,7 @@ export class TimerComponent {
   @Output() outputProperty = new EventEmitter<number>();
   private timeInSeconds: number;
   public timer: PTimer;
-  constructor() {
+  constructor(public alertCtrl:AlertController) {
     this.dogSelected = false;
   }
 
@@ -32,9 +33,28 @@ export class TimerComponent {
       this.timerStartTrigger.emit(true);
     }else{
       console.log("timer: time emit!");
-      this.outputProperty.emit(this.timer.timePassed);
-      this.timeInSeconds = null;
-      this.initTimer();
+      let confirm = this.alertCtrl.create({
+       title: '확인창',
+       message: '산책 데이터를 입력 하시겠습니까?',
+       buttons: [
+         {
+           text: '아니오',
+           cssClass: 'buttoncss',
+           handler: () => {
+           }
+         },
+         {
+            text: '예',
+            cssClass: 'buttoncss',
+            handler: () => {
+              this.outputProperty.emit(this.timer.timePassed);
+              this.timeInSeconds = null;
+              this.initTimer();
+            }
+          }
+        ]
+      });
+      confirm.present();
     }
   }
   hasFinished() {
@@ -46,17 +66,39 @@ export class TimerComponent {
   resumeTimer() {
     this.startTimer();
   }
+  refresh() {
+    let confirm = this.alertCtrl.create({
+     title: '확인창',
+     message: '산책 타이머를 초기화 하시겠습니까?',
+     buttons: [
+       {
+         text: '아니오',
+         cssClass: 'buttoncss',
+         handler: () => {
+         }
+       },
+       {
+         text: '예',
+         cssClass: 'buttoncss',
+         handler: () => {
+           this.initTimer();
+         }
+       }
+     ]
+   });
+   confirm.present();
+  }
   initTimer() {
-    if (!this.timeInSeconds) { this.timeInSeconds = 0; }
+     if (!this.timeInSeconds) { this.timeInSeconds = 0; }
 
-    this.timer = <PTimer>{
-      time: this.timeInSeconds,
-      runTimer: false,
-      hasStarted: false,
-      hasFinished: false,
-      timePassed: this.timeInSeconds
-    };
-    this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
+     this.timer = <PTimer>{
+       time: this.timeInSeconds,
+       runTimer: false,
+       hasStarted: false,
+       hasFinished: false,
+       timePassed: this.timeInSeconds
+     };
+     this.timer.displayTime = this.getSecondsAsDigitalClock(this.timer.timePassed);
   }
 
   getSecondsAsDigitalClock(inputSeconds: number) {

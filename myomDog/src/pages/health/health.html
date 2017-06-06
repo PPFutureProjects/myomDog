@@ -22,12 +22,12 @@
 
 <ion-content padding>
   <ion-item>
-      <ion-label>현재 반려동물</ion-label>
+      <ion-label>현재 반려견</ion-label>
         <ion-select [(ngModel)]="myMainDogKey" multiple="false" cancelText="cancel" okText="OK" (ionChange)="changeDog()">
             <div *ngFor="let group of mydogs | async">
               <div *ngFor="let dog of group.dogs | keys">
                 <ion-option value="{{dog.key}}">
-                  [{{group.groupName}}] {{dog.value.name}}
+                  {{dog.value.name}} - {{group.groupName}}
                 </ion-option>
               </div>
             </div>
@@ -37,9 +37,9 @@
   <div>
   <ion-card>
    <ion-card-header [ngSwitch]="graph">
-     <h2 *ngSwitchCase="'week'">1주일 그래프</h2>
-     <h2 *ngSwitchCase="'month'">1개월간 그래프</h2>
-     <h2 *ngSwitchCase="'3months'">3개월간 그래프</h2>
+     <h2 *ngSwitchCase="'week'">1주일 산책그래프</h2>
+     <h2 *ngSwitchCase="'month'">1개월간 산책 그래프</h2>
+     <h2 *ngSwitchCase="'3months'">3개월간 산책 그래프</h2>
    </ion-card-header>
    <ion-card-content>
      <canvas #lineCanvas></canvas>

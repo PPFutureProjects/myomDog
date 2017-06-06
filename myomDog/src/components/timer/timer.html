@@ -32,7 +32,7 @@
  </ion-fab>
 
 <ion-fab bottom right *ngIf="!timer.runTimer && (timer.hasStarted || timer.hasFinished) || timer.hasFinished">
-    <button ion-fab color="point" (click)="initTimer()" item-left>
+    <button ion-fab color="point" (click)="refresh()" item-left>
     <ion-icon name="refresh"></ion-icon>
     </button>
 </ion-fab>

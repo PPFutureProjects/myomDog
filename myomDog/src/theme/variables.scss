@@ -34,6 +34,19 @@ $colors: (
   main:       #24c5a9,
   emphasis:   #1b9998,
   point:      #fd806a
+
+  // primary:    #42566e,
+  // secondary:  #596c80,
+  // danger:     #d26954,
+  // // myom colors
+  // light:      #f4f4f4,
+  // gray:       #73808c,
+  // dark:       #3e454c,
+  // main:       #42566e,
+  // emphasis:   #596c80,
+  // point:      #d26954
+
+
 );
 
 $text-color: dark;
@@ -88,5 +101,8 @@ $tabs-md-tab-text-color-active: color($colors, main);
 
 @import "roboto";
 @import "noto-sans";
+@import "NanumBarunGothic";
+
+$font-family-base: 'NanumBarunGothic';
 
 $font-stack:  NanumBarunGothic,noto-sans;
