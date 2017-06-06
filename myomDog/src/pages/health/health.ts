@@ -556,6 +556,8 @@ export class PopoverPage {
   category;
   walktime;
   date;
+  //date: String = new Date().toISOString();
+
   what;
   constructor( private toastCtrl: ToastController, private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
     //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
@@ -592,9 +594,11 @@ export class PopoverPage {
     if(this.category=='food'){
       icon = 'restaurant';
       name = '식사';
-      console.log(this.date);
-      console.log(new Date(this.date));
-      this.manageService.feedDogs(this.selected, this.date);
+      //console.log(this.date);
+      var d = Date.parse(this.date);
+      console.log("here: "+d);
+      //console.log(new Date(this.date));
+      //this.manageService.feedDogs(this.selected, this.date);
 
     }else{
       if(this.category=='etc'){
@@ -605,6 +609,8 @@ export class PopoverPage {
         icon= 'paw';
         name = '산책';
       }
+      //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
+
       this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
 
     }

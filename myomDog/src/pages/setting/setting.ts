@@ -257,7 +257,7 @@ export class InvitingPage {
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog.toString());
+    //this.manageService.invite(this.inviteduser, this.inviteddog.toString(), this.grouplist.key);
   }
 
   dismiss(){
@@ -390,28 +390,29 @@ export class InviteInfoPage {
 export class ChangeInfoPage {
   userKey: string;
   grouplist: FirebaseListObservable<any[]>;
-  groupobject: FirebaseObjectObservable<any>;
   GroupAndDogs: any;
   nameOfGroups: any;
   AllDogs: any;
-  changeddog: string;
+  changeddog: string = '';
 
   //editdoggroup: string;
-  editdogname: string;
-  editdogsex: string;
-  editdogbirth: Date;
+  editdogname: string = '';
+  editdogsex: string = '';
+  editdoggroup: string= '';
+  editdogbirth: Date = null;
 
   moveanothergroup: string;
 
   constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
-    console.log(this.userKey);
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
-    this.groupobject = db.object('/userData/'+this.userKey+'/groups');
-    console.log(this.grouplist);
   }
   changeinfobutton(){ //해야해
-    console.log("changed dog :"+ this.changeddog );
+    if(this.changeddog=='' || this.editdogname=='' || this.editdogsex==''){
+      //예외처리
+      console.log('에외처리..모든필드입력요청')
+    }else{
+    }
   }
   editdog(SelectedDog){
     console.log("changed dog: "+ SelectedDog);

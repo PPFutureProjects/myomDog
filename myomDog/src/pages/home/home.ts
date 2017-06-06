@@ -10,7 +10,7 @@ declare var FCMPlugin;
 @Component({
   selector: 'page-home',
   templateUrl: 'home.html',
-
+  providers: [DatePipe]
 })
 export class HomePage {
     today:any;
@@ -22,9 +22,11 @@ export class HomePage {
     testCheckboxOpen: boolean;
     testCheckboxResult;
 
-    constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
-                private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController,
-                public toastCtrl: ToastController, public _viewCtrl: ViewController)
+    myDate: String = new Date().toISOString();
+    myDateSec: Number = Date.now();
+
+    constructor(public datePipe: DatePipe, public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
+                private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController, public _viewCtrl: ViewController)
     {
       this.today = Date.now();
       this.userKey = manageService.userKey;
@@ -35,6 +37,11 @@ export class HomePage {
         this.registerToken(token);
       })
     }
+      transformDate(date) {
+        return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm');
+        //return this.datePipe.transform(date, 'number');
+      }
+
 
     isNull(){
       return this.mygroups==null
@@ -88,20 +95,6 @@ export class HomePage {
 
     }
 
-    presentToast(msg: string){
-      let toast = this.toastCtrl.create({
-        message: msg,
-        duration: 1500,
-        position: 'middle',
-        dismissOnPageChange: true
-      });
-
-      toast.onDidDismiss(() => {
-        console.log("dismissed toast");
-      });
-      toast.present();
-    }
-
     givemeal(){
       let alert = this.alertCtrl.create();
       alert.setTitle('어떤 강아지에게 밥 주셨나요?');
@@ -125,15 +118,19 @@ export class HomePage {
             reject(err);
           }
         })
-      }).then(()=>{
+      }).then(()=>{ //시간달기
         alert.addButton('취소');
         alert.addButton({
           text: '지금 밥 주셨나요?',
           handler: data => {
+            this.myDate= new Date().toISOString();
+            this.myDateSec= Date.now();
+            this.myDate = this.transformDate(this.myDate);
+
             this.testCheckboxOpen = false;
             this.testCheckboxResult = data;
-            this.manageService.feedDogs(data); ///간식제외 홈에서 직접 버튼으로 사료 주는 경우
-            this.presentToast("맛있다!");
+            console.log(data);
+            this.manageService.feedDogs(data, this.myDate, this.myDateSec, "restaurant" ); ///간식제외 홈에서 직접 버튼으로 사료 주는 경우
           }
       });
     alert.present().then(() => {
@@ -171,6 +168,7 @@ export class MoreInfoPage {
   dogKey;
 
   myDate: String = new Date().toISOString();
+  myDateSec: Number = Date.now();
 
   constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService,
               public datePipe: DatePipe){
@@ -190,20 +188,6 @@ export class MoreInfoPage {
 
   }
 
-  presentToast(msg: string){
-    let toast = this.toastCtrl.create({
-      message: msg,
-      duration: 1500,
-      position: 'middle',
-      dismissOnPageChange: true
-    });
-
-    toast.onDidDismiss(() => {
-      console.log("dismissed toast");
-    });
-    toast.present();
-  }
-
   doginfofavorite(){
     let confirm = this.alertCtrl.create({
      title: '확인창',
@@ -219,7 +203,6 @@ export class MoreInfoPage {
          text: '등록',
          handler: () => {
           this.manageService.changeMainDog(this.dogKey);
-          this.presentToast("Favorite dog changed!");
         }
        }
      ]
@@ -228,7 +211,8 @@ export class MoreInfoPage {
   }
 
   transformDate(date) {
-    return this.datePipe.transform(date, 'yy-MM-dd HH:mm');
+    return this.datePipe.transform(date, 'yyyy-MM-dd HH:mm');
+    //return this.datePipe.transform(date, 'number');
   }
 
 
@@ -247,11 +231,12 @@ export class MoreInfoPage {
          text: '간식주기',
          handler: () => {
            this.myDate= new Date().toISOString();
+           this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
           //this.datePipe.transform(this.myDate, 'YYYY/MM/DD HH:mm');
-           console.log("test time: "+ this.myDate);
+          // console.log("test time: "+ this.myDate + "sec+" + this.myDateSec);
            //간식주세요
-           this.presentToast("Snack is so good!");
+           this.manageService.feedDogs(this.dogKey, this.myDate, this.myDateSec, 'nutrition');
          }
        }
      ]
@@ -276,9 +261,9 @@ export class MoreInfoPage {
          text: '밥주기',
          handler: () => {
            this.myDate= new Date().toISOString();
+           this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
-          this.manageService.feedDogs([this.dogKey]);
-          this.presentToast("맛있다!");
+           this.manageService.feedDogs(this.dogKey, this.myDate, this.myDateSec, 'restaurant');
          }
        }
      ]
