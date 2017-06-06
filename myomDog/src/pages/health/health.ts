@@ -236,27 +236,26 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       let month = current.getMonth();
       let label;
       let data;
-      let even = ['','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  '',''];
-      let odd =  ['','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  '','',''];
-      let noleap = ['','','','','','','',
-                    '','','','','','','',
-                    '','','','','','','',
-                    '','','','','','','',
+      let even = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1'];
+      let odd = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1'];
+      let noleap = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1'
                   ];
-      let leap = ['','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  '','','','','','','',
-                  ''
-                ];
+      let leap = ['1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1','1','1','1','1','1','1',
+                  '1'];
      let param = new Promise((resolve, reject)=>{
       let result = ((year%4 ==0 && year%100!=0 ) || year%400==0)? "윤년" : "윤년X";
       if(month%2==0 && month!=2){
@@ -329,44 +328,38 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
 
       this.walkHistory.subscribe(shots=>{
         if(Math.floor(current.getDate()/7)==0){
-          /*label =
+          label =
         [
             month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
             month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
             month+'_1', month+'_2', month+'_3', month+'_4',month+1+'_1'
-        ];*/
-          label =
-        [
-            month-2+'월', '', '', '',
-            month-1+'월', '', '', '',
-            month+'월', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==1){
           label =
         [
-            month-2+'월', '', '', '',
-            month-1+'월', '', '', '',
-            month+'월', '', '', '',
-            month+1+'월',''
+            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1',month+1+'_2'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==2){
           label =
         [
-            month-2+'월', '', '', '',
-            month-1+'월', '','', '',
-            month+'월', '', '', '',
-            month+1+'월', '', ''
+            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1', month+1+'_2', month+1+'_3'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==3){
           label =
         [
-          month-2+'월', '', '', '',
-            month-1+'월', '', '', '',
-            month+'월', '', '', '',
-            month+1+'월','', '', ''
+          month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
+            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
+            month+'_1', month+'_2', month+'_3', month+'_4',
+            month+1+'_1', month+1+'_2', month+1+'_3', month+1+'_4'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }
@@ -482,7 +475,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
      labels: l,//["January", "February", "March", "April", "May", "June", "July", "August"],
      datasets: [
        {
-         label: "",
+         label: "Initial Dataset",
          fill: false,
          lineTension: 0.1,
          backgroundColor: "rgba(75,192,192,0.4)",
@@ -562,7 +555,8 @@ export class PopoverPage {
   selected;
   category;
   walktime;
-  date;
+  foodtype;
+  inputdate: Date;
   //date: String = new Date().toISOString();
 
   what;
@@ -599,26 +593,33 @@ export class PopoverPage {
     let icon;
     let name;
     if(this.category=='food'){
-      icon = 'restaurant';
-      name = '식사';
+      if(this.foodtype=='restaurant'){
+        icon = 'restaurant';
+        name = '식사';
+      }
+      else if(this.foodtype=='nutrition'){
+        icon = 'nutrition';
+        name = '간식';
+      }
       //console.log(this.date);
-      var d = Date.parse(this.date);
-      console.log("here: "+d);
-      //console.log(new Date(this.date));
-      //this.manageService.feedDogs(this.selected, this.date);
+      var d = Date.parse(this.inputdate.toString());
+      //console.log("here: "+d);
+      console.log(new Date(this.inputdate));
+      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, 'restaurant');
 
     }else{
       if(this.category=='etc'){
         icon = 'medkit';
         name = this.what;
+
       }
       if(this.category=='walk'){
         icon= 'paw';
         name = '산책';
       }
       //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
-
-      this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
+      console.log("debug: " + this.inputdate);
+      this.manageService.addHistory(this.category, icon, name, this.inputdate, this.selected, this.walktime);
 
     }
     // this.showConfirm();

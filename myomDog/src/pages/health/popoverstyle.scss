@@ -1,5 +1,5 @@
 .popover-page {
-  
+
   ion-item{
     font-size : 1em;
   }
@@ -58,6 +58,7 @@
   }
 
   .popover-ios .popover-arrow::after {
+
     position: absolute;
 
     z-index: $z-index-overlay-wrapper;
@@ -113,7 +114,6 @@
 
 
   .popover-md .popover-content {
-  
 
     width: $popover-md-width;
     min-width: $popover-md-min-width;

@@ -163,7 +163,7 @@ export class MoreInfoPage {
   dogname: string;
   dogbirth: string;
   doggender: string;
-  doglastmeal: string;
+  doglastmealdate: string;
   gendernum: number = 0;
   dogKey;
 
@@ -175,7 +175,7 @@ export class MoreInfoPage {
     this.dogname = params.get('val').value.name;
     this.dogbirth = params.get('val').value.birth;
     this.doggender = params.get('val').value.gender;
-    this.doglastmeal = params.get('val').value.lastmeal;
+    this.doglastmealdate = params.get('val').value.lastmealdate;
     if(this.doggender=='maledog'){
       this.gendernum = 1;
       console.log("test:"+this.dogname);
@@ -183,7 +183,7 @@ export class MoreInfoPage {
 
     if(params){
       this.dogKey = params.data.val.key;
-      console.log(this.dogKey);
+      console.log("dogkey: "+this.dogKey);
     }
 
   }
@@ -233,6 +233,8 @@ export class MoreInfoPage {
            this.myDate= new Date().toISOString();
            this.myDateSec= Date.now();
            this.myDate = this.transformDate(this.myDate);
+
+           this.manageService.feedDogs(this.dogKey, this.myDate, this.myDateSec, 'nutrition');
           //this.datePipe.transform(this.myDate, 'YYYY/MM/DD HH:mm');
           // console.log("test time: "+ this.myDate + "sec+" + this.myDateSec);
            //간식주세요
