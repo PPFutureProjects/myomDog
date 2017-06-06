@@ -5,6 +5,7 @@ import { ManageService } from '../../providers/manage-service';
 // import firebase from 'firebase';
 import { AngularFireDatabase, FirebaseListObservable, FirebaseObjectObservable } from 'angularfire2/database';
 import {ModalController, ViewController, ToastController } from 'ionic-angular';
+import firebase from 'firebase';
 
 @Component({
   templateUrl: './setting.html'
@@ -82,6 +83,7 @@ export class DeleteGroupPage {
   editGroup: string;
   changegroupname: string;
 
+
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -92,41 +94,44 @@ export class DeleteGroupPage {
   }
 
   deleteButton(){
-    if(!this.manageService.removeCheck(this.selectedGroup)){ //삭제할 수 없음, 그룹에 개가 있음
-      let alertOK = this.alertCtrl.create({
-       title: '삭제실패',
-       subTitle: '해당 그룹에 반려견이 존재합니다.',
-       buttons: ['확인']
-     });
-     alertOK.present();
-    }
-    else{ //삭제할 수 있음
-      let confirm = this.alertCtrl.create({
-       title: '확인창',
-       message: '해당 그룹을 정말로 삭제할까요?',
-       buttons: [
-         {
-           text: '취소',
-           cssClass: 'buttoncss',
-           handler: () => {
-           }
-         },
-         {
-           text: 'Agree',
-           cssClass: 'buttoncss',
-           handler: () => {
-             this.manageService.removeGroup(this.selectedGroup);
-             let alertOK = this.alertCtrl.create({
-              title: '삭제완료',
-              subTitle: '해당 그룹을 삭제했습니다.',
-              buttons: ['확인']
-            });
-           }
-         }
-       ]
-     });
-     confirm.present();
-    }
+    firebase.database().ref('/userData/'+this.userKey+'/groups/'+this.selectedGroup+'/dogs').once('value').then((snapshot)=>{
+        console.log(typeof snapshot);
+        console.log(snapshot.val());
+        if(snapshot.val()!==null){
+          let alertOK = this.alertCtrl.create({
+            title: '삭제실패',
+            subTitle: '해당 그룹에 반려견이 존재합니다.',
+            buttons: ['확인']
+          });
+        alertOK.present();
+        }
+        else{ //삭제할 수 있음
+          let confirm = this.alertCtrl.create({
+            title: '확인창',
+            message: '해당 그룹을 정말로 삭제할까요?',
+            buttons: [
+            {
+              text: '취소',
+              cssClass: 'buttoncss',
+              handler: () => {}
+            },
+            {
+              text: 'Agree',
+              cssClass: 'buttoncss',
+              handler: () => {
+                this.manageService.removeGroup(this.selectedGroup);
+                let alertOK = this.alertCtrl.create({
+                    title: '삭제완료',
+                    subTitle: '해당 그룹을 삭제했습니다.',
+                    buttons: ['확인']
+                });
+              }
+            }
+            ]
+          });
+        confirm.present()
+      }
+    });
   }
 
   editButton(){

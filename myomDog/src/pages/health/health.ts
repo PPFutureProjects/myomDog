@@ -236,26 +236,26 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
       let month = current.getMonth();
       let label;
       let data;
-      let even = ['1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1'];
-      let odd = ['1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1'];
-      let noleap = ['1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1'
+      let even = ['0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0'];
+      let odd = ['0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0'];
+      let noleap = ['0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
                   ];
-      let leap = ['1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1','1','1','1','1','1','1',
-                  '1'];
+      let leap = ['0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0','0','0','0','0','0','0',
+                  '0'];
      let param = new Promise((resolve, reject)=>{
       let result = ((year%4 ==0 && year%100!=0 ) || year%400==0)? "윤년" : "윤년X";
       if(month%2==0 && month!=2){
@@ -330,36 +330,36 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         if(Math.floor(current.getDate()/7)==0){
           label =
         [
-            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
-            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
-            month+'_1', month+'_2', month+'_3', month+'_4',month+1+'_1'
+            month-2+'_1', '', '', '',
+            month-1+'_1', '', '', '',
+            month+'_1', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==1){
           label =
         [
-            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
-            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
-            month+'_1', month+'_2', month+'_3', month+'_4',
+            month-2+'_1', '', '', '','',
+            month-1+'_1', '', '', '','',
+            month+'_1', '', '', '','',
             month+1+'_1',month+1+'_2'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==2){
           label =
         [
-            month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
-            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
-            month+'_1', month+'_2', month+'_3', month+'_4',
-            month+1+'_1', month+1+'_2', month+1+'_3'
+            month-2+'_1', '', '', '','',
+            month-1+'_1', '', '', '','',
+            month+'_1', '', '', '','',
+            month+1+'_1', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==3){
           label =
         [
-          month-2+'_1', month-2+'_2', month-2+'_3', month-2+'_4',
-            month-1+'_1', month-1+'_2', month-1+'_3', month-1+'_4',
-            month+'_1', month+'_2', month+'_3', month+'_4',
-            month+1+'_1', month+1+'_2', month+1+'_3', month+1+'_4'
+          month-2+'_1', '', '', '','',
+            month-1+'_1', '', '', '','',
+            month+'_1', '', '', '','',
+            month+1+'_1', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }
@@ -475,7 +475,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
      labels: l,//["January", "February", "March", "April", "May", "June", "July", "August"],
      datasets: [
        {
-         label: "Initial Dataset",
+         label: "",
          fill: false,
          lineTension: 0.1,
          backgroundColor: "rgba(75,192,192,0.4)",
@@ -643,7 +643,7 @@ export class HistoryEditPage{
   editdate: Date;
   editwhat;
   editfoodtype;
-  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+  constructor(private toastCtrl: ToastController, private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
     //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
     // //console.log('dogs: ', this.dogs);
     // let userKey = this.manageService.userKey
@@ -661,20 +661,58 @@ export class HistoryEditPage{
 
     }
   }
-  editcheck(){
-    if(this.editcategory == 'food'){
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle',
+      dismissOnPageChange: true
+    });
 
-    }
-
-    else if(this.editcategory == 'walk'){
-
-    }
-
-    else if(this.editcategory == 'etc'){
-
-    }
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
   }
-
+  editcheck(){
+    // let icon;
+    // let name;
+    // if(this.editcategory == 'food'){
+    //   if(this.editfoodtype=='restaurant'){
+    //     icon = 'restaurant';
+    //     name = '식사';
+    //   }
+    //   else if(this.editfoodtype=='nutrition'){
+    //     icon = 'nutrition';
+    //     name = '간식';
+    //   }
+    //   //console.log(this.editdate);
+    //   var d = Date.parse(this.editdate.toString());
+    //   //console.log("here: "+d);
+    //   console.log(new Date(this.editdate));
+    //   this.manageService.feedDogs(this.selected, this.editdate.toString() , d, 'restaurant');
+    //
+    // }else{
+    //     if(this.editcategory=='etc'){
+    //       icon = 'medkit';
+    //       name = this.editwhat;
+    //
+    //     }
+    //     if(this.editcategory=='walk'){
+    //       icon= 'paw';
+    //       name = '산책';
+    //     }
+    //     //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
+    //     console.log("debug: " + this.editdate);
+    //     this.manageService.addHistory(this.editcategory, icon, name, this.editdate, this.selected, this.editwalktime);
+    //
+    //   }
+    //   // this.showConfirm();
+    //   this.presentToast("History added!");
+    //   this.viewCtrl.dismiss();
+    //
+    // }
+  }
   dismiss(){
     this.viewCtrl.dismiss();
   }
