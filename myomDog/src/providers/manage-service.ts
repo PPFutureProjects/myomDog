@@ -51,7 +51,8 @@ export class ManageService {
         },
         birth: birth,
         gender: gender,
-        lastmeal: 0
+        lastmeal: 0,
+        lastmealdate: ''
       }).then((newDogKey)=> {
           firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs/'+newDogKey.key+'/users').push({
             id: this.userKey,
@@ -65,7 +66,8 @@ export class ManageService {
               id: this.userKey,
               group: groupKey.key
             },
-            lastmeal: 0
+            lastmeal: 0,
+            lastmealdate: ''
           }).then(()=>{
             firebase.database().ref('dogData/'+newDogKey.key+'/users').push({
               id: this.userKey,
@@ -99,7 +101,8 @@ export class ManageService {
       },
       birth: birth,
       gender: gender,
-      lastmeal: 0
+      lastmeal: 0,
+      lastmealdate: ''
     }).then((newDog)=>{
       firebase.database().ref('dogData/'+newDog.key+'/users').push({
         id: this.userKey,
@@ -134,7 +137,8 @@ export class ManageService {
         group: group,
         super: snap.val().super,
         users: snap.val().users,
-        lastmeal: snap.val().lastmeal
+        lastmeal: snap.val().lastmeal,
+        lastmealdate: snap.val().lastmealdate
       });
     })
   }
@@ -248,18 +252,108 @@ export class ManageService {
   feedDogs(dogs, time,  sec, icon){
     let category = 'food';
     let name;
-    if(icon=='nutrition'){
-      for(let i=0; i<dogs.length; i++){
+    console.log("dogs: ", dogs);
+    console.log("type: ", typeof dogs);
+    if(typeof dogs=='string'){
+      console.log('한마리');
+      if(icon=='nutrition'){
         name = '간식';
-        firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+        firebase.database().ref('/dogData/'+dogs+'/history').push({
           category: category,
           icon: icon,
           name: name,
-          time: time
+          time: time,
         });
+      }else if(icon=='restaurant'){
+        name = '식사';
+        console.log('식사추가한마리');
+        firebase.database().ref('/dogData/'+dogs).once('value').then((shot)=>{
+          let currentLastmeal = parseInt(shot.val().lastmeal);
+          console.log('current lastmeal: ', currentLastmeal);
+          if(currentLastmeal < sec){
+            firebase.database().ref('/dogData/'+dogs).update({
+              lastmeal: sec,
+              lastmealdate: time
+            })
+          }
+          firebase.database().ref('/dogData/'+dogs+'/history').push({
+            category: category,
+            icon: icon,
+            name: name,
+            time: time,
+            sec: sec
+          }).then(()=>{
+            console.log('모든유저에게 추가');
+            firebase.database().ref('/dogData/'+dogs+'/users').once('value').then((users)=>{
+              console.log('users-->')
+              users.forEach((user)=>{
+                console.log('user: ', user.val().id)
+                firebase.database().ref('/userData/'+user.val().id+'/groups/'+user.val().group+'/dogs').child(dogs).update({
+                  lastmeal: sec,
+                  lastmealdate: time 
+                })
+              })
+            })
+          })
+        })
       }
-    }else if(icon=='restaurant'){
-      
+    }else{
+      if(icon=='nutrition'){
+        name = '간식';
+        for(let i=0; i<dogs.length; i++){
+          console.log(dogs[i]);
+          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+            category: category,
+            icon: icon,
+            name: name,
+            time: time
+          });
+        }
+      }else if(icon=='restaurant'){
+        name = '식사';
+        for(let i=0; i<dogs.length; i++){
+          firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+            category: category,
+            icon: icon,
+            name: name,
+            time: time,
+            sec: sec
+          });
+          firebase.database().ref('/dogData/'+dogs[i]).once('value').then((dog)=>{
+            let currentLastmeal = dog.val().lastmeal;
+            if(sec > currentLastmeal){
+              firebase.database().ref('/dogData/'+dogs[i]).once('value').then((shot)=>{
+                let currentLastmeal = parseInt(shot.val().lastmeal);
+                console.log('current lastmeal: ', currentLastmeal);
+                if(currentLastmeal < sec){
+                  firebase.database().ref('/dogData/'+dogs[i]).update({
+                    lastmeal: sec,
+                    lastmealdate: time
+                  })
+                }
+                firebase.database().ref('/dogData/'+dogs[i]+'/history').push({
+                  category: category,
+                  icon: icon,
+                  name: name,
+                  time: time,
+                  sec: sec
+                }).then(()=>{
+                  firebase.database().ref('/dogData/'+dogs[i]+'/users').once('value').then((users)=>{
+                    console.log('모든유저에게추가하기');
+                    users.forEach((user)=>{
+                      console.log('user: ', user.id)
+                      firebase.database().ref('/userData/'+user.val().id+'/groups/'+user.val().group+'/dogs').child(dogs[i]).update({
+                        lastmeal: sec,
+                        lastmealdate: time 
+                      })
+                    })
+                  })
+                })
+              })
+            }
+          })
+        }
+      }
     }
   }
 
