@@ -643,7 +643,7 @@ export class HistoryEditPage{
   editdate: Date;
   editwhat;
   editfoodtype;
-  constructor(private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
+  constructor(private toastCtrl: ToastController, private navParams: NavParams, public viewCtrl: ViewController, public db: AngularFireDatabase, public manageService: ManageService) {
     //this.dogs = db.list('userData/'+this.manageService.userKey+'/groups');
     // //console.log('dogs: ', this.dogs);
     // let userKey = this.manageService.userKey
@@ -661,20 +661,58 @@ export class HistoryEditPage{
 
     }
   }
-  editcheck(){
-    if(this.editcategory == 'food'){
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle',
+      dismissOnPageChange: true
+    });
 
-    }
-
-    else if(this.editcategory == 'walk'){
-
-    }
-
-    else if(this.editcategory == 'etc'){
-
-    }
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
   }
-
+  editcheck(){
+    // let icon;
+    // let name;
+    // if(this.editcategory == 'food'){
+    //   if(this.editfoodtype=='restaurant'){
+    //     icon = 'restaurant';
+    //     name = '식사';
+    //   }
+    //   else if(this.editfoodtype=='nutrition'){
+    //     icon = 'nutrition';
+    //     name = '간식';
+    //   }
+    //   //console.log(this.editdate);
+    //   var d = Date.parse(this.editdate.toString());
+    //   //console.log("here: "+d);
+    //   console.log(new Date(this.editdate));
+    //   this.manageService.feedDogs(this.selected, this.editdate.toString() , d, 'restaurant');
+    //
+    // }else{
+    //     if(this.editcategory=='etc'){
+    //       icon = 'medkit';
+    //       name = this.editwhat;
+    //
+    //     }
+    //     if(this.editcategory=='walk'){
+    //       icon= 'paw';
+    //       name = '산책';
+    //     }
+    //     //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
+    //     console.log("debug: " + this.editdate);
+    //     this.manageService.addHistory(this.editcategory, icon, name, this.editdate, this.selected, this.editwalktime);
+    //
+    //   }
+    //   // this.showConfirm();
+    //   this.presentToast("History added!");
+    //   this.viewCtrl.dismiss();
+    //
+    // }
+  }
   dismiss(){
     this.viewCtrl.dismiss();
   }

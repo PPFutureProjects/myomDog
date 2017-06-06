@@ -82,6 +82,7 @@ export class DeleteGroupPage {
   editGroup: string;
   changegroupname: string;
 
+
   constructor(public alertCtrl: AlertController, public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -92,7 +93,9 @@ export class DeleteGroupPage {
   }
 
   deleteButton(){
-    if(!this.manageService.removeCheck(this.selectedGroup)){ //삭제할 수 없음, 그룹에 개가 있음
+    console.log("boolean: " + this.manageService.removeCheck(this.selectedGroup) + " " + this.selectedGroup);
+    let editBool = this.manageService.removeCheck(this.selectedGroup); //true면 지울 수 있는거
+    if(editBool==false){ //삭제할 수 없음, 그룹에 개가 있음
       let alertOK = this.alertCtrl.create({
        title: '삭제실패',
        subTitle: '해당 그룹에 반려견이 존재합니다.',
@@ -126,7 +129,8 @@ export class DeleteGroupPage {
        ]
      });
      confirm.present()
-    }
+   }
+
   }
 
   editButton(){
