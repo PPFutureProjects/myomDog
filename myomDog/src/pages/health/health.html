@@ -20,27 +20,7 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content padding><!--
-  <div [ngSwitch]="graph">
-    <ion-list *ngSwitchCase="'week'">
-      <ion-item>
-        <h2>1주일 그래프</h2>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'month'">
-      <ion-item>
-        <h2>1개월간 그래프</h2>
-      </ion-item>
-    </ion-list>
-
-    <ion-list *ngSwitchCase="'3months'">
-      <ion-item>
-        <h2>3개월간 그래프</h2>
-      </ion-item>
-    </ion-list>
-  </div>-->
-
+<ion-content padding>
   <ion-item>
       <ion-label>현재 반려동물</ion-label>
         <ion-select [(ngModel)]="myMainDogKey" multiple="false" cancelText="cancel" okText="OK" (ionChange)="changeDog()">
@@ -53,10 +33,13 @@
             </div>
         </ion-select>
   </ion-item>
-  <div> <!-- Chart -->
+  <!-- Chart -->
+  <div>
   <ion-card>
-   <ion-card-header>
-     Line Chart
+   <ion-card-header [ngSwitch]="graph">
+     <h2 *ngSwitchCase="'week'">1주일 그래프</h2>
+     <h2 *ngSwitchCase="'month'">1개월간 그래프</h2>
+     <h2 *ngSwitchCase="'3months'">3개월간 그래프</h2>
    </ion-card-header>
    <ion-card-content>
      <canvas #lineCanvas></canvas>
