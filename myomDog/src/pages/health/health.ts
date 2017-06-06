@@ -622,7 +622,7 @@ export class PopoverPage {
       this.manageService.addHistory(this.category, icon, name, this.inputdate, this.selected, this.walktime);
 
     }
-    // this.showConfirm();
+    // this.showConfirm();addhistory
     this.presentToast("History added!");
     this.viewCtrl.dismiss();
 
