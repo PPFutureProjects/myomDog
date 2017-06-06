@@ -210,6 +210,23 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   weekBTN(){
     let current = new Date();
     let labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    let d = current.toString().split(' ')[0];
+    console.log(d);
+     if(d=='Mon'){
+       labels = ["Tue","Wed","Thu","Fri","Sat","Sun","Mon"];
+     }else if(d=='Tue'){
+       labels = ["Wed","Thu","Fri","Sat","Sun","Mon","Tue"];
+     }else if(d=='Wed'){
+       labels = ["Thu","Fri","Sat","Sun","Mon","Tue","Wed"];
+     }else if(d=='Thu'){
+       labels = ["Fri","Sat","Sun","Mon","Tue","Wed","Thu"];
+     }else if(d=='Fri'){
+       labels = ["Sat","Sun","Mon","Tue","Wed","Thu","Fri"];
+     }else if(d=='Sat'){
+       labels = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+     }else if(d=='Sun'){
+       labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+     }
     let param = new Promise((resolve,reject)=>{
       this.walkHistory.subscribe(shots=>{
         let cnt = [0, 0, 0, 0, 0, 0, 0];
