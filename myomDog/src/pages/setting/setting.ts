@@ -364,7 +364,7 @@ export class InviteInfoPage {
                   {
                     text: 'Save',
                     handler: data => {
-                      this.manageService.receiveInvitationOnExists(data, item);
+                      this.manageService.receiveInvitation(data, item);
                     }
                   }
                 ]
@@ -372,7 +372,7 @@ export class InviteInfoPage {
               prompt.present();
             }else{
               console.log("+")
-              this.manageService.receiveInvitation(data, item);
+              this.manageService.receiveInvitationOnExists(data, item);
             }
           }
         });
