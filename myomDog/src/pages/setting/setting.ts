@@ -414,8 +414,21 @@ export class ChangeInfoPage {
     if(this.changeddog=='' || this.editdogname=='' || this.editdogsex=='' || this.editdogbirth===null){
       console.log('에외처리..모든필드입력요청');
       //this.alertCtrl.
+      let confirm = this.alertCtrl.create({
+        title: '알림',
+        message: '모든 항목을 입력해주세요',
+        buttons: [
+          {
+            text: '확인',
+            cssClass: 'buttoncss',
+            handler: () => {
+            }
+          }
+        ]
+      });
+      confirm.present()
     }else{
-
+      this.manageService.changeInfo(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth)//name, gender, birth, meal?
     }
   }
   editdog(SelectedDog){
