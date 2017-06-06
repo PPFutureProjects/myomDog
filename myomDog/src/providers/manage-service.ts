@@ -298,7 +298,9 @@ export class ManageService {
         })
       }
     }else{
+      console.log('여러마리야~')
       if(icon=='nutrition'){
+        console.log('간식')
         name = '간식';
         for(let i=0; i<dogs.length; i++){
           console.log(dogs[i]);
@@ -310,8 +312,10 @@ export class ManageService {
           });
         }
       }else if(icon=='restaurant'){
+        console.log('식사')
         name = '식사';
         for(let i=0; i<dogs.length; i++){
+          console.log('=>', dogs[i])
           firebase.database().ref('dogData/'+dogs[i]+'/history').push({
             category: category,
             icon: icon,
@@ -331,13 +335,6 @@ export class ManageService {
                     lastmealdate: time
                   })
                 }
-                firebase.database().ref('/dogData/'+dogs[i]+'/history').push({
-                  category: category,
-                  icon: icon,
-                  name: name,
-                  time: time,
-                  sec: sec
-                }).then(()=>{
                   firebase.database().ref('/dogData/'+dogs[i]+'/users').once('value').then((users)=>{
                     console.log('모든유저에게추가하기');
                     users.forEach((user)=>{
@@ -348,7 +345,7 @@ export class ManageService {
                       })
                     })
                   })
-                })
+               
               })
             }
           })
