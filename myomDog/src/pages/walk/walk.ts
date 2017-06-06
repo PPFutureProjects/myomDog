@@ -1,6 +1,5 @@
-import { Component } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController } from 'ionic-angular';
-
+import { Component, ViewChild } from '@angular/core';
+import { IonicPage, NavController, NavParams, AlertController, Select } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 
@@ -18,14 +17,18 @@ import { ManageService } from '../../providers/manage-service';
   templateUrl: 'walk.html',
 })
 export class WalkPage {
+  @ViewChild('walkDogSelect') walkDogSelect: Select;
   walkedTime: number;
+  dogSel: boolean;
   //checkboxOpen: boolean;
   //dogChecked: boolean;
   dogs: FirebaseObjectObservable<any>;
-  selectedDogs;
+  selectedDogs: [any];
+  selectedDogsName: any;
   walkingDog :FirebaseListObservable<any[]>;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
             public db: AngularFireDatabase, public manageService: ManageService) {
+              this.dogSel = false;
 
   }
 
@@ -38,7 +41,30 @@ export class WalkPage {
    this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
    //this.dogChecked = false;
    this.selectedDogs = null;
+   this.dogSel = false;
  }
+
+ timerStartEvent(event: boolean) {
+   if(event){
+     this.walkDogSelect.open();
+   }
+ }
+
+ dogChanged(){
+   let selectCheck = this.selectedDogs;
+   console.log("selected Dogs : " + selectCheck);
+   if (selectCheck !== null) {
+     console.log("is checked");
+     this.dogSel = true;
+   }
+ }
+
+ dogSelectCanceled(){
+   console.log("select cancel");
+   this.selectedDogs = null;
+   this.dogSel = false;
+ }
+
  ionViewDidLoad() {
     console.log('ionViewDidLoad Walk');
   }

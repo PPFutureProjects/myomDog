@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter,Input, Output } from '@angular/core';
 import { PTimer } from './PTimer';
 
 /**
@@ -13,19 +13,29 @@ import { PTimer } from './PTimer';
 })
 export class TimerComponent {
 
-
+  @Input() dogSelected : boolean;
+  @Output() timerStartTrigger = new EventEmitter<boolean>();
   @Output() outputProperty = new EventEmitter<number>();
   private timeInSeconds: number;
   public timer: PTimer;
-  constructor() {}
+  constructor() {
+    this.dogSelected = false;
+  }
 
   ngOnInit() {
     this.initTimer();
   }
   updateParent(){
-    this.outputProperty.emit(this.timer.timePassed);
-    this.timeInSeconds = null;
-    this.initTimer();
+    console.log("dogSelected "+this.dogSelected);
+    if (!this.dogSelected) {
+      console.log("timer: dog select plz");
+      this.timerStartTrigger.emit(true);
+    }else{
+      console.log("timer: time emit!");
+      this.outputProperty.emit(this.timer.timePassed);
+      this.timeInSeconds = null;
+      this.initTimer();
+    }
   }
   hasFinished() {
     return this.timer.hasFinished;
@@ -67,7 +77,7 @@ export class TimerComponent {
     this.timer.runTimer = true;
     this.timerTick();
   }
-  
+
   timerTick(){
     setTimeout(()=>{
       if(!this.timer.runTimer) return;

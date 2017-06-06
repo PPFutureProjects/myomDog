@@ -1,15 +1,17 @@
-<div class="no-bottom-border item">
+<div class="card-background-page">
   <ion-card>
     <img src="assets/img/shiba_inu_walk2.jpg" />
-    <div class="card-title">{{timer.displayTime}}</div>
+    <div class="timer-text card-title">{{timer.displayTime}}</div>
       <!-- <h1 text-center color="primary" class="timer-button timer-text">{{timer.displayTime}}</h1> -->
-    <div class="card-subtitle">???</div>
+    <div *ngIf="timer.runTimer && timer.hasStarted && !timer.hasFinished" class="card-subtitle">산책 중 . . . </div>
+    <div *ngIf="!timer.runTimer && timer.hasStarted && !timer.hasFinished" class="card-subtitle">휴식 중</div>
+    <div *ngIf="!timer.hasStarted" class="card-subtitle">산책 준비</div>
   </ion-card>
 </div>
 
-<div>
-    <button color="emphasis" ion-button (click) = 'updateParent()'>산책정보등록</button>
-</div>
+<ion-fab bottom center *ngIf="!timer.runTimer && (timer.hasStarted || timer.hasFinished) || timer.hasFinished">
+    <button ion-fab color="dark" (click)='updateParent()'><ion-icon name="baseball"></ion-icon></button>
+</ion-fab>
 
 <ion-fab bottom left *ngIf="timer.runTimer && timer.hasStarted && !timer.hasFinished">
     <button ion-fab color="emphasis" (click)="pauseTimer()">

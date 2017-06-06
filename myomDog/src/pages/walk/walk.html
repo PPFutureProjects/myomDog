@@ -11,17 +11,22 @@
 </ion-header>
 
 <ion-content padding>
-  <timer (outputProperty)="outputEvent($event)"></timer>
-  <ion-item>  //ngFor문
-      <ion-label>누구와함께~?</ion-label>
-      <ion-select [(ngModel)]="selectedDogs" multiple="true" cancelText="cancel" okText="OK">
-          <div *ngFor="let group of walkingDog | async">
-            <div *ngFor="let dog of group.dogs | keys">
-              <ion-option value="{{dog.key}}">
-                [{{group.groupName}}] {{dog.value.name}}
-              </ion-option>
-             </div>
+  <timer [dogSelected]="dogSel" (timerStartTrigger)="timerStartEvent($event)" (outputProperty)="outputEvent($event)"></timer>
+  <ion-item>
+    <ion-label>산책할 반려견</ion-label>
+    <ion-select #walkDogSelect cancelText="cancel" okText="OK" [(ngModel)]="selectedDogs" multiple="true" (ionChange)="dogChanged()" (ionCancel)="dogSelectCanceled()">
+        <div *ngFor="let group of walkingDog | async">
+          <div *ngFor="let dog of group.dogs | keys">
+            <ion-option value="{{dog.key}}">
+              [{{group.groupName}}] {{dog.value.name}}
+            </ion-option>
            </div>
+         </div>
       </ion-select>
   </ion-item>
+  <div>
+    <ul *ngFor="let dog of selectedDogs">
+      <ion-item>{{dog}}</ion-item>
+    </ul>
+  </div>
 </ion-content>
