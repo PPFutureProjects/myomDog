@@ -99,7 +99,7 @@ export class DeleteGroupPage {
         console.log(snapshot.val());
         if(snapshot.val()!==null){
           let alertOK = this.alertCtrl.create({
-            title: '삭제실패',
+            title: '삭제 실패',
             subTitle: '해당 그룹에 반려견이 존재합니다.',
             buttons: ['확인']
           });
@@ -164,7 +164,7 @@ export class DeleteGroupPage {
 export class AddingDogPage {
   userKey: string;
 
-  dogname:string;
+  dogname:string ;
   groupname: string;
   birth:Date;
   gender: string;
@@ -208,10 +208,26 @@ export class AddingDogPage {
            console.log("mealtime: "+ this.mealtime);
            if(this.alreadygroup && this.alreadygroup!='moo_exception'){
              console.log("alreadygroup: "+this.alreadygroup);
-            this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth, this.mealtime);
+             if((!this.dogname || this.dogname=='')||(!this.birth)||(!this.gender || this.gender=='')){
+                let alertOK = this.alertCtrl.create({
+                  title: '알림',
+                  subTitle: '모든 항목을 입력해주세요.',
+                  buttons: ['확인']
+                });
+             }else{
+              this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth, this.mealtime);
+             }
            }  else {
                 console.log("newAdd");
-                this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth, this.mealtime);
+                if((!this.dogname || this.dogname=='')||(!this.birth)||(!this.gender || this.gender=='')){
+                  let alertOK = this.alertCtrl.create({
+                    title: '알림',
+                    subTitle: '모든 항목을 입력해주세요.',
+                    buttons: ['확인']
+                  });
+                } else{
+                  this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth, this.mealtime);
+                }
            }
            let alertOK = this.alertCtrl.create({
             title: '강아지 등록',
@@ -320,7 +336,7 @@ export class InviteInfoPage {
   select(item){
     console.log(item.$key)
   let alert = this.alertCtrl.create();
-  alert.setTitle('초대를 수락?');
+  alert.setTitle('초대를 수락하시겠습니까?');
   alert.addInput({
     type:'radio',
     label: '새 그룹에 추가',
@@ -476,14 +492,14 @@ export class GoodByePage {
      message: '이별하시겠습니까?',
      buttons: [
        {
-         text: 'Disagree',
+         text: '아직은안돼요',
          cssClass: 'buttoncss',
          handler: () => {
            console.log('Disagree');
          }
        },
        {
-         text: 'Agree',
+         text: '그래요',
          cssClass: 'buttoncss',
          handler: () => {
            console.log("del dog"+this.goodbyedog);
