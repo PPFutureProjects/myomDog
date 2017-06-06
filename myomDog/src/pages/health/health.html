@@ -89,7 +89,7 @@
             {{history.name}}
             <p *ngIf="history.name==='산책' && history.content" class="walkTime">{{history.content}} 분</p>
         </div>
-        <ion-note item-right class="historyTime">{{history.time | date:'MM/dd HH:mm'}}</ion-note>
+        <ion-note item-right class="historyTime">{{history.time}}</ion-note>
       </ion-item>
       <ion-item-options>
         <button ion-button color="emphasis" icon-left (click)="editItem(history.$key, history.category, $event)">
