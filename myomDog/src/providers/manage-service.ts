@@ -51,6 +51,7 @@ export class ManageService {
         },
         birth: birth,
         gender: gender,
+        lastmeal: 0
       }).then((newDogKey)=> {
           firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs/'+newDogKey.key+'/users').push({
             id: this.userKey,
@@ -63,7 +64,8 @@ export class ManageService {
             super: {
               id: this.userKey,
               group: groupKey.key
-            }
+            },
+            lastmeal: 0
           }).then(()=>{
             firebase.database().ref('dogData/'+newDogKey.key+'/users').push({
               id: this.userKey,
@@ -96,7 +98,8 @@ export class ManageService {
         group: g
       },
       birth: birth,
-      gender: gender
+      gender: gender,
+      lastmeal: 0
     }).then((newDog)=>{
       firebase.database().ref('dogData/'+newDog.key+'/users').push({
         id: this.userKey,
@@ -130,7 +133,8 @@ export class ManageService {
         birth: snap.val().birth,
         group: group,
         super: snap.val().super,
-        users: snap.val().users
+        users: snap.val().users,
+        lastmeal: snap.val().lastmeal
       });
     })
   }
@@ -241,8 +245,22 @@ export class ManageService {
 
   }
 
-  feedDogs(dogs, time?){
-
+  feedDogs(dogs, time,  sec, icon){
+    let category = 'food';
+    let name;
+    if(icon=='nutrition'){
+      for(let i=0; i<dogs.length; i++){
+        name = '간식';
+        firebase.database().ref('dogData/'+dogs[i]+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: time
+        });
+      }
+    }else if(icon=='restaurant'){
+      
+    }
   }
 
   changeMainDog(newMainDog) {
