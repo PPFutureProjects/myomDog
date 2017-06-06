@@ -29,7 +29,12 @@
     <ion-item-group>
       <ion-item-divider color="light">User</ion-item-divider>
       <button ion-item (click) = "invitingModal()">사용자 초대</button>
-      <button ion-item (click) = "inviteinfoModal()">초대 목록</button>
+      <ion-item (click) = "inviteinfoModal()">
+        <ion-icon name='mail' item-start></ion-icon>
+        초대 목록
+        <ion-badge color="point" item-end>{{numOfInvites}}</ion-badge>
+      </ion-item>
+
       <ion-item>
         <ion-label>알람</ion-label>
         <ion-toggle [checked]= "pushboolean" [(ngModel)]="pushonoff" (ionChange)="pushcheck(pushonoff)"></ion-toggle>

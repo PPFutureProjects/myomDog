@@ -3,7 +3,6 @@ import { DatePipe } from '@angular/common';
 import { IonicPage, NavController, NavParams, AlertController, Select, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
-import firebase from 'firebase';
 
 // import { TimerComponent } from '../../component/timer/timer'
 

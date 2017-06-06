@@ -44,8 +44,6 @@ export class HealthPage {
 
 
   @ViewChild('lineCanvas') lineCanvas;
-  @ViewChild('popoverContent', { read: ElementRef }) content: ElementRef;
-  @ViewChild('popoverText', { read: ElementRef }) text: ElementRef;
   lineChart: any;
 
   constructor(public navCtrl: NavController, public navParams: NavParams, public platform: Platform, public db: AngularFireDatabase,

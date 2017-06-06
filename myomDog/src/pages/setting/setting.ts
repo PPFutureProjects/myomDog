@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { AlertController, NavController, NavParams } from 'ionic-angular';
+import { AlertController, NavController, NavParams, Events } from 'ionic-angular';
 import { AuthService } from '../../providers/auth-service';
 import { ManageService } from '../../providers/manage-service';
 // import firebase from 'firebase';
@@ -19,14 +19,31 @@ export class SettingPage {
   AllDogs: any;
   favorite: string;
   pushboolean: boolean = true;
+  // inviteRef: any;
+  numOfInvites: number;
 
-  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase) {
+  constructor(public modalCtrl: ModalController, public navCtrl: NavController, public authService: AuthService, public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase, public events:Events) {
     this.userKey = manageService.userKey;
     console.log(this.userKey);
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
     this.groupobject = db.object('/userData/'+this.userKey+'/groups');
     console.log(this.grouplist);
     this.pushboolean = true;
+    events.publish('invite:badge', this.numOfInvites);
+    // this.inviteRef = db.list('/userData/'+this.userKey+'/invitation');
+  }
+  countInvitation(){
+    firebase.database().ref('/userData/'+this.userKey+'/invitation').once('value').then((snapshot) => {
+      if (snapshot.val()!==null) {
+        this.numOfInvites = snapshot.numChildren();
+      }else{
+        this.numOfInvites = null;
+      }
+    });
+    // this.events.publish('invite:badge', this.numOfInvites);
+  }
+  ionViewWillEnter(){
+    this.countInvitation();
   }
   pushcheck(pushboolean){
     this.pushboolean = pushboolean;
