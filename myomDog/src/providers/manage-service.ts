@@ -393,17 +393,18 @@ export class ManageService {
     firebase.database().ref('/userData/'+this.userKey+'/groups/'+key).set(null);
   }
 
-  removeCheck(key):boolean{
-    firebase.database().ref('/userData/'+this.userKey+'/groups/'+key+'/dogs').once('value').then((snapshot)=>{
-      console.log(snapshot);
-      console.log(snapshot.numChildren())
-      if(snapshot.numChildren()==0){
-        return true;
-      }else{
-        return false;
-      }
+  removeCheck(key): any{
+    new Promise(()=>{
+      firebase.database().ref('/userData/'+this.userKey+'/groups/'+key+'/dogs').once('value').then((snapshot)=>{
+        console.log(snapshot);
+        console.log(snapshot.numChildren())
+        if(snapshot.numChildren()==0){
+          return true;
+        }else{
+          return false;
+        }
+      })
     })
-    return true;
   }
 
   removeHistory(key, dog){
