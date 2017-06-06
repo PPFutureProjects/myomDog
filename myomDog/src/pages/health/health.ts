@@ -555,7 +555,8 @@ export class PopoverPage {
   selected;
   category;
   walktime;
-  date;
+  foodtype;
+  inputdate: Date;
   //date: String = new Date().toISOString();
 
   what;
@@ -592,26 +593,33 @@ export class PopoverPage {
     let icon;
     let name;
     if(this.category=='food'){
-      icon = 'restaurant';
-      name = '식사';
+      if(this.foodtype=='restaurant'){
+        icon = 'restaurant';
+        name = '식사';
+      }
+      else if(this.foodtype=='nutrition'){
+        icon = 'nutrition';
+        name = '간식';
+      }
       //console.log(this.date);
-      var d = Date.parse(this.date);
-      console.log("here: "+d);
-      //console.log(new Date(this.date));
-      //this.manageService.feedDogs(this.selected, this.date);
+      var d = Date.parse(this.inputdate.toString());
+      //console.log("here: "+d);
+      console.log(new Date(this.inputdate));
+      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, 'restaurant');
 
     }else{
       if(this.category=='etc'){
         icon = 'medkit';
         name = this.what;
+
       }
       if(this.category=='walk'){
         icon= 'paw';
         name = '산책';
       }
       //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
-
-      this.manageService.addHistory(this.category, icon, name, new Date(this.date), this.selected, this.walktime);
+      console.log("debug: " + this.inputdate);
+      this.manageService.addHistory(this.category, icon, name, this.inputdate, this.selected, this.walktime);
 
     }
     // this.showConfirm();
