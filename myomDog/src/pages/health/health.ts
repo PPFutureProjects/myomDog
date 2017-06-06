@@ -624,7 +624,10 @@ export class PopoverPage {
       var d = Date.parse(this.inputdate.toString());
       //console.log("here: "+d);
       console.log(new Date(this.inputdate));
-      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, 'restaurant');
+
+//      console.log("debug: " + icon + " " + name);
+
+      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, icon);
 
     }else{
       if(this.category=='etc'){
@@ -637,7 +640,7 @@ export class PopoverPage {
         name = '산책';
       }
       //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
-      console.log("debug: " + this.inputdate);
+
       this.manageService.addHistory(this.category, icon, name, this.inputdate, this.selected, this.walktime);
 
     }

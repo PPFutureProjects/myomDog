@@ -14,7 +14,7 @@
     </ion-item>
     <ion-item>
         <ion-label>시간</ion-label>
-        <ion-datetime displayFormat= "YYYY-MM-DD_HH:mm" [(ngModel)]="inputdate"></ion-datetime>
+        <ion-datetime displayFormat= "YYYY/MM/DD HH:mm" [(ngModel)]="inputdate"></ion-datetime>
     </ion-item>
     <ion-item *ngIf="category=='food'">
       <ion-label>식사종류</ion-label>
@@ -28,7 +28,7 @@
       <ion-input [(ngModel)]="walktime"></ion-input>
     </ion-item>
     <ion-item *ngIf="category=='etc'">
-      <ion-label>무슨일?</ion-label>
+      <ion-label>기록내용</ion-label>
       <ion-input [(ngModel)]="what"></ion-input>
     </ion-item>
   </ion-list>

@@ -292,7 +292,6 @@ export class InvitingPage {
   }
   invitebutton(){
     if(!this.inviteduser || !this.inviteddog){
-
       let alertdel = this.alertCtrl.create({
               title: '알림',
               subTitle: '모든 항목을 채워주세요',
@@ -301,9 +300,15 @@ export class InvitingPage {
             alertdel.present();
     }else{
       console.log("invited dog :" + this.inviteddog );
-     this.manageService.invite(this.inviteduser, this.inviteddog);
+      this.manageService.invite(this.inviteduser, this.inviteddog);
+      let alertOK = this.alertCtrl.create({
+        title: '알림',
+        subTitle: '초대가 완료되었습니다.',
+        buttons: ['확인']
+      });
+      alertOK.present();
+      this._viewCtrl.dismiss();
     }
-
   }
 
   dismiss(){
