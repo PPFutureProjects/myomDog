@@ -208,16 +208,37 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   weekBTN(){
     let current = new Date();
     let labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    let d = current.toString().split(' ')[0];
+    console.log(d);
+     if(d=='Mon'){
+       labels = ["Tue","Wed","Thu","Fri","Sat","Sun","Mon"];
+     }else if(d=='Tue'){
+       labels = ["Wed","Thu","Fri","Sat","Sun","Mon","Tue"];
+     }else if(d=='Wed'){
+       labels = ["Thu","Fri","Sat","Sun","Mon","Tue","Wed"];
+     }else if(d=='Thu'){
+       labels = ["Fri","Sat","Sun","Mon","Tue","Wed","Thu"];
+     }else if(d=='Fri'){
+       labels = ["Sat","Sun","Mon","Tue","Wed","Thu","Fri"];
+     }else if(d=='Sat'){
+       labels = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+     }else if(d=='Sun'){
+       labels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+     }
     let param = new Promise((resolve,reject)=>{
       this.walkHistory.subscribe(shots=>{
         let cnt = [0, 0, 0, 0, 0, 0, 0];
         shots.forEach(history=>{
           // 이번주인지확인...
-          for(let i=0; i<7; i++){
-            if(this.days[new Date(history.time).getDay()]==labels[i]){
-              cnt[i] += history.content;
+          if(Math.floor( (current.getTime()-(new Date(history.time)).getTime())/1000/60/60/24 ) <= 7 ){
+            for(let i=0; i<7; i++){
+              console.log(new Date(history.time).getDay());
+              if(this.days[new Date(history.time).getDay()]==labels[i]){
+                cnt[i] += history.content;
+              }
             }
           }
+          
         })
         resolve(cnt);
       }, err=>{
@@ -330,27 +351,27 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         if(Math.floor(current.getDate()/7)==0){
           label =
         [
-            month-2+'_1', '', '', '',
-            month-1+'_1', '', '', '',
-            month+'_1', '', '', '',''
+            month-2+'월', '', '', '',
+            month-1+'월', '', '', '',
+            month+'월', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==1){
           label =
         [
-            month-2+'_1', '', '', '','',
-            month-1+'_1', '', '', '','',
-            month+'_1', '', '', '','',
-            month+1+'_1',month+1+'_2'
+            month-2+'월', '', '', '','',
+            month-1+'월', '', '', '','',
+            month+'월', '', '', '','',
+            month+1+'월',month+1+'_2'
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==2){
           label =
         [
-            month-2+'_1', '', '', '','',
-            month-1+'_1', '', '', '','',
-            month+'_1', '', '', '','',
-            month+1+'_1', '', '', '',''
+            month-2+'월', '', '', '','',
+            month-1+'월', '', '', '','',
+            month+'월', '', '', '','',
+            month+1+'월', '', '', '',''
         ];
           data = [0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0];
         }else if(Math.floor(current.getDate()/7)==3){
@@ -388,35 +409,35 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
   }
 
   editItem(history, kind, ev){
-    this.kind = kind;
-    //console.log("test1234 : " + this.kind);
-    let curDogKey = this.myMainDogKey;
-    let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
-    editlist.subscribe(snap=>{
-      this.edittime = new Date(snap.val().time); //시간time공통적용
-      //console.log("t: "+ this.edittime);
-      if(this.kind=='food'){
-        this.editfoodtype = snap.val().icon;
-      }
-
-      if(this.kind=='walk'){
-        this.editwalktime = snap.val().content; //산책만 content
-        //console.log("tstetst: "+ this.editwalktime);
-      }
-      if(this.kind=='etc'){
-        this.editwhat = snap.val().name; //etc만 뭐했는지
-      }
-
-      console.log("time : " + this.edittime);
-      //console.log("name==>"+time);
-    })
-
+  //   this.kind = kind;
+  //   //console.log("test1234 : " + this.kind);
+  //   let curDogKey = this.myMainDogKey;
+  //   let editlist = this.db.object('/dogData/'+curDogKey+'/history/'+history, {preserveSnapshot: true});
+  //   editlist.subscribe(snap=>{
+  //     //this.edittime = new Date(snap.val().time); //시간time공통적용
+  //     //console.log("t: "+ this.edittime);
+  //     if(this.kind=='food'){
+  //       this.editfoodtype = snap.val().icon;
+  //     }
+  //
+  //     if(this.kind=='walk'){
+  //       this.editwalktime = snap.val().content; //산책만 content
+  //       //console.log("tstetst: "+ this.editwalktime);
+  //     }
+  //     if(this.kind=='etc'){
+  //       this.editwhat = snap.val().name; //etc만 뭐했는지
+  //     }
+  //
+  //     //console.log("time : " + this.edittime);
+  //     //console.log("name==>"+time);
+  //   })
+  //
     let editpopover = this.popoverCtrl.create(HistoryEditPage, {
-     category: this.kind,
-     time: this.edittime,
-     content: this.editwalktime,
-     name: this.editwhat,
-     icon: this.editfoodtype
+    //  category: this.kind,
+    //  time: this.edittime,
+    //  content: this.editwalktime,
+    //  name: this.editwhat,
+    //  icon: this.editfoodtype
     });
     editpopover.present({
       ev: ev
@@ -605,7 +626,10 @@ export class PopoverPage {
       var d = Date.parse(this.inputdate.toString());
       //console.log("here: "+d);
       console.log(new Date(this.inputdate));
-      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, 'restaurant');
+
+//      console.log("debug: " + icon + " " + name);
+
+      this.manageService.feedDogs(this.selected, this.inputdate.toString() , d, icon);
 
     }else{
       if(this.category=='etc'){
@@ -618,11 +642,11 @@ export class PopoverPage {
         name = '산책';
       }
       //this.manageService.addHistory(this.category, icon, name, this.date, this.selected, this.walktime);
-      console.log("debug: " + this.inputdate);
+
       this.manageService.addHistory(this.category, icon, name, this.inputdate, this.selected, this.walktime);
 
     }
-    // this.showConfirm();
+    // this.showConfirm();addhistory
     this.presentToast("History added!");
     this.viewCtrl.dismiss();
 

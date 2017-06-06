@@ -111,67 +111,86 @@ export class DeleteGroupPage {
   }
 
   deleteButton(){
-    firebase.database().ref('/userData/'+this.userKey+'/groups/'+this.selectedGroup+'/dogs').once('value').then((snapshot)=>{
-        console.log(typeof snapshot);
-        console.log(snapshot.val());
-        if(snapshot.val()!==null){
-          let alertOK = this.alertCtrl.create({
-            title: '삭제 실패',
-            subTitle: '해당 그룹에 반려견이 존재합니다.',
-            buttons: ['확인']
-          });
-        alertOK.present();
-        }
-        else{ //삭제할 수 있음
-          let confirm = this.alertCtrl.create({
-            title: '확인창',
-            message: '해당 그룹을 정말로 삭제할까요?',
-            buttons: [
-            {
-              text: '취소',
-              cssClass: 'buttoncss',
-              handler: () => {}
-            },
-            {
-              text: 'Agree',
-              cssClass: 'buttoncss',
-              handler: () => {
-                this.manageService.removeGroup(this.selectedGroup);
-                let alertOK = this.alertCtrl.create({
-                    title: '삭제완료',
-                    subTitle: '해당 그룹을 삭제했습니다.',
-                    buttons: ['확인']
-                });
+    if(!this.selectedGroup){
+      let alertdel = this.alertCtrl.create({
+              title: '알림',
+              subTitle: '모든 항목을 채워주세요',
+              buttons: ['확인']
+            });
+            alertdel.present();
+    }else{
+      firebase.database().ref('/userData/'+this.userKey+'/groups/'+this.selectedGroup+'/dogs').once('value').then((snapshot)=>{
+          console.log(typeof snapshot);
+          console.log(snapshot.val());
+          if(snapshot.val()!==null){
+            let alertOK = this.alertCtrl.create({
+              title: '삭제 실패',
+              subTitle: '해당 그룹에 반려견이 존재합니다.',
+              buttons: ['확인']
+            });
+          alertOK.present();
+          }
+          else{ //삭제할 수 있음
+            let confirm = this.alertCtrl.create({
+              title: '확인창',
+              message: '해당 그룹을 정말로 삭제할까요?',
+              buttons: [
+              {
+                text: '취소',
+                cssClass: 'buttoncss',
+                handler: () => {}
+              },
+              {
+                text: 'Agree',
+                cssClass: 'buttoncss',
+                handler: () => {
+                  this.manageService.removeGroup(this.selectedGroup);
+                  let alertOK = this.alertCtrl.create({
+                      title: '삭제완료',
+                      subTitle: '해당 그룹을 삭제했습니다.',
+                      buttons: ['확인']
+                  });
+                }
               }
-            }
-            ]
-          });
-        confirm.present()
-      }
-    });
+              ]
+            });
+          confirm.present()
+        }
+      });
+    }
   }
 
   editButton(){
-    let confirm = this.alertCtrl.create({
-      title: '확인창',
-      message: '해당 그룹을 수정할까요?',
-      buttons: [
-        {
-          text: '취소',
-          cssClass: 'buttoncss',
-          handler: () => {
+    if(!this.changegroupname || !this.editGroup){
+      let alertdel = this.alertCtrl.create({
+              title: '알림',
+              subTitle: '모든 항목을 채워주세요',
+              buttons: ['확인']
+            });
+            alertdel.present();
+    }else{
+
+      let confirm = this.alertCtrl.create({
+        title: '확인창',
+        message: '해당 그룹을 수정할까요?',
+        buttons: [
+          {
+            text: '취소',
+            cssClass: 'buttoncss',
+            handler: () => {
+            }
+          },
+          {
+            text: '수정',
+            cssClass: 'buttoncss',
+            handler: () => {
+              this.manageService.editGroupName(this.editGroup, this.changegroupname);
+            }
           }
-        },
-        {
-          text: '수정',
-          cssClass: 'buttoncss',
-          handler: () => {
-            this.manageService.editGroupName(this.editGroup, this.changegroupname);
-          }
-        }
-      ]
-    });
-    confirm.present()
+        ]
+      });
+      confirm.present()
+    }
    }
 }
 
@@ -202,6 +221,15 @@ export class AddingDogPage {
   }
 
   addingbutton(){
+    if((!this.dogname || this.dogname=='')||(!this.birth)||(!this.gender || this.gender=='')){
+        let alertOK = this.alertCtrl.create({
+          title: '알림',
+          subTitle: '모든 항목을 입력해주세요.',
+          buttons: ['확인']
+        });
+        alertOK.present();
+    }
+    else{
     let confirm = this.alertCtrl.create({
      title: '확인창',
      message: '추가할거야?',
@@ -225,26 +253,10 @@ export class AddingDogPage {
            console.log("mealtime: "+ this.mealtime);
            if(this.alreadygroup && this.alreadygroup!='moo_exception'){
              console.log("alreadygroup: "+this.alreadygroup);
-             if((!this.dogname || this.dogname=='')||(!this.birth)||(!this.gender || this.gender=='')){
-                let alertOK = this.alertCtrl.create({
-                  title: '알림',
-                  subTitle: '모든 항목을 입력해주세요.',
-                  buttons: ['확인']
-                });
-             }else{
-              this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth, this.mealtime);
-             }
+             this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth, this.mealtime);
            }  else {
                 console.log("newAdd");
-                if((!this.dogname || this.dogname=='')||(!this.birth)||(!this.gender || this.gender=='')){
-                  let alertOK = this.alertCtrl.create({
-                    title: '알림',
-                    subTitle: '모든 항목을 입력해주세요.',
-                    buttons: ['확인']
-                  });
-                } else{
-                  this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth, this.mealtime);
-                }
+                this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth, this.mealtime);
            }
            let alertOK = this.alertCtrl.create({
             title: '강아지 등록',
@@ -256,7 +268,9 @@ export class AddingDogPage {
        }
      ]
    });
+
    confirm.present();
+    }
   }
   addalreadygroupname(SelectedGroup){
     console.log("Selected Group: " + SelectedGroup);
@@ -277,7 +291,7 @@ export class InvitingPage {
   inviteduser:string;
   inviteddog:string;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, db: AngularFireDatabase){
+  constructor(public _viewCtrl: ViewController, public alertCtrl: AlertController, public manageService: ManageService, db: AngularFireDatabase){
     this.userKey = manageService.userKey;
     console.log(this.userKey);
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
@@ -294,9 +308,24 @@ export class InvitingPage {
 
   }
   invitebutton(){
-
-    console.log("invited dog :" + this.inviteddog );
-    this.manageService.invite(this.inviteduser, this.inviteddog);
+    if(!this.inviteduser || !this.inviteddog){
+      let alertdel = this.alertCtrl.create({
+              title: '알림',
+              subTitle: '모든 항목을 채워주세요',
+              buttons: ['확인']
+            });
+            alertdel.present();
+    }else{
+      console.log("invited dog :" + this.inviteddog );
+      this.manageService.invite(this.inviteduser, this.inviteddog);
+      let alertOK = this.alertCtrl.create({
+        title: '알림',
+        subTitle: '초대가 완료되었습니다.',
+        buttons: ['확인']
+      });
+      alertOK.present();
+      this._viewCtrl.dismiss();
+    }
   }
 
   dismiss(){
@@ -462,6 +491,7 @@ export class ChangeInfoPage {
       confirm.present()
     }else{
       this.manageService.changeInfo(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth)//name, gender, birth, meal?
+      this._viewCtrl.dismiss();
     }
   }
   editdog(SelectedDog){
@@ -503,44 +533,45 @@ export class GoodByePage {
 
   }
   deletebutton(){
-
-    let confirm = this.alertCtrl.create({
-     title: '확인창',
-     message: '이별하시겠습니까?',
-     buttons: [
-       {
-         text: '아직은안돼요',
-         cssClass: 'buttoncss',
-         handler: () => {
-           console.log('Disagree');
-         }
-       },
-       {
-         text: '그래요',
-         cssClass: 'buttoncss',
-         handler: () => {
-           console.log("del dog"+this.goodbyedog);
-           //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
-           //삭제 메소드 goodbyedog변수에 삭제할 강아지key값 가지고 있음.
-           this.manageService.goodbyeDog(this.goodbyedog);
-           let alertOK = this.alertCtrl.create({
-            title: '이별완료',
-            subTitle: '이별하였습니다.',
-            buttons: ['확인']
-          });
-    alertOK.present();
-         }
-       }
-     ]
-   });
-   confirm.present()
-  //  if(this.OKboolean){
-  //    let toast = this.toastCtrl.create({
-  //       message: 'User was added successfully',
-  //       duration: 3000
-  //     });
-  //     toast.present();
-  //  }
+    if(!this.goodbyedog){
+      let alertdel = this.alertCtrl.create({
+        title: '알림',
+        subTitle: '이별할 강아지를 선택해 주세요',
+        buttons: ['확인']
+      });
+      alertdel.present();
+    }else{
+      let confirm = this.alertCtrl.create({
+      title: '확인창',
+      message: '이별하시겠습니까?',
+      buttons: [
+        {
+          text: '아직은안돼요',
+          cssClass: 'buttoncss',
+          handler: () => {
+            console.log('Disagree');
+          }
+        },
+        {
+          text: '그래요',
+          cssClass: 'buttoncss',
+          handler: () => {
+            console.log("del dog"+this.goodbyedog);
+            //this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
+            //삭제 메소드 goodbyedog변수에 삭제할 강아지key값 가지고 있음.
+            this.manageService.goodbyeDog(this.goodbyedog);
+            let alertOK = this.alertCtrl.create({
+              title: '이별완료',
+              subTitle: '이별하였습니다.',
+              buttons: ['확인']
+            });
+      alertOK.present();
+          }
+        }
+      ]
+    });
+    confirm.present()
+    }
 
   }
 
