@@ -412,16 +412,6 @@ export class ChangeInfoPage {
       //예외처리
       console.log('에외처리..모든필드입력요청')
     }else{
-      if(this.moveanothergroup!==undefined && this.moveanothergroup!='' && this.moveanothergroup!='moo'){
-        console.log('그룹이동할래');
-        this.manageService.changeGroup(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth, this.moveanothergroup);
-      }else if(this.editdoggroup!=''){
-        console.log('새로만들래')
-        console.log(this.editdoggroup)
-        this.manageService.changeGroup(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth, this.editdoggroup, 'new');
-      }else{
-        console.log('그룹변경x')
-        this.manageService.changeInfo(this.changeddog, this.editdogname, this.editdogsex, this.editdogbirth);}
     }
   }
   editdog(SelectedDog){

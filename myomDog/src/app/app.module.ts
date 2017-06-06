@@ -35,6 +35,7 @@ import { Push } from '@ionic-native/push';
 import { TimerComponent } from '../components/timer/timer';
 import { HealthListComponent } from '../components/health-list/health-list';
 
+
 export const firebaseConfig = {
   apiKey: "AIzaSyCnY0y-OWPY7mqPIZtQ8Jp_maxGPDSyttA",
   authDomain: "myomdog.firebaseapp.com",
