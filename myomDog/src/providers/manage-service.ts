@@ -172,7 +172,7 @@ export class ManageService {
               firebase.database().ref('/userData/'+this.userKey+'/invitation').child(invitationKey).set(null);
             })
           })
-          
+
         })
     })
   }
@@ -231,6 +231,30 @@ export class ManageService {
           icon: icon,
           name: name,
           time: time, // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          content: content
+        })
+      }
+
+    })
+
+  }
+
+  addWalk(category: string, icon: string, name: string, dogs: any, content?:any){ // category, icon, name, time(date), content?:any
+    dogs.forEach((dog)=>{
+
+      if(!content){
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: firebase.database.ServerValue.TIMESTAMP // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+        })
+      }else{
+        firebase.database().ref('/dogData/'+dog+'/history').push({
+          category: category,
+          icon: icon,
+          name: name,
+          time: firebase.database.ServerValue.TIMESTAMP, // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
           content: content
         })
       }

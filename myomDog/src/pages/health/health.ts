@@ -40,6 +40,8 @@ export class HealthPage {
   editfoodtype: string;
 
   addcategory;
+  days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
 
   @ViewChild('lineCanvas') lineCanvas;
   @ViewChild('popoverContent', { read: ElementRef }) content: ElementRef;
@@ -214,7 +216,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
         shots.forEach(history=>{
           // 이번주인지확인...
           for(let i=0; i<7; i++){
-            if(history.time.split(" ")[0]==labels[i]){
+            if(this.days[new Date(history.time).getDay()]==labels[i]){
               cnt[i] += history.content;
             }
           }
@@ -475,7 +477,7 @@ getTime() 은 밀리세컨드 단위로 변환하는 함수이기 때문에 이 
      labels: l,//["January", "February", "March", "April", "May", "June", "July", "August"],
      datasets: [
        {
-         label: "",
+         label: "산책 시간",
          fill: false,
          lineTension: 0.1,
          backgroundColor: "rgba(75,192,192,0.4)",
