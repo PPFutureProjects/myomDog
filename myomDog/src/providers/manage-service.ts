@@ -36,12 +36,12 @@ export class ManageService {
     });
   }
 
-  addDog(dogName: String, groupName: String, gender: string, birth: Date, mealtime?){
+  addDog(dogName: String, groupname: String, gender: string, birth: Date, mealtime?){
     this.currentUser = firebase.auth().currentUser;
     console.log(this.currentUser);
 
      firebase.database().ref('userData/'+this.userKey+'/groups').push({
-      groupName: groupName
+      groupName: groupname
      }).then((groupKey)=>{
       firebase.database().ref('userData/'+this.userKey+'/groups/'+groupKey.key+'/dogs').push({
         name: dogName,
@@ -78,7 +78,7 @@ export class ManageService {
             if(snap.val().first===false){
               console.log(snap.val().first);
               let maindogKey = newDogKey.key;
-              firebase.database().ref().update({
+              firebase.database().ref('userData/'+this.userKey).update({
                 email: this.currentUser.email,
                 first: true,
                 mainDog: maindogKey,
@@ -142,7 +142,7 @@ export class ManageService {
   }
   /* 새로운 그룹에 초대받은 강아지를 추가 */
   receiveInvitation(group, invitation){
-    console.log('group-->',group); //
+    console.log('groupname-->', group.groupname); //
     console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
@@ -150,40 +150,35 @@ export class ManageService {
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    new Promise(()=>{
-      firebase.database().ref('/userData/'+this.userKey+'/groups').push({
-
-      }).then((newgroup)=>{
-        firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid).update({
-          name: dogname,
-          super: {
-            id: superuser.id,
-            group: superuser.group
-          },
-          birth: birth,
-          gender: gender
-        }).then(()=>{
-          firebase.database().ref('dogData/'+dogid+'/users').push({
-            id: this.userKey,
-            group: newgroup.key
-          });
-          firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid+'/users').push({
-            id: this.userKey,
-            group: newgroup.key
-          });
-          firebase.database().ref('/userData/'+this.userKey+'/groups/'+invitation.group+'/dogs/'+dogid+'/users').push({
-            id: invitation.sender,
-            group: invitation.group
+    let lastmeal = invitation.lastmeal;
+    let lastmealdate = invitation.lastmealdate;
+    firebase.database().ref('userData/'+this.userKey+'/groups').push({
+      groupName: group.groupname
+    }).then(newgroup=>{
+        firebase.database().ref('/dogData/'+dogid+'/users').push({
+          id: this.userKey,
+          group: newgroup.key
+        }).then((user)=>{
+          console.log('user', user.key)
+          firebase.database().ref('/dogData/'+dogid+'/users').once('value').then((snap)=>{
+            firebase.database().ref('/userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/').child(dogid).update({
+              name: dogname,
+              gender: gender,
+              birth: birth,
+              lastmeal: lastmeal,
+              lastmealdate: lastmealdate,
+              users: snap.val()
+            }).then((updatedog)=>{
+              firebase.database().ref('/userData/'+this.userKey+'/invitation').child(invitationKey).set(null);
+            })
           })
-        });
-      });
-    }).then(()=>{
-      firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
+          
+        })
     })
   }
 /* 이미 존재하는 그룹에 초대받은 강아지를 추가 */
   receiveInvitationOnExists(group, invitation){
-    console.log('group.groupname-->',group.groupname); //
+    console.log('group.groupname-->',group); //
     console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
@@ -191,30 +186,25 @@ export class ManageService {
     let gender = invitation.gender;
     let birth = invitation.birth;
     let superuser = invitation.super;
-    firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid).set({
-      birth: birth,
-      gender: gender,
-      name: dogname,
-      super: {
-        id: superuser.id,
-        group: superuser.group
-      }
-    }).then(()=>{
-      firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid+'/users').push({
-        id: this.userKey,
-        group: group.groupname
+    let lastmeal = invitation.lastmeal;
+    let lastmealdate = invitation.lastmealdate;
+    firebase.database().ref('dogData/'+dogid+'/users/').push({
+      id: this.userKey,
+      group: group
+    }).then((updatedog)=>{
+      firebase.database().ref('/dogData/'+dogid+'/users').once('value').then((snap)=>{
+        firebase.database().ref('/userData/'+this.userKey+'/groups/'+group+'/dogs').child(dogid).update({
+          name: dogname,
+          gender: gender,
+          birth: birth,
+          lastmeal: lastmeal,
+          lastmealdate: lastmealdate,
+          users: snap.val()
+        }).then((up)=>{
+          firebase.database().ref('/userData/'+this.userKey+'/invitation').child(invitationKey).set(null);
+        })
       })
-      firebase.database().ref('/dogData/'+dogid+'/users').push({
-        id: this.userKey,
-        group: group.groupname
-      })
-      firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid+'/users').push({
-        id: invitation.sender,
-        group: invitation.group
-      })
-    });
-
-    firebase.database().ref('/userData/'+this.userKey+'/invitation/'+invitation.$key).set(null);
+    })
   }
 
   rejectInvitation(invitation){
