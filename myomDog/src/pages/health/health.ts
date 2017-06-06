@@ -598,7 +598,7 @@ export class PopoverPage {
       var d = Date.parse(this.date);
       console.log("here: "+d);
       //console.log(new Date(this.date));
-      this.manageService.feedDogs(this.selected, this.date);
+      //this.manageService.feedDogs(this.selected, this.date);
 
     }else{
       if(this.category=='etc'){
