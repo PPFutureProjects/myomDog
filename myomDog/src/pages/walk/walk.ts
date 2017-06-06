@@ -1,5 +1,5 @@
 import { Component, ViewChild } from '@angular/core';
-import { IonicPage, NavController, NavParams, AlertController, Select } from 'ionic-angular';
+import { IonicPage, NavController, NavParams, AlertController, Select, ToastController } from 'ionic-angular';
 import { AngularFireDatabase, FirebaseObjectObservable, FirebaseListObservable } from 'angularfire2/database';
 import { ManageService } from '../../providers/manage-service';
 
@@ -27,9 +27,23 @@ export class WalkPage {
   selectedDogsName: any;
   walkingDog :FirebaseListObservable<any[]>;
   constructor(public navCtrl: NavController, public navParams: NavParams, public alertCtrl: AlertController,
-            public db: AngularFireDatabase, public manageService: ManageService) {
+            public db: AngularFireDatabase, public manageService: ManageService, private toastCtrl: ToastController) {
               this.dogSel = false;
 
+  }
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 3000,
+      position: 'middle',
+      showCloseButton: true,
+      dismissOnPageChange: true
+    });
+
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
   }
 
  outputEvent(time: number){
@@ -39,6 +53,7 @@ export class WalkPage {
    console.log("dogs waking with me : "+this.selectedDogs+"type: "+typeof this.selectedDogs);
    console.log("!!!!!!!"+typeof this.selectedDogs+"!!!!!!!!"+this.selectedDogs);
    this.manageService.addHistory("walk", "paw", "산책", current, this.selectedDogs , this.walkedTime);
+   this.presentToast("Walk successfully added!");
    //this.dogChecked = false;
    this.selectedDogs = null;
    this.dogSel = false;

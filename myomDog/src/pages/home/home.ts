@@ -21,7 +21,8 @@ export class HomePage {
     testCheckboxResult;
 
     constructor(public navCtrl: NavController, public authService: AuthService, public manageService: ManageService,
-                private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController, public _viewCtrl: ViewController)
+                private db: AngularFireDatabase, public alertCtrl: AlertController, public modalCtrl: ModalController,
+                public toastCtrl: ToastController, public _viewCtrl: ViewController)
     {
       this.today = Date.now();
       this.userKey = manageService.userKey;
@@ -85,6 +86,20 @@ export class HomePage {
 
     }
 
+    presentToast(msg: string){
+      let toast = this.toastCtrl.create({
+        message: msg,
+        duration: 1500,
+        position: 'middle',
+        dismissOnPageChange: true
+      });
+
+      toast.onDidDismiss(() => {
+        console.log("dismissed toast");
+      });
+      toast.present();
+    }
+
     givemeal(){
       let alert = this.alertCtrl.create();
       alert.setTitle('어떤 강아지에게 밥 주셨나요?');
@@ -116,6 +131,7 @@ export class HomePage {
             this.testCheckboxOpen = false;
             this.testCheckboxResult = data;
             this.manageService.feedDogs(data);
+            this.presentToast("맛있다!");
           }
       });
     alert.present().then(() => {
@@ -168,6 +184,20 @@ export class MoreInfoPage {
 
   }
 
+  presentToast(msg: string){
+    let toast = this.toastCtrl.create({
+      message: msg,
+      duration: 1500,
+      position: 'middle',
+      dismissOnPageChange: true
+    });
+
+    toast.onDidDismiss(() => {
+      console.log("dismissed toast");
+    });
+    toast.present();
+  }
+
   doginfofavorite(){
     let confirm = this.alertCtrl.create({
      title: '확인창',
@@ -183,6 +213,7 @@ export class MoreInfoPage {
          text: '등록',
          handler: () => {
           this.manageService.changeMainDog(this.dogKey);
+          this.presentToast("Favorite dog changed!");
         }
        }
      ]
@@ -205,6 +236,7 @@ export class MoreInfoPage {
          text: '간식주기',
          handler: () => {
            //간식주세요
+           this.presentToast("Snack is so good!");
          }
        }
      ]
@@ -227,6 +259,7 @@ export class MoreInfoPage {
          text: '밥주기',
          handler: () => {
           this.manageService.feedDogs([this.dogKey]);
+          this.presentToast("맛있다!");
          }
        }
      ]
