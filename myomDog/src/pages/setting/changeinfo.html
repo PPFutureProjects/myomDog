@@ -40,25 +40,6 @@
       </ion-item>
 
       <ion-list>
-        <ion-item *ngIf="editdoggroup==null || editdoggroup==''">
-          <ion-label>다른 그룹으로 이동</ion-label>
-          <ion-select interface="action-sheet" [(ngModel)]="moveanothergroup">
-            <ion-option value="moo">
-              없음
-            </ion-option>
-            <div *ngFor="let group of grouplist | async">
-              <ion-option value="{{group.$key}}">
-                {{group.groupName}}
-              </ion-option>
-            </div>
-        </ion-select>
-      </ion-item>
-
-        <ion-item *ngIf="moveanothergroup==null || moveanothergroup=='moo'">
-          <ion-label stacked>새 그룹으로 이동</ion-label>
-          <ion-input type = "text" value="" [(ngModel)]="editdoggroup"></ion-input>
-        </ion-item>
-
         <ion-item>
           <ion-label stacked>이름</ion-label>
           <ion-input type = "text" value="" [(ngModel)]="editdogname"></ion-input>

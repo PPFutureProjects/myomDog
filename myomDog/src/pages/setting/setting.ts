@@ -203,10 +203,10 @@ export class AddingDogPage {
            console.log("mealtime: "+ this.mealtime);
            if(this.alreadygroup && this.alreadygroup!='moo_exception'){
              console.log("alreadygroup: "+this.alreadygroup);
-            this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth);
+            this.manageService.addDogToGroup(this.alreadygroup, this.dogname, this.gender ,this.birth, this.mealtime);
            }  else {
                 console.log("newAdd");
-                this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth);
+                this.manageService.addDog(this.dogname, this.groupname, this.gender, this.birth, this.mealtime);
            }
            let alertOK = this.alertCtrl.create({
             title: '강아지 등록',
@@ -257,7 +257,7 @@ export class InvitingPage {
   }
   invitebutton(){
     console.log("invited dog :" + this.inviteddog );
-    //this.manageService.invite(this.inviteduser, this.inviteddog.toString(), this.grouplist.key);
+    this.manageService.invite(this.inviteduser, this.inviteddog);
   }
 
   dismiss(){
@@ -390,28 +390,26 @@ export class InviteInfoPage {
 export class ChangeInfoPage {
   userKey: string;
   grouplist: FirebaseListObservable<any[]>;
-  GroupAndDogs: any;
-  nameOfGroups: any;
   AllDogs: any;
   changeddog: string = '';
 
   //editdoggroup: string;
   editdogname: string = '';
   editdogsex: string = '';
-  editdoggroup: string= '';
   editdogbirth: Date = null;
 
   moveanothergroup: string;
 
-  constructor(public _viewCtrl: ViewController, public manageService: ManageService, public db: AngularFireDatabase){
+  constructor(public _viewCtrl: ViewController, public alertCtrl: AlertController, public manageService: ManageService, public db: AngularFireDatabase){
     this.userKey = manageService.userKey;
     this.grouplist = db.list('/userData/'+this.userKey+'/groups');
   }
   changeinfobutton(){ //해야해
-    if(this.changeddog=='' || this.editdogname=='' || this.editdogsex==''){
-      //예외처리
-      console.log('에외처리..모든필드입력요청')
+    if(this.changeddog=='' || this.editdogname=='' || this.editdogsex=='' || this.editdogbirth===null){
+      console.log('에외처리..모든필드입력요청');
+      //this.alertCtrl.
     }else{
+
     }
   }
   editdog(SelectedDog){

@@ -36,7 +36,7 @@ export class ManageService {
     });
   }
 
-  addDog(dogName: String, groupName: String, gender: string, birth: Date){
+  addDog(dogName: String, groupName: String, gender: string, birth: Date, mealtime?){
     this.currentUser = firebase.auth().currentUser;
     console.log(this.currentUser);
 
@@ -78,21 +78,19 @@ export class ManageService {
             if(snap.val().first===false){
               console.log(snap.val().first);
               let maindogKey = newDogKey.key;
-              let updates = {};
-              updates['/userData/'+this.userKey] = {
+              firebase.database().ref().update({
                 email: this.currentUser.email,
                 first: true,
                 mainDog: maindogKey,
                 groups: snap.val().groups
-              }
-              firebase.database().ref().update(updates);
+              });
             }
           });
         });
      });
   }
 
-  addDogToGroup(g, dogName, gender, birth){
+  addDogToGroup(g, dogName, gender, birth, mealtime?){
     firebase.database().ref('dogData/').push({
       name: dogName,
       super: {
@@ -125,7 +123,8 @@ export class ManageService {
     });
   }
 /* 초대하기 */
-  invite(receiver, dog, group){
+  invite(receiver, dog){
+    console.log(receiver, dog);
     let strArr2 = receiver.split('.');
     firebase.database().ref('dogData/'+dog).once('value').then(snap=>{
       firebase.database().ref('userData/'+strArr2[0]+'-'+strArr2[1]+'/invitation').push({
@@ -134,7 +133,6 @@ export class ManageService {
         dog_name: snap.val().name,
         gender: snap.val().gender,
         birth: snap.val().birth,
-        group: group,
         super: snap.val().super,
         users: snap.val().users,
         lastmeal: snap.val().lastmeal,
@@ -144,7 +142,7 @@ export class ManageService {
   }
   /* 새로운 그룹에 초대받은 강아지를 추가 */
   receiveInvitation(group, invitation){
-    console.log(group); //
+    console.log('group-->',group); //
     console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
@@ -154,7 +152,7 @@ export class ManageService {
     let superuser = invitation.super;
     new Promise(()=>{
       firebase.database().ref('/userData/'+this.userKey+'/groups').push({
-        groupName: group
+        
       }).then((newgroup)=>{
         firebase.database().ref('userData/'+this.userKey+'/groups/'+newgroup.key+'/dogs/'+dogid).update({
           name: dogname,
@@ -185,7 +183,7 @@ export class ManageService {
   }
 /* 이미 존재하는 그룹에 초대받은 강아지를 추가 */
   receiveInvitationOnExists(group, invitation){
-    console.log(group.groupname); //
+    console.log('group.groupname-->',group.groupname); //
     console.log(invitation);  //
     let invitationKey = invitation.$key;
     let dogid = invitation.dog_id;
@@ -233,14 +231,14 @@ export class ManageService {
           category: category,
           icon: icon,
           name: name,
-          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          time: time, // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
         })
       }else{
         firebase.database().ref('/dogData/'+dog+'/history').push({
           category: category,
           icon: icon,
           name: name,
-          time: time.toString(), // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
+          time: time, // 현재 시간을 찍으려면은 이거를 하래 서버 시간이라 정확함 : firebase.database.ServerValue.TIMESTAMP
           content: content
         })
       }
@@ -362,6 +360,10 @@ export class ManageService {
     console.log("mainDog changed to "+newMainDog);
   }
 
+  changeInfo(name, gender, birth, meal?){
+
+  }
+
   goodbyeDog(key){
     firebase.database().ref('dogData/'+key+'/users').once('value').then((snapshots)=>{
       snapshots.forEach((snapshot)=>{
@@ -387,46 +389,6 @@ export class ManageService {
         }
       })
     });
-    /*
-    firebase.database().ref('userData/'+this.userKey+'/groups').once('value').then((snap)=>{
-      snap.forEach((group)=>{
-        console.log(group.val().dogs);
-        let dogs = group.child('dogs');
-        dogs.forEach((dog)=>{
-          console.log("dogKey: "+dog.key);
-          if(dog.key==key) {
-            firebase.database().ref('userData/'+this.userKey+'/groups/'+group.key+'/dogs').child(key).set(null);
-          }
-        });
-      });
-    });
-    firebase.database().ref('userData/'+this.userKey).once('value').then((snap)=>{
-      if(snap.val().mainDog==key){
-        firebase.database().ref('userData/'+this.userKey).update({
-          mainDog: null,
-          first: false
-        });
-      }
-
-    })
-    new Promise(()=>{
-      firebase.database().ref('dogData/'+key+'users/').once('value').then(snap=>{
-        snap.forEach(user=>{
-          firebase.database().ref('/userData/'+user.id+'/groups/'+user.group+'/dogs/').child(key).set(null);
-          firebase.database().ref('/userData/'+user.id).once('value').then((userinfo)=>{
-            if(userinfo.val().mainDog==key){
-              firebase.database().ref('userData/'+this.userKey).update({
-                mainDog: null,
-                first: false
-              });
-            }
-          });
-        });
-      });
-    }).then(()=>{
-      firebase.database().ref('dogData/').child(key).set(null);
-    });
-    */
   }
 
   editGroupName(key, name){
