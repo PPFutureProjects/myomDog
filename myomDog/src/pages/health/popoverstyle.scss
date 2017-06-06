@@ -33,7 +33,6 @@
 
 
   .popover-ios .popover-content {
-    @include border-radius($popover-ios-border-radius);
 
     width: $popover-ios-width;
     min-width: $popover-ios-min-width;
@@ -59,9 +58,6 @@
   }
 
   .popover-ios .popover-arrow::after {
-    @include position(3px, null, null, 3px);
-    @include border-radius(3px);
-
     position: absolute;
 
     z-index: $z-index-overlay-wrapper;
@@ -117,7 +113,7 @@
 
 
   .popover-md .popover-content {
-    @include border-radius($popover-md-border-radius);
+  
 
     width: $popover-md-width;
     min-width: $popover-md-min-width;
