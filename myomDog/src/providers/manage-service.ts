@@ -119,7 +119,7 @@ export class ManageService {
     });
   }
 /* 초대하기 */
-  invite(receiver, dog){
+  invite(receiver, dog, group){
     let strArr2 = receiver.split('.');
     firebase.database().ref('dogData/'+dog).once('value').then(snap=>{
       firebase.database().ref('userData/'+strArr2[0]+'-'+strArr2[1]+'/invitation').push({
@@ -128,6 +128,7 @@ export class ManageService {
         dog_name: snap.val().name,
         gender: snap.val().gender,
         birth: snap.val().birth,
+        group: group,
         super: snap.val().super,
         users: snap.val().users
       });
@@ -164,6 +165,10 @@ export class ManageService {
             id: this.userKey,
             group: newgroup.key
           });
+          firebase.database().ref('/userData/'+this.userKey+'/groups/'+invitation.group+'/dogs/'+dogid+'/users').push({
+            id: invitation.sender,
+            group: invitation.group
+          })
         });
       });
     }).then(()=>{
@@ -196,6 +201,10 @@ export class ManageService {
       firebase.database().ref('/dogData/'+dogid+'/users').push({
         id: this.userKey,
         group: group.groupname
+      })
+      firebase.database().ref('/userData/'+this.userKey+'/groups/'+group.groupname+'/dogs/'+dogid+'/users').push({
+        id: invitation.sender,
+        group: invitation.group
       })
     });
     
