@@ -22,12 +22,12 @@
 
 <ion-content padding>
   <ion-item>
-      <ion-label>현재 반려동물</ion-label>
+      <ion-label>현재 반려견</ion-label>
         <ion-select [(ngModel)]="myMainDogKey" multiple="false" cancelText="cancel" okText="OK" (ionChange)="changeDog()">
             <div *ngFor="let group of mydogs | async">
               <div *ngFor="let dog of group.dogs | keys">
                 <ion-option value="{{dog.key}}">
-                  [{{group.groupName}}] {{dog.value.name}}
+                  {{dog.value.name}} - {{group.groupName}}
                 </ion-option>
               </div>
             </div>
