@@ -16,7 +16,7 @@
             <img src="../../assets/img/myom_logo-{{dog.value.gender}}.png">
           </ion-avatar>
           <h2 class="dog-name">{{dog.value.name}}</h2>
-          <h3 class="dog-birth">{{dog.value.birth}}</h3>
+          <h3 class="dog-birth"><br>생일 {{dog.value.birth | date: "M월 d일"}}</h3>
           <p>오늘 밥 먹은 횟수 <ion-badge color="dark" item-end>2/3</ion-badge></p>
           <!-- <ion-icon *ngIf="{{dog.value.gender}}==='maledog'" name='male' item-end color="gray"></ion-icon>
           <ion-icon *ngIf="{{dog.value.gender}}==='femaledog'" name='female' item-end color="gray"></ion-icon> -->

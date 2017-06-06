@@ -18,15 +18,15 @@
         <div *ngFor="let group of walkingDog | async">
           <div *ngFor="let dog of group.dogs | keys">
             <ion-option value="{{dog.key}}">
-              {{dog.value.name}} - {{group.groupName}}
+              {{dog.value.name}}
             </ion-option>
            </div>
          </div>
       </ion-select>
   </ion-item>
-  <div>
+  <!-- <div>
     <ul *ngFor="let dog of selectedDogs">
       <ion-item>{{dog}}</ion-item>
     </ul>
-  </div>
+  </div> -->
 </ion-content>
