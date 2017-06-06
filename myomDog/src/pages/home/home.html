@@ -5,7 +5,7 @@
   </ion-navbar>
 </ion-header>
 
-<ion-content padding *ngIf="!isNull()" class="home-content">
+<ion-content *ngIf="!isNull()" class="home-content">
   <ion-list *ngFor="let group of mygroups | async">
     <ion-list-header class="group-name">
       {{group.groupName}}
@@ -18,7 +18,7 @@
           </ion-avatar>
           <h2 class="dog-name">{{dog.value.name}}</h2>
           <h3 class="dog-birth"><br>생일 {{dog.value.birth | date: "M월 d일"}}</h3>
-          <p>오늘 밥 먹은 횟수 <ion-badge color="dark" item-end>2/3</ion-badge></p>
+          <p>마지막으로 밥 먹은 시간<ion-badge color="dark" item-end>{{dog.value.lastmealdate | date: "hh시mm분"}}</ion-badge></p>
           <!-- <ion-icon *ngIf="{{dog.value.gender}}==='maledog'" name='male' item-end color="gray"></ion-icon>
           <ion-icon *ngIf="{{dog.value.gender}}==='femaledog'" name='female' item-end color="gray"></ion-icon> -->
         <!-- other information -->
