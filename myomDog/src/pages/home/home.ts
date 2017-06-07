@@ -172,7 +172,7 @@ export class MoreInfoPage {
   myDate: String = new Date().toISOString();
   myDateSec: Number = Date.now();
 
-  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController, 
+  constructor(public navCtrl: NavController, public toastCtrl: ToastController, public _viewCtrl: ViewController,
               public params: NavParams, public alertCtrl: AlertController, public manageService: ManageService,
               public datePipe: DatePipe, public db: AngularFireDatabase)
   {
